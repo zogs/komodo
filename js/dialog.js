@@ -1,345 +1,318 @@
-(function() {
+class Dialog extends createjs.Container {
+
+  constructor(content= [], buttons=[], params) {
+
+    super();
+    this.content = content;
+    this.buttons = buttons;
+    var defaults = {
+      x: 0,
+      y: 0,
+      width: null,
+      height: null,
+      alpha: 0,
+      lifetime: 0,
+      call: null,
+      radius: 0,
+      paddings: [10,10,10,10],
+      color: 'white',
+      borderColor: 'grey',
+      borderWidth: 1,
+      arrowTo: null,
+      arrowFrom: 'top',
+      arrowWidth: 100,
+      arrowCenter: 0
+    };
+
+    this.params = extend(defaults,params);
+    this.originParams = this.params;
+    this.x = this.params.x;
+    this.y = this.params.y;
+    this.alpha = this.params.alpha;
+    this.htmlElement = null;
+    this.htmlContent = null;
+
+    Stage.addEventListener('canvas_resized', proxy(this.onResize, this));
 
 
-// create new class
-function Dialog(content= [], buttons=[], params) {
-
-  this.Container_constructor();
-
-  this.content = content;
-  this.buttons = buttons;
-  var defaults = {
-    x: 0,
-    y: 0,
-    width: null,
-    height: null,
-    alpha: 0,
-    lifetime: 0,
-    call: null,
-    radius: 0,
-    paddings: [10,10,10,10],
-    color: 'white',
-    borderColor: 'grey',
-    borderWidth: 1,
-    arrowTo: null,
-    arrowFrom: 'top',
-    arrowWidth: 100,
-    arrowCenter: 0
-  };
-
-  this.params = extend(defaults,params);
-  this.originParams = this.params;
-  this.x = this.params.x;
-  this.y = this.params.y;
-  this.alpha = this.params.alpha;
-  this.htmlElement = null;
-  this.htmlContent = null;
-
-  Stage.addEventListener('canvas_resized', proxy(this.onResize, this));
-
-
-  this.init(params);
-}
-
-//extend it
-var prototype = createjs.extend(Dialog, createjs.Container);
-
-prototype.open = function() {
-
-  this.alpha = 1;
-  this.mouseEnabled = true;
-
-  if(this.htmlElement) {
-    this.htmlElement.style.pointerEvents = 'auto';
+    this.init(params);
   }
 
-  if(this.params.lifetime > 0) {
-    createjs.Tween.get(this).to({}, this.params.lifetime).call(this.params.call);
-  }
-}
+  open() {
 
-prototype.close = function() {
+    this.alpha = 1;
+    this.mouseEnabled = true;
 
-  this.alpha = 0;
-  this.mouseEnabled = false;
+    if(this.htmlElement) {
+      this.htmlElement.style.pointerEvents = 'auto';
+    }
 
-  if(this.htmlElement) {
-    this.htmlElement.style.pointerEvents = 'none';
-  }
-}
-
-prototype.onResize = function(ev) {
-
-  if(this.htmlContent) {
-
-    /*
-    I don't understand why this is not working
-    this.htmlContent._props.matrix.appendTransform(100, 100, 0.5, 0.5, 0, 0, 0, 0, 0);
-    this.htmlContent._oldProps.matrix = new createjs.Matrix2D();
-    this.htmlContent._handleDrawEnd();
-    */
-
-    //Apply new transformation to DOMElement when resizing
-    //(remember that DOMElement coords is based to its parent)
-    let dx = this.x*ev.newWidth/ev.originWidth - this.x;
-    let dy = this.y*ev.newHeight/ev.originHeight - this.y;
-    let dr = ev.newHeight/ev.originHeight;
-    let matrix = new createjs.Matrix2D(dr, 0, 0, dr, dx, dy);
-    this.htmlContent.transformMatrix = matrix;
-
-  }
-}
-
-prototype.init = function() {
-
-  let H = 0;
-  let W = 0;
-
-  let content;
-  let element;
-  if(typeof this.content == 'string') {
-
-    element = document.getElementById(this.content);
-    element.style.visibility = 'visible';
-    content = new createjs.DOMElement(this.content);
-    this.htmlElement = element;
-    this.htmlContent = content;
-    W = element.offsetWidth;
-    H = element.offsetHeight;
-  }
-
-  if(typeof this.content == 'object') {
-    for(let i=0; i<this.content.length; i++) {
-      let text = this.content[i];
-      let w = text.width;
-      let h = text.height;
-      text.y = H;
-      H += h;
-      W = (w > W)? w : W;
+    if(this.params.lifetime > 0) {
+      createjs.Tween.get(this).to({}, this.params.lifetime).call(this.params.call);
     }
   }
 
-  for(let i=0,ln=this.buttons.length; i<ln; i++) {
-    let button = this.buttons[i];
-    let w = button.width;
-    let h = button.height;
-    H += (i==0)? h/2 : 0;
-    button.y = H + button.params.y;
-    button.dialogBox = this;
-    if(button.params.float == 'center') button.x = W/2;
-    if(button.params.float == 'left') button.x = 0 + button.width/2;
-    if(button.params.float == 'right') button.x = W - button.width/2;
-    button.x += button.params.x;
-    H += (i==this.buttons.length-1)? h*2/3 : 0;
+  close() {
+
+    this.alpha = 0;
+    this.mouseEnabled = false;
+
+    if(this.htmlElement) {
+      this.htmlElement.style.pointerEvents = 'none';
+    }
   }
 
-  this.width = W;
-  this.height = H;
+  onResize(ev) {
 
-  let bg = new createjs.Shape();
-  let pad = this.params.paddings;
-  bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.color).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
-  this.addChild(bg);
+    if(this.htmlContent) {
 
-  if(this.params.arrowTo !== null && typeof this.params.arrowTo == 'object' && this.params.arrowTo.x !== undefined && this.params.arrowTo.y !== undefined) {
-      this.drawArrow();
+      /*
+      I don't understand why this is not working
+      this.htmlContent._props.matrix.appendTransform(100, 100, 0.5, 0.5, 0, 0, 0, 0, 0);
+      this.htmlContent._oldProps.matrix = new createjs.Matrix2D();
+      this.htmlContent._handleDrawEnd();
+      */
+
+      //Apply new transformation to DOMElement when resizing
+      //(remember that DOMElement coords is based to its parent)
+      let dx = this.x*ev.newWidth/ev.originWidth - this.x;
+      let dy = this.y*ev.newHeight/ev.originHeight - this.y;
+      let dr = ev.newHeight/ev.originHeight;
+      let matrix = new createjs.Matrix2D(dr, 0, 0, dr, dx, dy);
+      this.htmlContent.transformMatrix = matrix;
+
+    }
   }
 
-  if(typeof this.content == 'object') {
-    for(let i=0; i<this.content.length; i++) {
-      let text = this.content[i];
+  init() {
+
+    let H = 0;
+    let W = 0;
+
+    let content;
+    let element;
+    if(typeof this.content == 'string') {
+
+      element = document.getElementById(this.content);
+      element.style.visibility = 'visible';
+      content = new createjs.DOMElement(this.content);
+      this.htmlElement = element;
+      this.htmlContent = content;
+      W = element.offsetWidth;
+      H = element.offsetHeight;
+    }
+
+    if(typeof this.content == 'object') {
+      for(let i=0; i<this.content.length; i++) {
+        let text = this.content[i];
+        let w = text.width;
+        let h = text.height;
+        text.y = H;
+        H += h;
+        W = (w > W)? w : W;
+      }
+    }
+
+    for(let i=0,ln=this.buttons.length; i<ln; i++) {
+      let button = this.buttons[i];
+      let w = button.width;
+      let h = button.height;
+      H += (i==0)? h/2 : 0;
+      button.y = H + button.params.y;
+      button.dialogBox = this;
+      if(button.params.float == 'center') button.x = W/2;
+      if(button.params.float == 'left') button.x = 0 + button.width/2;
+      if(button.params.float == 'right') button.x = W - button.width/2;
+      button.x += button.params.x;
+      H += (i==this.buttons.length-1)? h*2/3 : 0;
+    }
+
+    this.width = W;
+    this.height = H;
+
+    let bg = new createjs.Shape();
+    let pad = this.params.paddings;
+    bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.color).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
+    this.addChild(bg);
+
+    if(this.params.arrowTo !== null && typeof this.params.arrowTo == 'object' && this.params.arrowTo.x !== undefined && this.params.arrowTo.y !== undefined) {
+        this.drawArrow();
+    }
+
+    if(typeof this.content == 'object') {
+      for(let i=0; i<this.content.length; i++) {
+        let text = this.content[i];
+        this.addChild(text);
+      }
+    }
+
+    if(typeof this.content == 'string') {
+
+      this.addChild(content);
+    }
+
+    for(let i=0; i<this.buttons.length; i++) {
+      let button = this.buttons[i];
+      this.addChild(button);
+    }
+
+    let mid = new createjs.Shape();
+    mid.graphics.beginFill('red').drawCircle(0,0,3);
+    //this.addChild(mid);
+
+    this.x -= W/2;
+    this.y -= H/2;
+
+  }
+
+  drawArrow() {
+
+    let to = this.globalToLocal(this.params.arrowTo.x, this.params.arrowTo.y);
+
+    let arrow = new createjs.Shape();
+    arrow.graphics.beginFill(this.params.color).setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor);
+    if(this.params.arrowFrom == 'top') {
+      arrow.graphics
+            .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
+            .lineTo(to.x + this.width/2, to.y + this.height/2)
+            .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
+            ;
+    }
+    if(this.params.arrowFrom == 'left') {
+      arrow.graphics
+            .moveTo(-this.params.paddings[3]+ this.params.borderWidth/2+1, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
+            .lineTo(to.x + this.width/2, to.y + this.height/2)
+            .lineTo(-this.params.paddings[3]+ this.params.borderWidth/2+1, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
+            ;
+    }
+    if(this.params.arrowFrom == 'right') {
+      arrow.graphics
+            .moveTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-1, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
+            .lineTo(to.x + this.width/2, to.y + this.height/2)
+            .lineTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-1, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
+            ;
+    }
+    if(this.params.arrowFrom == 'bottom') {
+      arrow.graphics
+            .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-1 )
+            .lineTo(to.x + this.width/2, to.y + this.height/2)
+            .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-1 )
+            ;
+    }
+
+    this.addChild(arrow);
+
+  }
+
+}
+
+
+  class Text extends createjs.Container {
+
+    constructor(text = 'KOMODO', font = null, params) {
+
+      super();
+      this.text = text;
+      this.font = (font === null)? '14px Arial' : font;
+      var defaults = {
+        width: null,
+        height: null,
+        color: 'black',
+      };
+
+      this.params = extend(defaults,params);
+      this.init();
+    }
+
+    init() {
+
+      this.drawText();
+    }
+
+    drawText() {
+
+      let text = new createjs.Text(this.text, this.font, this.params.color);
+      let w = (this.params.width == null)? text.getBounds().width : this.params.width;
+      let h = (this.params.height == null)? text.getBounds().height : this.params.height;
+      let pad = this.params.paddings;
+      text.textAlign = 'center';
+      text.regX = -w/2;
+      text.x = w/2;
+      text.y = h/2;
+
       this.addChild(text);
+
+      this.regX = w/2;
+      this.regY = h/2;
+      this.width = w;
+      this.height = h;
+    }
+
+  }
+
+
+  class Button extends createjs.Container {
+
+    constructor(text = 'KOMODO', callback = null, params) {
+
+      super();
+      this.text = text;
+      this.callback = (callback === null)? this.nullCallback : callback;
+      var defaults = {
+        width: null,
+        height: null,
+        font: '22px bold Arial',
+        radius: 3,
+        paddings: [12, 30, 12, 30],
+        color: 'white',
+        backgroundColor: "blue",
+        float: 'center',
+        x: 0,
+        y: 0,
+      };
+
+      this.params = extend(defaults,params);
+      this.init();
+
+    }
+
+    init() {
+
+      this.drawButton();
+    }
+
+    drawButton() {
+
+      let text = new createjs.Text(this.text, this.params.font, this.params.color);
+      let w = (this.params.width == null)? text.getBounds().width : this.params.width;
+      let h = (this.params.height == null)? text.getBounds().height : this.params.height;
+      let pad = this.params.paddings;
+      text.textAlign = 'center';
+      text.regX = 0;
+      text.regY = h/2;
+
+      let bg = new createjs.Shape();
+      bg.graphics.setStrokeStyle(1).beginStroke('grey').beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
+      bg.regX = w/2;
+      bg.regY = h/2 - 2;
+
+      this.addChild(bg);
+      this.addChild(text);
+
+      this.addEventListener("click", this.callback);
+
+      this.cursor = "pointer";
+      this.width = w + pad[1] + pad[3];
+      this.height = h + pad[0] + pad[2];
+
+      let c = new createjs.Shape();
+      c.graphics.beginFill('red').drawCircle(0,0,2);
+      //this.addChild(c);
+
+    }
+
+    nullCallback() {
+
+      console.error("Button has been clicked but there is no handler");
     }
   }
-
-  if(typeof this.content == 'string') {
-
-    this.addChild(content);
-  }
-
-  for(let i=0; i<this.buttons.length; i++) {
-    let button = this.buttons[i];
-    this.addChild(button);
-  }
-
-  let mid = new createjs.Shape();
-  mid.graphics.beginFill('red').drawCircle(0,0,3);
-  //this.addChild(mid);
-
-  this.x -= W/2;
-  this.y -= H/2;
-
-}
-
-prototype.drawArrow = function() {
-
-  let to = this.globalToLocal(this.params.arrowTo.x, this.params.arrowTo.y);
-
-  let arrow = new createjs.Shape();
-  arrow.graphics.beginFill(this.params.color).setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor);
-  if(this.params.arrowFrom == 'top') {
-    arrow.graphics
-          .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
-          .lineTo(to.x + this.width/2, to.y + this.height/2)
-          .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
-          ;
-  }
-  if(this.params.arrowFrom == 'left') {
-    arrow.graphics
-          .moveTo(-this.params.paddings[3]+ this.params.borderWidth/2+1, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
-          .lineTo(to.x + this.width/2, to.y + this.height/2)
-          .lineTo(-this.params.paddings[3]+ this.params.borderWidth/2+1, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
-          ;
-  }
-  if(this.params.arrowFrom == 'right') {
-    arrow.graphics
-          .moveTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-1, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
-          .lineTo(to.x + this.width/2, to.y + this.height/2)
-          .lineTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-1, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
-          ;
-  }
-  if(this.params.arrowFrom == 'bottom') {
-    arrow.graphics
-          .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-1 )
-          .lineTo(to.x + this.width/2, to.y + this.height/2)
-          .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-1 )
-          ;
-  }
-
-  this.addChild(arrow);
-
-}
-
-//<-- end methods
-//assign Dialog to window's scope & promote overriden container's methods from Wave object, allow them to be call by 'Container_methodName()'
-window.Dialog = createjs.promote(Dialog,'Container');
-
-}());
-
-(function() {
-
-// create new class
-function Text(text = 'KOMODO', font = null, params) {
-
-  this.Container_constructor();
-  this.text = text;
-  this.font = (font === null)? '14px Arial' : font;
-  var defaults = {
-    width: null,
-    height: null,
-    color: 'black',
-  };
-
-  this.params = extend(defaults,params);
-  this.init();
-}
-//extend it
-var prototype = createjs.extend(Text, createjs.Container);
-
-//public methods
-prototype.init = function() {
-
-  this.drawText();
-}
-
-prototype.drawText = function() {
-
-  let text = new createjs.Text(this.text, this.font, this.params.color);
-  let w = (this.params.width == null)? text.getBounds().width : this.params.width;
-  let h = (this.params.height == null)? text.getBounds().height : this.params.height;
-  let pad = this.params.paddings;
-  text.textAlign = 'center';
-  text.regX = -w/2;
-  text.x = w/2;
-  text.y = h/2;
-
-  this.addChild(text);
-
-  this.regX = w/2;
-  this.regY = h/2;
-  this.width = w;
-  this.height = h;
-}
-
-
-//<-- end methods
-//assign Button to window's scope & promote overriden container's methods from Wave object, allow them to be call by 'Container_methodName()'
-window.Text = createjs.promote(Text,'Container');
-
-}());
-
-(function() {
-// create new class
-function Button(text = 'KOMODO', callback = null, params) {
-
-  this.Container_constructor();
-  this.text = text;
-  this.callback = (callback === null)? this.nullCallback : callback;
-  var defaults = {
-    width: null,
-    height: null,
-    font: '22px bold Arial',
-    radius: 3,
-    paddings: [12, 30, 12, 30],
-    color: 'white',
-    backgroundColor: "blue",
-    float: 'center',
-    x: 0,
-    y: 0,
-  };
-
-
-  this.params = extend(defaults,params);
-  this.init();
-}
-//extend it
-var prototype = createjs.extend(Button, createjs.Container);
-//add EventDispatcher
-createjs.EventDispatcher.initialize(prototype);
-
-//public methods
-prototype.init = function() {
-
-  this.drawButton();
-}
-
-prototype.drawButton = function() {
-
-  let text = new createjs.Text(this.text, this.params.font, this.params.color);
-  let w = (this.params.width == null)? text.getBounds().width : this.params.width;
-  let h = (this.params.height == null)? text.getBounds().height : this.params.height;
-  let pad = this.params.paddings;
-  text.textAlign = 'center';
-  text.regX = 0;
-  text.regY = h/2;
-
-  let bg = new createjs.Shape();
-  bg.graphics.setStrokeStyle(1).beginStroke('grey').beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
-  bg.regX = w/2;
-  bg.regY = h/2 - 2;
-
-  this.addChild(bg);
-  this.addChild(text);
-
-  this.addEventListener("click", this.callback);
-
-  this.cursor = "pointer";
-  this.width = w + pad[1] + pad[3];
-  this.height = h + pad[0] + pad[2];
-
-  let c = new createjs.Shape();
-  c.graphics.beginFill('red').drawCircle(0,0,2);
-  //this.addChild(c);
-
-}
-
-prototype.nullCallback = function() {
-
-  console.error("Button has been clicked but there is no handler");
-}
-
-//<-- end methods
-//assign Button to window's scope & promote overriden container's methods from Wave object, allow them to be call by 'Container_methodName()'
-window.Button = createjs.promote(Button,'Container');
-
-}());

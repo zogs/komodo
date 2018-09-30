@@ -3,9 +3,8 @@
 var Stage;
 var Blockchains = [];
 var Emitters = [];
-var Timeline;
+var TimeLine;
 var Tweens = new Tweens();
-var TransactionPool = new TransactionPool();
 var Paused = 0;
 var TimeScale = 1;
 var ZoomScale = 1;
@@ -129,7 +128,7 @@ window.keyDownHandler = function(e)
    switch(e.key)
    {
     case ' ':  window.pause(); break;
-    case 's':  Timeline.start(); break;
+    case 's':  TimeLine.start(); break;
     case 'w':  slowMo(0.5,1000); break;
     case 'z':  zoom(1.6,700); break;
     case 'a':  dezoom(700); break;
