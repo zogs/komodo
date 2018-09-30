@@ -8,13 +8,17 @@ function get1dDistance(x1,x2){
 		return Math.sqrt(Math.pow(x2-x1,2));
 }
 
+function map(n, start1, stop1, start2, stop2) {
+      return ((n-start1)/(stop1-start1))*(stop2-start2)+start2;
+}
+
 function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
-function proxy(method, scope, args) { 
-	if(args == undefined ) return function() { return method.apply(scope, arguments); } 
-	else return function() { return method.apply(scope, args); } 
+function proxy(method, scope, args) {
+	if(args == undefined ) return function() { return method.apply(scope, arguments); }
+	else return function() { return method.apply(scope, args); }
 }
 
 function findPointFromAngle(x, y, angle, distance) {
@@ -60,7 +64,7 @@ function hexToRgbA(hex,opacity = 1){
 Math.radians = function(degrees) {
   return degrees * Math.PI / 180;
 };
- 
+
 // Converts from radians to degrees.
 Math.degrees = function(radians) {
   return radians * 180 / Math.PI;
@@ -105,12 +109,12 @@ function cloneObject(obj) {
     if (obj === null || typeof obj !== 'object') {
         return obj;
     }
- 
+
     var temp = new obj.constructor(); // give temp the original obj's constructor
     for (var key in obj) {
         temp[key] = cloneObject(obj[key]);
     }
- 
+
     return temp;
 }
 

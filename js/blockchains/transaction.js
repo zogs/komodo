@@ -20,10 +20,16 @@ function Transaction(params) {
   };
 
   this.params = extend(defaults,params);
-  this.position = null;
   this.posX = 0;
   this.posY = 0;
-  this.moveCallback = null;
+  this.callback = null;
+  this.target = null;
+  this.position = null;
+  this.velocity = new Victor(0,0);
+  this.acceleration = new Victor(0,0);
+  this.maxSpeed = 40;
+  this.maxForce = 4;
+  this.moving = false;
 
   this.init(params);
   this.tickChildren = false;
@@ -44,6 +50,88 @@ prototype.init = function(params) {
 
 }
 
+prototype.setPosition = function(x,y) {
+
+  this.x = x;
+  this.y = y;
+  this.position = new Victor(x,y);
+}
+
+prototype.setTarget = function(x,y,c) {
+
+  this.moving = true;
+  this.target = new Victor(x,y);
+}
+
+prototype.setCallback = function(c) {
+
+  this.callback = c;
+}
+
+prototype.move = function( ) {
+
+  if(this.moving === false) return;
+
+  this.behaviors();
+  this.position.add(this.velocity);
+  this.velocity.add(this.acceleration);
+  this.acceleration.zero();
+  this.velocity.multiplyScalar(TimeScale/2);
+
+  this.x = this.position.x;
+  this.y = this.position.y;
+
+  if(this.position.distanceSq(this.target) < 0.01) {
+    this.moving = false;
+    if(this.callback !== null) {
+      this.callback();
+      this.callback = null;
+    }
+  }
+}
+
+prototype.behaviors = function() {
+
+  let arrive = this.arrive(this.target);
+  this.applyForce(arrive);
+}
+
+prototype.applyForce = function(f) {
+
+  this.acceleration.add(f);
+}
+
+prototype.arrive = function(target) {
+  let desired = target.clone();
+  desired.subtract(this.position);
+  let mag = desired.magnitude();
+  let speed = this.maxSpeed;
+  if( mag < 100) {
+      speed = map(mag, 0, 100, 0, this.maxSpeed);
+
+  }
+  desired.norm().multiplyScalar(speed);
+  var steer = desired.clone();
+  steer.subtract(this.velocity);
+  //steer.limit(this.maxForce, this.maxSpeed);
+  return steer;
+}
+
+
+prototype.arrivedAtContract = function() {
+
+  let mempool = this.params.blockchain.mempool;
+  mempool.removeContractTransaction(this);
+
+  let target = mempool.addTransaction(this);
+  this.setTarget(target.x, target.y);
+  let trans = this;
+  setTimeout(function() {trans.setCallback(trans.validate)},1); //wow... here we have to call setTimeout because we cant change setCallback() inside an execution of callback()
+
+  let tw = createjs.Tween.get(this.params.ccc, {override: true, timeScale: TimeScale}).to({ rotation: 360}, 500).set({rotation: 0});
+  Tweens.add(tw);
+}
+
 prototype.drawTransaction = function() {
 
   let shape;
@@ -51,24 +139,24 @@ prototype.drawTransaction = function() {
   if(this.params.type == null) {
 
     shape = TransactionPool.get(this.params.blockchain);
-    this.regX = this.params.radius/2;
-    this.regY = this.params.radius/2;
+    shape.regX = this.params.radius/2+2;
+    shape.regY = this.params.radius/2+2;
     this.addChild(shape);
   }
 
   if(this.params.type == 'notary') {
 
     shape = TransactionPool.getNotary(this.params.blockchain);
-    this.regX = this.params.radius+2;
-    this.regY = this.params.radius+2;
+    shape.regX = this.params.radius*2;
+    shape.regY = this.params.radius*2;
     this.addChild(shape);
   }
 
   if(this.params.type == 'ccc') {
 
     shape = TransactionPool.getCC(this.params.blockchain);
-    this.regX = this.params.radius +2;
-    this.regY = -this.params.radius/2 + 1;
+    shape.regX = this.params.radius*3;
+    shape.regY = this.params.radius/2 +2;
     this.addChild(shape);
   }
 
@@ -86,60 +174,6 @@ prototype.drawTransaction = function() {
   this.shape = shape;
   this.alpha = this.params.alpha;
 
-}
-
-prototype.moveIn = function() {
-
-  //CCC transaction
-  if(this.params.type === 'ccc' && this.params.ccc != null) {
-    // move to CCC
-    this.moveTo(0, 0, this.params.ccc, this.arrivedAtContract);
-  }
-
-  //regular transaction
-  else {
-
-    this.params.mempool.addTransaction(this);
-    this.moveTo(0, 0, this.position, this.arrivedInPosition);
-  }
-}
-
-prototype.arrivedInPosition = function() {
-
-  if(this.position.hidden === true) this.hide();
-  this.validate();
-
-}
-prototype.arrivedAtContract = function() {
-
-  let tw = createjs.Tween.get(this.params.ccc, {override: true, timeScale: TimeScale}).to({ rotation: 360}, 500).set({rotation: 0});
-  Tweens.add(tw);
-
-  this.params.mempool.addTransaction(this);
-  this.moveTo(0, 0, this.position, this.arrivedInPosition);
-}
-
-prototype.moveTo = function(x = 0, y = 0, obj = undefined, callback = null) {
-
-  this.posX = x;
-  this.posY = y;
-  this.moveCallback = callback;
-  this.position = (typeof(obj) == 'undefined')? {x: 0, y: 0} : obj;
-  this.moveIntv = this.on("tick", this.moving, this);
-}
-
-prototype.moving = function() {
-
-  let x = this.position.x + this.posX;
-  let y = this.position.y + this.posY;
-
-  let tw = createjs.Tween.get(this, { timeScale: TimeScale }).to({x: x, y: y}, 300);
-  Tweens.add(tw);
-
-  if(get2dDistance(x, y, this.x, this.y) <= 1) {
-    this.off("tick", this.moveIntv);
-    if(typeof this.moveCallback === "function") this.moveCallback();
-  }
 }
 
 prototype.setColor = function(color, alpha = 1) {

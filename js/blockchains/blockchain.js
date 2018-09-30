@@ -132,6 +132,7 @@ prototype.mineBlock = function() {
 	let transactions = this.mempool.getValidTransactions(10);
 	block.addTransactions(transactions);
 	this.mempool.removeTransactions(transactions);
+	this.mempool.reorderTransactions();
 
 	this.drawNotarySecurity(block, transactions);
 
@@ -180,12 +181,12 @@ prototype.notarize = function() {
 	let tw = createjs.Tween.get(trans, {timeScale: TimeScale}).to({x: trans.x + this.params.blockWidth/2, y: trans.y - this.params.blockHeight/2, alpha: 0.5}, 800)
 		.call(function() {
 
+			trans.setPosition(trans.x, trans.y);
 			blockchain.mempool.addTransaction(trans);
-			trans.moveTo(0, 0, trans.position);
+			blockchain.mempool.reorderTransactions();
 			createjs.Tween.get(trans.image).to({ rotation: -1280, scale: 0, alpha: 0}, 200);
 			createjs.Tween.get(trans.shape).to({ alpha: 1}, 200);
 
-			blockchain.mempool.reorderTransactions();
 		});
 	Tweens.add(tw);
 

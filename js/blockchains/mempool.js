@@ -19,6 +19,7 @@ function Mempool(params) {
 
 	this.params = extend(defaults,params);
 	this.transactions = [];
+	this.ccTransactions = [];
 	this.positions = [];
 	this.ccc =  [];
 	this.saturated = false;
@@ -54,8 +55,23 @@ prototype.init = function(params) {
 
 prototype.tick = function() {
 
+	if(Paused === 1) return;
+
+	this.animateTransactions();
 	this.animateCapacity();
 
+}
+
+prototype.animateTransactions = function() {
+
+	for(let i=0,ln=this.transactions.length; i<ln; i++) {
+		let trans = this.transactions[i];
+		if(trans) trans.move();
+	}
+	for(let i=0,ln=this.ccTransactions.length; i<ln; i++) {
+		let trans = this.ccTransactions[i];
+		if(trans) trans.move();
+	}
 }
 
 prototype.animateCapacity = function() {
@@ -185,25 +201,41 @@ prototype.drawMempool = function() {
 
 }
 
+prototype.appendTransaction = function(trans) {
 
+	this.cont_transaction.addChild(trans);
+}
+
+prototype.addContractTransaction = function(trans) {
+
+	this.ccTransactions.push(trans);
+}
+
+prototype.removeContractTransaction = function(trans) {
+
+	this.ccTransactions.splice(this.ccTransactions.indexOf(trans), 1);
+}
 
 prototype.addTransaction = function(trans) {
 
+	let position;
 	if(this.transactions.length === 0) {
-		trans.position = this.getPosition(0);
+		position = this.getPosition(0);
 		this.transactions.push(trans);
 	}
 	else {
 		for(let i=0; i < this.transactions.length; i++) {
 			if(trans.params.priority > 0 && trans.params.priority > this.transactions[i].params.priority) {
-				trans.position = this.getPosition(i);
+				position = this.getPosition(i);
 				this.transactions.splice(i, 0, trans);
-				return;
+				return position;
 			}
 		}
-		trans.position = this.getPosition(this.transactions.length);
+		position = this.getPosition(this.transactions.length);
 		this.transactions.push(trans);
 	}
+	return position;
+
 }
 
 prototype.removeTransactions = function(transactions) {
@@ -214,8 +246,6 @@ prototype.removeTransactions = function(transactions) {
 		this.cont_transaction.removeChild(trans);
 		this.transactions.splice(this.transactions.indexOf(trans),1);
 	}
-
-	this.reorderTransactions();
 }
 
 prototype.reorderTransactions = function() {
@@ -226,7 +256,7 @@ prototype.reorderTransactions = function() {
 		let newpos = this.getPosition(i);
 		if(newpos.hidden === true) trans.hide();
 		else trans.show();
-		trans.moveTo(0, 0, newpos, trans.moveCallback);
+		trans.setTarget(newpos.x, newpos.y);
 	}
 }
 
@@ -251,7 +281,7 @@ prototype.computePosition = function() {
 		}
 
 		let pos = new createjs.Shape();
-		pos.graphics.setStrokeStyle(1).beginStroke('#BBB').drawCircle(0,0,3);
+		pos.graphics.setStrokeStyle(1).beginStroke('#DDD').drawCircle(0,0,3);
 		pos.x = x;
 		pos.y = y;
 		pos.position = i;
@@ -309,6 +339,11 @@ prototype.getArrowBand = function(width, height, color) {
 		Tweens.add(tw, false);
 
 		return stream;
+}
+
+prototype.getRandomContract = function() {
+
+	return this.ccc[Math.floor(Math.random()*this.ccc.length)];
 }
 
 prototype.getValidTransactions = function(n) {

@@ -104,8 +104,6 @@
     Blockchains.push(SC1);
     SC1.drawMoMoMMagic();
 
-    /*
-
     let AC1 = new Blockchain({name: 'AC1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
     AC1.x = 0;
     AC1.y = 500;
@@ -114,14 +112,14 @@
     Blockchains.push(AC1);
     AC1.drawMoMoMMagic();
 
-    let AC2 = new Blockchain({name: 'AC2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6});
+    let AC2 = new Blockchain({name: 'AC2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
     AC2.x = 0;
     AC2.y = 600;
     AC2.initMempool();
     Cont_blockchain.addChild(AC2);
     Blockchains.push(AC2);
     AC2.drawMoMoMMagic();
-    */
+
 
 		const pointiller = new Pointiller(500, 500);
     const logo = document.querySelector('#komodo-logo');
@@ -144,6 +142,8 @@
     emitter.y = komodo.y;
     emitter.addChain(komodo);
     emitter.addChain(SC1);
+    emitter.addChain(AC1);
+    emitter.addChain(AC2);
     Cont_emitter.addChild(emitter);
     Emitters.push(emitter);
 

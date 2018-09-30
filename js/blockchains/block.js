@@ -94,9 +94,7 @@ prototype.addTransaction = function(trans) {
 	let nb = this.transactions.length+1;
 
 	let pos = this.getNextPosition();
-
-	trans.x = pos.x;
-	trans.y = pos.y;
+	trans.setPosition(pos.x, pos.y);
 
 	if(trans.params.blockchain == this.params.blockchain) {
 		trans.setColor(this.params.blockchain.params.color, 1);
