@@ -27,6 +27,7 @@ class Transaction extends createjs.Container {
     this.maxSpeed = 40;
     this.maxForce = 4;
     this.moving = false;
+    this.impulsions = [];
 
     this.init(params);
     this.tickChildren = false;
@@ -48,7 +49,7 @@ class Transaction extends createjs.Container {
     this.position = new Victor(x,y);
   }
 
-  setTarget(x,y,c) {
+  setTarget(x,y) {
 
     this.moving = true;
     this.target = new Victor(x,y);
@@ -85,6 +86,8 @@ class Transaction extends createjs.Container {
 
     let arrive = this.arrive(this.target);
     this.applyForce(arrive);
+
+    this.applyImpulsions();
   }
 
   applyForce(f) {
@@ -109,18 +112,18 @@ class Transaction extends createjs.Container {
   }
 
 
-  arrivedAtContract() {
+  addImpulsion(imp, desc) {
+    this.impulsions.push([imp, desc]);
+  }
 
-    let mempool = this.params.blockchain.mempool;
-    mempool.removeContractTransaction(this);
-
-    let target = mempool.addTransaction(this);
-    this.setTarget(target.x, target.y);
-    let trans = this;
-    setTimeout(function() {trans.setCallback(trans.validate)},1); //wow... here we have to call setTimeout because we cant change setCallback() inside an execution of callback()
-
-    let tw = createjs.Tween.get(this.params.ccc, {override: true, timeScale: TimeScale}).to({ rotation: 360}, 500).set({rotation: 0});
-    Tweens.add(tw);
+  applyImpulsions() {
+    if(this.impulsions.length > 0) {
+      for(let i=0,ln=this.impulsions.length; i<ln; i++) {
+        let f = this.impulsions[i][0];
+        this.applyForce(f);
+        this.impulsions[i][0].multiplyScalar(this.impulsions[i][1]);
+      }
+    }
   }
 
  drawTransaction() {
@@ -148,6 +151,14 @@ class Transaction extends createjs.Container {
       shape = Transaction.getCCShape(this.params.blockchain, this.params.radius);
       shape.regX = this.params.radius*3;
       shape.regY = this.params.radius/2 +2;
+      this.addChild(shape);
+    }
+
+    if(this.params.type == 'z') {
+
+      shape = Transaction.getZShape(this.params.blockchain, this.params.radius);
+      shape.regX = this.params.radius*2+2;
+      shape.regY = this.params.radius*2+2;
       this.addChild(shape);
     }
 
@@ -243,6 +254,24 @@ class Transaction extends createjs.Container {
     this.shapeContract[name] = new createjs.Bitmap(shape.cacheCanvas);
 
     return this.shapeContract[name].clone();
+
+  }
+
+  static getZShape(blockchain, radius) {
+
+    if(this.shapeContract['z'] !== undefined) {
+      return this.shapeContract['z'].clone();
+    }
+
+    radius += radius*1/5;
+
+    let shape = new createjs.Shape();
+    shape.graphics.setStrokeStyle(2).beginStroke(blockchain.params.color)
+      .moveTo(-radius/2 - radius*1/5, -radius/2).lineTo(radius/2, -radius/2).lineTo(-radius/2, radius/2).lineTo(radius/2 + radius*1/5, radius/2);
+    shape.cache(-radius*2, -radius*2, radius*4, radius*4);
+
+    this.shapeContract['z'] = new createjs.Bitmap(shape.cacheCanvas);
+    return this.shapeContract['z'].clone();
 
   }
 }

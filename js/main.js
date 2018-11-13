@@ -2,7 +2,10 @@
 // define usefull const
 var Stage;
 var Blockchains = [];
+var Platforms = [];
 var Emitters = [];
+var Particles = [];
+var Mempools = [];
 var TimeLine;
 var Tweens = new Tweens();
 var Paused = 0;
@@ -12,7 +15,9 @@ var SlowMotion = false;
 var Cont_main;
 var Cont_timeline;
 var Cont_blockchain;
-var Cont_mempool;
+var ColorAsset = ['#f3de8a', '#eb9486', '#7e7f9a', '#97a7b3'];
+var MinuteWidth = 120;
+var MinuteSeconds = 2;
 
 
 // define global usefull constant
@@ -36,6 +41,8 @@ window.loaded = function() {
 		{id:'komodoASlogo',src:'assets/img/Komodo-icon.png'},
 		{id:'kmddPOWed',src:'assets/img/KMDdPOW.png'},
 		{id:'btcdPOWed',src:'assets/img/BTCdPOW.png'},
+		{id:'btc_security',src:'assets/img/BTC_security.png'},
+		{id:'kmd_security',src:'assets/img/KMD_security.png'},
 		{id:'arrowband',src:'assets/img/arrowband.png'},
 		{id:'icon_btc',src:'assets/img/icon/btc.png'},
 		{id:'icon_kmd',src:'assets/img/icon/kmd.png'},
@@ -45,7 +52,9 @@ window.loaded = function() {
 		{id:'icon_faucet',src:'assets/img/icon/faucet.png'},
 		{id:'icon_kmd_ac',src:'assets/img/icon/kmd_ac.png'},
 		{id:'icon_oracle',src:'assets/img/icon/oracle.png'},
-		{id:'icon_reward',src:'assets/img/icon/reward.png'},
+    {id:'icon_reward',src:'assets/img/icon/reward.png'},
+    {id:'icon_gamecredits',src:'assets/img/icon/game.png'},
+		{id:'icon_einsteinium',src:'assets/img/icon/emc2.png'},
 	]);
 
 }
@@ -58,6 +67,34 @@ window.assetsLoaded = function() {
 	ORIGINWIDTH = Stage.canvas.width;
 	ORIGINHEIGHT = Stage.canvas.height;
 	RATIO = STAGEWIDTH / STAGEHEIGHT;
+
+	//Stage containers
+	Cont_main = new createjs.Container();
+  Stage.addChild(Cont_main);
+
+  Cont_background = new createjs.Container();
+  Cont_main.addChild(Cont_background);
+
+  Cont_timeline = new createjs.Container();
+  Cont_main.addChild(Cont_timeline);
+
+  Cont_platform = new createjs.Container();
+  Cont_main.addChild(Cont_platform);
+
+  Cont_blockchain = new createjs.Container();
+  Cont_main.addChild(Cont_blockchain);
+
+  Cont_mempool = new createjs.Container();
+  Cont_main.addChild(Cont_mempool);
+
+  Cont_emitter = new createjs.Container();
+  Cont_main.addChild(Cont_emitter);
+
+  Cont_currenttime = new createjs.Container();
+  Cont_main.addChild(Cont_currenttime);
+
+  Cont_tour = new createjs.Container();
+  Stage.addChild(Cont_tour);
 
 	//init onEnterFrame
 	createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
@@ -80,47 +117,36 @@ window.assetsLoaded = function() {
 }
 
 
+window.resetGlobals = function() {
+
+  Blockchains = [];
+  Platforms = [];
+  Emitters = [];
+  Particles = [];
+  Mempools = [];
+  TimeLine = null;
+
+}
+
+window.clearStage = function() {
+
+  Cont_background.removeAllChildren();
+  Cont_timeline.removeAllChildren();
+  Cont_platform.removeAllChildren();
+  Cont_blockchain.removeAllChildren();
+  Cont_mempool.removeAllChildren();
+  Cont_emitter.removeAllChildren();
+  Cont_currenttime.removeAllChildren();
+
+  Stage.removeAllEventListeners();
+  createjs.Tween.removeAllTweens();
+}
+
+
 window.tick = function() {
 
-	//console.log(createjs.Tween._tweens.length);
 	Stage.update();
 }
-
-window.addAssetChain = function() {
-
-	let n = Blockchains.length+1;
-
-	let prev = Blockchains[Blockchains.length-1];
-	let bloc = prev.blocks[prev.blocks.length-2];
-
-	let AS = new Blockchain({name: 'AS'+n, color:'green', notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
-	AS.x = prev.x + bloc.x + AS.params.blockWidth/2 + AS.params.blockPadding/2;
-	AS.y = 100 + n*100;
-	AS.initMempool();
-	AS.mempool.start();
-	Cont_blockchain.addChild(AS);
-	Blockchains.push(AS);
-
-}
-
-window.addScalingChain = function() {
-
-	let n = Blockchains.length+1;
-	let prev = Blockchains[Blockchains.length-1];
-	let bloc = prev.blocks[prev.blocks.length-2];
-	let blocX = (typeof bloc !== 'undefined')? bloc.x : 0;
-
-	let SC = new Blockchain({name: 'SC'+n, color:'#569b9b', notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
-	SC.x = prev.x + blocX + SC.params.blockWidth/2 + SC.params.blockPadding/2;
-	SC.y = prev.y + 100;
-	SC.initMempool();
-	Cont_blockchain.addChild(SC);
-
-	Blockchains.push(SC);
-	Emitters.find(e => e.params.name == 'komodo').addChain(SC);
-
-}
-
 
 
 window.keyDownHandler = function(e)
@@ -136,8 +162,49 @@ window.keyDownHandler = function(e)
     case 'c':  window.addScalingChain(); break;
     case '+':  window.increaseTps(); break;
     case '-':  window.decreaseTps(); break;
+    case 'l':  window.particleTest(); break;
     default: console.log('Key "'+e.key+'" have no handler.');
    }
+}
+
+
+window.particleTest = function() {
+
+	for(let i=0,ln=Particles.length; i<ln; ++i) {
+		Particles[i].moveRandomly = !Particles[i].moveRandomly;
+	}
+}
+
+window.addAssetChain = function() {
+
+	let platform = Platforms.find(p => p.params.name == 'KOMODO PLATFORM');
+	let chains = platform.chains;
+
+	let n = chains.length+1;
+	let prev = chains[chains.length-1];
+	let bloc = prev.blocks[prev.blocks.length-2];
+	let color = ColorAsset[Math.ceil(Math.random()*(ColorAsset.length-1))];
+
+	let AS = new Blockchain({id: 'AS'+n, name:"Asset Chain "+n, color: color, type: 'AC', notarizeTo: 'kmd'});
+	AS.x = prev.x + bloc.x + AS.params.blockWidth/2 + AS.params.blockPadding/2;
+	platform.addChain(AS);
+
+}
+
+window.addScalingChain = function() {
+
+	let platform = Platforms.find(p => p.params.name == 'KOMODO PLATFORM');
+	let chains = platform.chains;
+
+	let n = chains.length+1;
+	let prev = chains[chains.length-1];
+	let bloc = prev.blocks[prev.blocks.length-2];
+	let blocX = (typeof bloc !== 'undefined')? bloc.x : 0;
+
+	let SC = new Blockchain({id: 'SC'+n, name: "Scaling Chain "+n, color:'#569b9b', type: 'SC', notarizeTo: 'kmd'});
+	SC.x = prev.x + blocX + SC.params.blockWidth/2 + SC.params.blockPadding/2;
+	platform.addChain(SC);
+
 }
 
 window.keyUpHandler = function(e)
@@ -168,14 +235,14 @@ window.getMouseVector = function(n) {
 
 window.increaseTps = function() {
 
-	let emit = Emitters.find(e => e.params.name == 'komodo');
+	let emit = Emitters.find(e => e.params.name == 'KOMODO PLATFORM');
 	emit.params.tps = Math.ceil(emit.params.tps*2);
 	console.log(emit.params.name + ' - Tps: '+emit.params.tps+' tx/s total');
 
 }
 window.decreaseTps = function() {
 
-	let emit = Emitters.find(e => e.params.name == 'komodo');
+	let emit = Emitters.find(e => e.params.name == 'KOMODO PLATFORM');
 	emit.params.tps = Math.ceil(emit.params.tps/2);
 	console.log(emit.params.name + ' - Tps: '+emit.params.tps+' tx/s total');
 }

@@ -6,34 +6,42 @@ class Dialog extends createjs.Container {
     this.content = content;
     this.buttons = buttons;
     var defaults = {
-      x: 0,
-      y: 0,
+      x: STAGEWIDTH/2,
+      y: STAGEHEIGHT/2,
+      dx: 0,
+      dy: 0,
       width: null,
       height: null,
       alpha: 0,
       lifetime: 0,
       call: null,
+      onload: null,
       radius: 0,
       paddings: [10,10,10,10],
-      color: 'white',
+      backgroundColor: '#d6e0e0',
       borderColor: 'grey',
       borderWidth: 1,
       arrowTo: null,
       arrowFrom: 'top',
-      arrowWidth: 100,
-      arrowCenter: 0
+      arrowWidth: 50,
+      arrowCenter: 0,
+      animate: false,
+      animateSpeed: 500
     };
 
     this.params = extend(defaults,params);
     this.originParams = this.params;
     this.x = this.params.x;
     this.y = this.params.y;
+    this.x += this.params.dx;
+    this.y += this.params.dy;
     this.alpha = this.params.alpha;
     this.htmlElement = null;
     this.htmlContent = null;
 
-    Stage.addEventListener('canvas_resized', proxy(this.onResize, this));
 
+
+    Stage.addEventListener('canvas_resized', proxy(this.onResize, this));
 
     this.init(params);
   }
@@ -47,9 +55,21 @@ class Dialog extends createjs.Container {
       this.htmlElement.style.pointerEvents = 'auto';
     }
 
+    if(this.params.onload) {
+      this.params.onload(this);
+    }
+
     if(this.params.lifetime > 0) {
       createjs.Tween.get(this).to({}, this.params.lifetime).call(this.params.call);
     }
+
+    if(this.params.animate) {
+      this.y -= 20;
+      createjs.Tween.get(this).to({y: this.y + 20}, this.params.animateSpeed);
+    }
+
+    this.alpha = 0;
+    createjs.Tween.get(this).to({alpha: 1}, this.params.animateSpeed);
   }
 
   close() {
@@ -132,12 +152,19 @@ class Dialog extends createjs.Container {
 
     let bg = new createjs.Shape();
     let pad = this.params.paddings;
-    bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.color).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
+    bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
     this.addChild(bg);
 
     if(this.params.arrowTo !== null && typeof this.params.arrowTo == 'object' && this.params.arrowTo.x !== undefined && this.params.arrowTo.y !== undefined) {
-        this.drawArrow();
+      let to = this.globalToLocal(this.params.arrowTo.x, this.params.arrowTo.y);
+      this.drawArrow(to);
     }
+
+    if(this.params.arrow !== null && typeof this.params.arrow == 'object' && this.params.arrow.x !== undefined && this.params.arrow.y !== undefined) {
+      let to = this.globalToLocal(this.x + this.params.arrow.x, this.y + this.params.arrow.y);
+      this.drawArrow(to);
+    }
+
 
     if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
@@ -165,12 +192,10 @@ class Dialog extends createjs.Container {
 
   }
 
-  drawArrow() {
-
-    let to = this.globalToLocal(this.params.arrowTo.x, this.params.arrowTo.y);
+  drawArrow(to) {
 
     let arrow = new createjs.Shape();
-    arrow.graphics.beginFill(this.params.color).setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor);
+    arrow.graphics.beginFill(this.params.backgroundColor).setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor);
     if(this.params.arrowFrom == 'top') {
       arrow.graphics
             .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
@@ -209,15 +234,20 @@ class Dialog extends createjs.Container {
 
   class Text extends createjs.Container {
 
-    constructor(text = 'KOMODO', font = null, params) {
+    constructor(text = 'KOMODO', font = null, params = {}) {
 
       super();
       this.text = text;
-      this.font = (font === null)? '14px Arial' : font;
+      this.font = (font === null)? '20px Arial' : font;
       var defaults = {
         width: null,
         height: null,
-        color: 'black',
+        color: '#31656580',
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        textAlign: 'center',
       };
 
       this.params = extend(defaults,params);
@@ -231,21 +261,27 @@ class Dialog extends createjs.Container {
 
     drawText() {
 
+      if(this.text.length == 0) {
+        this.params.paddingTop = 0, this.params.paddingBottom = 0, this.params.paddingLeft = 0, this.params.paddingRight = 0;
+      }
+
       let text = new createjs.Text(this.text, this.font, this.params.color);
-      let w = (this.params.width == null)? text.getBounds().width : this.params.width;
-      let h = (this.params.height == null)? text.getBounds().height : this.params.height;
-      let pad = this.params.paddings;
-      text.textAlign = 'center';
-      text.regX = -w/2;
-      text.x = w/2;
-      text.y = h/2;
+      let w = (this.text.length > 0)? text.getBounds().width : 0;
+      let h = (this.text.length > 0)? text.getBounds().height : 0;
+      let W = w + this.params.paddingLeft + this.params.paddingRight;
+      let H = h + this.params.paddingTop + this.params.paddingBottom;
+      text.textAlign = this.params.textAlign;
+      text.x = W/2;
+      text.y = this.params.paddingTop;
 
       this.addChild(text);
 
-      this.regX = w/2;
-      this.regY = h/2;
-      this.width = w;
-      this.height = h;
+      this.width = W;
+      this.height = H;
+
+      let mid = new createjs.Shape();
+      mid.graphics.beginFill('red').drawCircle(0,0,3);
+      //this.addChild(mid);
     }
 
   }
@@ -261,11 +297,13 @@ class Dialog extends createjs.Container {
       var defaults = {
         width: null,
         height: null,
-        font: '22px bold Arial',
-        radius: 3,
+        font: '22px Roboto',
+        radius: 2,
         paddings: [12, 30, 12, 30],
         color: 'white',
-        backgroundColor: "blue",
+        backgroundColor: "#316565",
+        borderWidth: 1,
+        borderColor: '#316565',
         float: 'center',
         x: 0,
         y: 0,
@@ -292,7 +330,7 @@ class Dialog extends createjs.Container {
       text.regY = h/2;
 
       let bg = new createjs.Shape();
-      bg.graphics.setStrokeStyle(1).beginStroke('grey').beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
+      bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
       bg.regX = w/2;
       bg.regY = h/2 - 2;
 

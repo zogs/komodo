@@ -13,7 +13,7 @@
       body { margin: 0; padding: 0; background: #DFEFEE; }
       #canvas-container { position: relative; margin: 0 auto; }
       canvas { position: relative; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
-      .dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; background: #FFF; padding: 10px 30px; }
+      .dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; padding: 10px 30px; }
       .dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
   </style>
 
@@ -21,7 +21,7 @@
 
   <body onload="loaded()">
       <div id="canvas-container">
-        <div class="dialog" id="secu1"><h1>KOMODO ROCKS</h1> Discover the magic behind the dragon !</div>
+        <div class="dialog" id="secu1"><h1>SECURITY</h1> Recycling bitcoin hashrate !</div>
         <div class="dialog" id="secu2">Lets begin with dPOW...</div>
         <div class="dialog" id="secu3">This was dPOW !</div>
         <canvas id="canvas" width="1500" height="800"> <!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
@@ -37,13 +37,17 @@
   <script src="lib/dat/dat.gui.min.js"></script>
   <script src="commons/utils.js" type="text/javascript"></script>
   <script src="commons/tweens.js" type="text/javascript"></script>
+  <script src="js/blockchains/platform.js" type="text/javascript"></script>
   <script src="js/blockchains/blockchain.js" type="text/javascript"></script>
   <script src="js/blockchains/block.js" type="text/javascript"></script>
   <script src="js/blockchains/mempool.js" type="text/javascript"></script>
+  <script src="js/blockchains/emitter.js" type="text/javascript"></script>
   <script src="js/blockchains/timeline.js" type="text/javascript"></script>
   <script src="js/blockchains/transaction.js" type="text/javascript"></script>
+  <script src="js/blockchains/contract.js" type="text/javascript"></script>
   <script src="js/dialog.js" type="text/javascript"></script>
   <script src="js/chapter.js" type="text/javascript"></script>
+  <script src="js/chapters/intro.js" type="text/javascript"></script>
   <script src="js/chapters/security.js" type="text/javascript"></script>
   <script src="js/chapters/scalability.js" type="text/javascript"></script>
   <script src="js/tour.js" type="text/javascript"></script>
@@ -53,42 +57,16 @@
 
   window.initStage = function() {
 
-
-    Cont_main = new createjs.Container();
-    Stage.addChild(Cont_main);
-
-    Cont_timeline = new createjs.Container();
-    Cont_main.addChild(Cont_timeline);
-
-    Cont_blockchain = new createjs.Container();
-    Cont_main.addChild(Cont_blockchain);
-
-    Cont_mempool = new createjs.Container();
-    Cont_main.addChild(Cont_mempool);
-
-    Cont_tour = new createjs.Container();
-    Stage.addChild(Cont_tour);
-
-    let minuteWidth = 120;
-    let minuteSeconds = 2;
-
-    TimeLine = new Timeline({
-      width: STAGEWIDTH,
-      height: STAGEHEIGHT,
-      minuteWidth: minuteWidth,
-      minuteSeconds: minuteSeconds,
-      defaultTime: 7,
-    });
-    Cont_timeline.addChild(TimeLine);
-
-
     Tour = new Tour();
+    // Intro chapter
+    //Tour.addChapter(Intro);
     // First chapter : SECURITY
-    Tour.addChapter(Security);
+    // Tour.addChapter(Security);
     // Second chapter : SCALABILITY
     Tour.addChapter(Scalability);
 
     Tour.start();
+    //Cont_tour.alpha = 0;
 
   }
 

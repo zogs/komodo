@@ -63,7 +63,7 @@ class Block extends createjs.Container {
 		let text = new createjs.Text(name, '12px Arial', '#AAA');
 		text.x = text.getMeasuredWidth()/2;
 		text.y = this.params.height + 4;
-		this.cont_text.addChild(text);
+		//this.cont_text.addChild(text);
 
 		this.regX = this.params.width/2;
 		this.regY = this.params.height/2;

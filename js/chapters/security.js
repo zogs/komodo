@@ -2,39 +2,268 @@ const Security = new Chapter({name: 'Security'});
 
 Security.init = function() {
 
-      let bitcoin = new Blockchain({name: 'bitcoin', blockTime: 10, color: 'orange', 'premined': 0});
-      bitcoin.x = 0;
-      bitcoin.y = 100;
-      bitcoin.initMempool();
-      Cont_blockchain.addChild(bitcoin);
-      Blockchains.push(bitcoin);
+  TimeLine = new Timeline({
+    width: STAGEWIDTH,
+    height: STAGEHEIGHT,
+    minuteWidth: MinuteWidth,
+    minuteSeconds: MinuteSeconds,
+    defaultTime: 7,
+  });
+  Cont_timeline.addChild(TimeLine);
 
-      let komodo = new Blockchain({name: 'komodo', color:'#306565', premined: 6, notarizeTo: 'bitcoin', notarizeInterval: 10, notarizeNBlock: 1});
-      komodo.x = 0;
-      komodo.y = 300;
-      komodo.initMempool();
-      Cont_blockchain.addChild(komodo);
-      Blockchains.push(komodo);
-    }
+  let komodo = new Blockchain({id: 'kmd', name: 'komodo', color:'#306565', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
+  var komodoPlatform = new Platform({y: 250,name: 'komodo',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 2,});
+  Platforms.push(komodoPlatform);
+
+
+  Platforms.map(p => p.alpha = 0);
+  Emitters.map(e=> e.alpha = 0);
+  Mempools.map(m=> m.alpha = 0);
+
+}
+
 
 Security.set = function() {
 
-  let title = new Dialog('secu1', [
-    new Button('Start', proxy(this.continue, this), {float: 'center'}),
-    ], {
-  x: STAGEWIDTH/2, y: STAGEHEIGHT/2
-  });
-  this.addDialog(title);
+  var that = this;
 
-  let next = new Dialog('secu2', [], {
-  x: STAGEWIDTH/2, y: STAGEHEIGHT/2, lifetime: 2000, call: proxy(this.continue, this), arrowTo: {x: 800, y: 700}, arrowFrom: 'bottom'
-  });
-  this.addDialog(next);
-
-  let end = new Dialog('secu3', [
-    new Button('Continue', proxy(this.continue, this), {float: 'center'}),
+  // #1
+  let dial = new Dialog([
+    new Text('SECURITY', '60px Roboto', {color: '#316565'}),
+    new Text('How to recycle bitcoin power', '20px Arial', {paddingTop: 20, paddingBottom: 20}),
+    ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
-  x: STAGEWIDTH/2, y: STAGEHEIGHT/2, arrowTo: {x: 500, y: 400}, arrowFrom: 'left'
   });
-  this.addDialog(end);
+  this.addDialog(dial);
+
+  // #2
+  dialog = new Dialog([
+    new Text('So there is the Komodo blockchain.', '20px Arial'),
+    ], [
+    ], {
+      dy: -50, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
+      lifetime: 2000, call: proxy(this.continue, this), onload: function() {
+        let komodo = Platforms.find(b => b.params.name == 'komodo');
+        komodo.hide();
+        komodo.fadeIn(500);
+        TimeLine.start();
+      },
+    });
+  this.addDialog(dialog);
+
+  // #3
+  dialog = new Dialog([
+    new Text('It is a Proof-of-Work blockchain, with a blocktime of 1min.'),
+    new Text("So every minute or so, a new block is mined by a pool of miners all arround the world."),
+    ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
+    ], {
+      arrow: {x:0, y:100}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
+      dx: 0, dy: -280
+    });
+  this.addDialog(dialog);
+
+  // #4
+  dialog = new Dialog([
+    new Text("Now, every 10 minutes, Komodo will reuse the Bitcoin security !"),
+    new Text(""),
+    new Text("Let's wait for the next notarization..."),
+    ], [
+    ], {
+      arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
+      dx: 0, dy: 0,
+      onload: function(_this) {
+
+        let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0});
+        Blockchains.push(bitcoin);
+        let platform = new Platform({ y: 100, name: 'bitcoin', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 0.5});
+        platform.emitter.start();
+        Platforms.push(platform);
+
+        platform.hide();
+        platform.fadeIn(500);
+
+        platform.y = - 100;
+        platform.emitter.y = -100;
+        platform.slideY(100, 500);
+
+        //enable dPoW
+        let komodo = Blockchains.find(b => b.params.id == 'kmd');
+        komodo.params.notarizeTo = 'btc';
+
+        let line = _this.content[2];
+        let text = new createjs.Text('', '20px Arial', '#31656580');
+        text.x = line.x + line.getBounds().x + 330;
+        text.y = line.y + 5;
+        _this.addChild(text);
+
+        //wait for notarization
+        Stage.on('newminute', function(ev) {
+
+          let t = komodo.params.notarizeInterval - ev.time%10;
+          window.setTimeout(function() {
+            text.text = '('+t+'s)';
+          }, 100);
+
+          if((ev.time+1)%10 == 0) {
+            ev.remove();
+          }
+        });
+
+        // slow down
+        Stage.on('notarization_start', Security.slowDown, null, true);
+        Stage.on('notarization_start', proxy(that.continue, that), null, true);
+        //return to normal
+        Stage.on('notarization_end', Security.slowUp, null, true);
+      }
+    });
+  this.addDialog(dialog);
+
+
+  // #5
+  dialog = new Dialog([
+    new Text("Look here !")
+    ], [
+    ], {
+      x:1050, y: 170, arrow: {x:-150, y:0}, arrowFrom: 'left', arrowWidth:20, animate: true, backgroundColor: '#FFF',
+      lifetime: 3000, call: proxy(this.continue, this)
+    });
+  this.addDialog(dialog);
+
+  // #6
+  dialog = new Dialog([
+    new Text("Did you see that ?"),
+    new Text(""),
+    new Text("That was the notarization process !"),
+    ], [
+    ], {
+      dx: 100, dy: -60, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
+      lifetime: 3500, call: proxy(this.continue, this)
+    });
+  this.addDialog(dialog);
+
+  // #7
+  dialog = new Dialog([
+    new Text('By notarizing its status inside a Bitcoin block, Komodo takes avantage of the Bitcoin hashrate.'),
+    new Text('As soon as the Bitcoin block is mined, there is now an immutable record of Komodo transactions written on the Bitcoin blockchain,'),
+    new Text(' '),
+    new Text('Therefore, it becomes impossible to reorged the Komodo blockchain before this checkpoint !'),
+    ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
+    ], {
+      animate: true,
+    });
+  this.addDialog(dialog);
+
+  // #8
+  dialog = new Dialog([
+    new Text('This mechanism is called Delayed Proof-of-Work (dPOW). '),
+    new Text('This means that for a 51% attack, you needs to gain the majority of Komodo hashrate'),
+    new Text('Plus the majority of the Bitcoin hashrate !'),
+    new Text(' '),
+    new Text('I wish you good luck with that !'),
+    ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
+    ], {
+      animate: true,
+    });
+  this.addDialog(dialog);
+
+  // #9
+  dialog = new Dialog([
+    new Text("Wait, that's not all !")
+    ], [], {
+      lifetime: 1000, call: proxy(this.continue, this), backgroundColor: '#FFF'
+    });
+  this.addDialog(dialog);
+
+  // #10
+  dialog = new Dialog([
+    new Text("Komodo can now provide Bitcoin security to others independant blockchain !"),
+    new Text(""),
+    new Text("Do you want to see an example ?"),
+    ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
+    ], {
+      animate : true, backgroundColor: '#FFF',
+    });
+  this.addDialog(dialog);
+
+  // #11
+  dialog = new Dialog([
+    new Text("These are 2 external blockchains that have choose to trust Komodo to secure their network."),
+    new Text(""),
+    new Text("GameCredits and Einsteinum."),
+    ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
+    ], {
+      dx: 0, dy: 300, arrow: {x:0, y:-90}, arrowFrom: 'top', backgroundColor: '#FFF',
+      onload: function(_this) {
+          let emc2 = new Blockchain({id: 'emc2', name: 'Einsteinum', color: '#32cbd4', premined: 5, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_einsteinium' })
+          let game = new Blockchain({id: 'game', name: 'GameCredits', color: '#8bca2a', premined: 5, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_gamecredits' })
+          Blockchains.push(emc2);
+          Blockchains.push(game);
+
+          var einsPlatform = new Platform({y: 400, name: 'einsteinium', color: '#32cbd4', backgroundColor: null, chains: [emc2], emitterTPS: 2,});
+          einsPlatform.emitter.start();
+          Platforms.push(einsPlatform);
+
+          var gamePlatform = new Platform({y: 550,name: 'game',color: '#8bca2a',backgroundColor: null,chains: [game],emitterTPS: 2});
+          gamePlatform.emitter.start();
+          Platforms.push(gamePlatform);
+
+          einsPlatform.hide();
+          gamePlatform.hide();
+
+          einsPlatform.fadeIn(1000);
+          gamePlatform.fadeIn(1000);
+
+          einsPlatform.y = 500;
+          einsPlatform.emitter.y = 500;
+          einsPlatform.slideY(400, 1000);
+
+          gamePlatform.y = 650;
+          gamePlatform.emitter.y = 650;
+          gamePlatform.slideY(550, 1000);
+
+      }
+    });
+  this.addDialog(dialog);
+
+  // #12
+  dialog = new Dialog([
+    new Text("These blockchain are notarizing themselves to Komodo. "),
+    new Text("They now beneficit from the Bitcoin hashrate + the Komodo hashrate."),
+    new Text("Now attackers needs to attack 3 blockchains instead of 1, that should be pretty hard, don't you think ?"),
+    new Text(""),
+    new Text("As a matter of fact, Einsteinium already resist at least one 51% attack since they implements dPoW !")
+    ], [
+    new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
+    ], {
+      dy: 280,
+    });
+  this.addDialog(dialog);
+
+  // #13
+  dialog = new Dialog([
+    new Text("If you are interested in the dPoW mechanism for securing your blockchain,"),
+    new Text("Dont hesitate to contact the Komodo team! "),
+    new Text(""),
+    ], [
+      new Button("REPLAY CHAPTER", proxy(this.replay, this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+      new Button("NEXT CHAPTER", proxy(this.continue, this), { float: 'right'}),
+    ], {
+      dy: 300,
+    });
+  this.addDialog(dialog);
+
+}
+
+Security.slowDown = function() {
+  window.slowMo(0.2, 1000);
+}
+
+Security.slowUp = function() {
+  window.slowMo(1, 1000);
 }

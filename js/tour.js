@@ -35,6 +35,7 @@ class Tour extends createjs.Container {
     if(chapter == null) console.error('Chapter "'+name+'" does not exist');
 
     this.current.stop();
+    this.clearStage();
     chapter.start();
 
     this.current = chapter;
@@ -47,9 +48,15 @@ class Tour extends createjs.Container {
     if(chapter == null) return this.stop();
 
     this.current.stop();
+    this.clearStage();
     chapter.start();
 
     this.current = chapter;
+  }
+
+  clearStage() {
+
+    Cont_main.removeAllChildren();
   }
 
   stop() {

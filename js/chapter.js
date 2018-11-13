@@ -27,7 +27,7 @@ class Chapter extends createjs.Container {
   goTo(n) {
 
     if(this.current !== null) {
-      this.current.close();
+      this.dialogs.map(d => d.close());
     }
     let dialog = this.dialogs[n];
     dialog.open();
@@ -36,7 +36,7 @@ class Chapter extends createjs.Container {
 
   continue() {
 
-    this.current.close();
+    this.dialogs.map(d => d.close());
 
     let idx = this.dialogs.indexOf(this.current);
     if(idx+1 > this.dialogs.length-1) {
@@ -54,7 +54,16 @@ class Chapter extends createjs.Container {
 
   stop() {
 
-    this.current.close();
+    this.dialogs.map(d => d.close());
+
+    this.destroy();
+  }
+
+  replay() {
+
+    this.stop();
+    this.current = null;
+    this.start();
   }
 
   destroy() {
@@ -62,6 +71,9 @@ class Chapter extends createjs.Container {
     this.removeAllChildren();
     this.dialogs = [];
     Cont_tour.removeChild(this);
+
+    window.clearStage();
+    window.resetGlobals();
   }
 
   addDialog(dialog) {

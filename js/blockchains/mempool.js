@@ -6,8 +6,8 @@ class Mempool extends createjs.Container {
 		var defaults = {
 			width: 140,
 			height: 50,
-			cols: 8,
-			rows: 3,
+			cols: 6,
+			rows: 2,
 			padding: 10,
 			radius: 10,
 			transSize: 10,
@@ -22,6 +22,7 @@ class Mempool extends createjs.Container {
 		this.saturated = false;
 
 		this.params.capacity = this.params.cols * this.params.rows;
+		this.params.nbTrans = this.params.blockchain.params.maxTps * this.params.blockchain.params.blockTime * 60 / 10;
 
 		this.cont_debug = new createjs.Container();
 		this.cont_momom = new createjs.Container();
@@ -39,6 +40,14 @@ class Mempool extends createjs.Container {
 		this.drawMempool();
 
 		createjs.Ticker.addEventListener('tick', proxy(this.tick, this));
+
+
+	}
+
+	start() {
+
+		//let tw = createjs.Tween.get(this, {loop: true, timeScale: TimeScale}).to({z: 0}, 500).call(this.everyHalfSeconds);
+		//Tweens.add(tw, false);
 
 	}
 
@@ -71,14 +80,11 @@ class Mempool extends createjs.Container {
 		if(coef > 1) coef = 1;
 
 		// gauge
-		if(coef > 0.7) this.gaugeColor.style = "red";
+		if(coef > 0.9) this.gaugeColor.style = "red";
 		else this.gaugeColor.style = "#AAA";
 		let tw = createjs.Tween.get(this.gauge, {override: true, timeScale: TimeScale}).to({scaleX: coef}, 500);
 		Tweens.add(tw);
 
-		// tps
-		let tps = coef * this.params.blockchain.params.maxTps;
-		this.tps.text = Math.ceil(tps) + ' tx/s';
 
 		//if mempool satured
 		if(this.saturated == false && this.transactions.length > (this.params.cols * this.params.rows)) {
@@ -86,6 +92,25 @@ class Mempool extends createjs.Container {
 			let t = createjs.Tween.get(this.warning, { timeScale: TimeScale}).to({alpha: 0.2}, 500).to({alpha: 0}, 500).set({saturated: false}, this);
 			Tweens.add(t);
 		}
+	}
+
+	updateTps() {
+
+		let tps = this.transactions.length * this.params.nbTrans / (this.params.blockchain.params.blockTime*60);
+		let d = tps*0.10;
+		//if(tps > 5) tps += d/2 - Math.random()*d;
+		if(tps > this.params.blockchain.params.maxTps) tps = this.params.blockchain.params.maxTps;
+		tps = Math.ceil(tps);
+		this.tps_text.text = tps + ' tx/s';
+		this.params.blockchain.tps = tps;
+
+		this.animateCapacity()
+
+	}
+
+
+	mined(block) {
+
 	}
 
 	drawMempool() {
@@ -115,26 +140,12 @@ class Mempool extends createjs.Container {
 		this.cont_block.addChild(warn);
 		this.warning = warn;
 
-		// TPS
-		let tps = new createjs.Text('0 tx/s', '12px Arial', "#666");
-		tps.x = this.params.width + 10;
-		tps.y = this.params.height + 4;
-		tps.alpha = 0.5;
-		this.tps = tps;
-		this.cont_block.addChild(tps);
-
-
-		// text
-		let text = new createjs.Text('MEMPOOL','12px Arial', '#AAA');
-		text.y = this.params.height + 4;
-		text.x = this.params.width/2 - text.getMeasuredWidth()/2;
-		this.cont_block.addChild(text);
-
 		let asset = queue.getResult('icon_kmd_ac');
-		if(this.params.blockchain.params.name == 'bitcoin') asset = queue.getResult('icon_btc');
-		if(this.params.blockchain.params.name == 'komodo') asset = queue.getResult('icon_kmd');
+		if(this.params.blockchain.params.id == 'btc') asset = queue.getResult('icon_btc');
+		if(this.params.blockchain.params.id == 'kmd') asset = queue.getResult('icon_kmd');
 		if(this.params.blockchain.params.type == 'SC') asset = queue.getResult('icon_kmd_ac');
 		if(this.params.blockchain.params.type == 'AC') asset = queue.getResult('icon_kmd_ac');
+		if(this.params.blockchain.params.logo !== null) asset = queue.getResult(this.params.blockchain.params.logo);
 
 		/*
 			logo = queue.getResult('cog');
@@ -163,23 +174,33 @@ class Mempool extends createjs.Container {
 			let cccs = this.params.blockchain.params.ccc;
 			for(let i=0; i< cccs.length; i++) {
 				let ccc = cccs[i];
-				let icon = new createjs.Bitmap(queue.getResult('icon_'+ccc));
-				icon.name = ccc;
-				let w = icon.image.width/2;
-				let h = icon.image.height/2;
-				icon.regX = icon.image.width/2;
-				icon.regY = icon.image.height/2;
-				icon.x = logo.x + w*2 + 5 + (w*2+5)*i;
-				icon.y = logo.y
+				let cc = new CContract({icon: ccc});
+				if(ccc == 'dice') {
+					cc = new Dice();
+				}
+				cc.name = ccc;
+				let w = cc.icon.image.width/2;
+				let h = cc.icon.image.height/2;
+				cc.x = logo.x + w*2 + 5 + (w*2+5)*i;
+				cc.y = logo.y
 				let bkg = new createjs.Shape();
 				bkg.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('#FFF').drawCircle(0, 0, 20);
-				bkg.x = icon.x;
-				bkg.y = icon.y;
+				bkg.x = cc.x;
+				bkg.y = cc.y;
 				this.cont_block.addChild(bkg);
-				this.cont_block.addChild(icon);
-				this.ccc.push(icon);
+				this.cont_block.addChild(cc);
+				this.ccc.push(cc);
 			}
 		}
+		// TPS
+		let tps = new createjs.Text('0 tx/s', '12px Arial', "#666");
+		tps.x = logo.x + 30;
+		if(this.ccc.length > 0) tps.x = this.ccc[this.ccc.length-1].x + 30;
+		tps.y = this.params.height/2 - tps.getMeasuredHeight()/2;
+		tps.alpha = 0.5;
+		this.tps_text = tps;
+		this.cont_block.addChild(tps);
+
 
 		this.regX = this.params.width/2;
 		this.regY = this.params.height/2;
@@ -203,6 +224,21 @@ class Mempool extends createjs.Container {
 	removeContractTransaction(trans) {
 
 		this.ccTransactions.splice(this.ccTransactions.indexOf(trans), 1);
+	}
+
+	arrivalAtMempool(trans) {
+
+		trans.validate();
+
+		this.updateTps();
+	}
+
+	arrivalAtContract(trans) {
+
+		trans.params.ccc.handleTransaction(trans, this);
+
+    let tw = createjs.Tween.get(trans.params.ccc, {override: true, timeScale: TimeScale}).to({ rotation: 360}, 500).set({rotation: 0});
+    Tweens.add(tw);
 	}
 
 	addTransaction(trans) {
@@ -249,6 +285,7 @@ class Mempool extends createjs.Container {
 		}
 	}
 
+
 	computePosition() {
 
 		let cols = this.params.cols;
@@ -259,43 +296,46 @@ class Mempool extends createjs.Container {
 		let y = 0;
 		let line = 1, col = 1;
 		let total = cols*lines;
+		let i = 0;
 
-		for(let i=1; i<=total; i++) {
-			x = spanX * col;
-			y = spanY * line;
-			col++;
-			if(i >= line*cols) {
-				col = 1;
-				line++;
+		for(let c=1; c<=cols; ++c) {
+			for(let l=1; l<=lines; ++l) {
+				x = spanX * c;
+				y = spanY * l;
+
+				let pos = new createjs.Shape();
+				pos.graphics.setStrokeStyle(1).beginStroke('#DDD').drawCircle(0,0,3);
+				pos.x = x;
+				pos.y = y;
+				pos.position = i;
+				this.cont_debug.addChild(pos);
+
+				this.positions.push(pos);
+
+				i++;
 			}
-
-			let pos = new createjs.Shape();
-			pos.graphics.setStrokeStyle(1).beginStroke('#DDD').drawCircle(0,0,3);
-			pos.x = x;
-			pos.y = y;
-			pos.position = i;
-			this.cont_debug.addChild(pos);
-
-			this.positions.push(pos);
 		}
+
 	}
 
 	drawMoMoMTo(mempool) {
 
-			let width = 30
+			let width = 40
 			let height = 50;
 
 			//upstream
 			let upstream = this.getArrowBand(width, height, this.params.blockchain.params.color);
-			upstream.x = 26;
+			upstream.x = 36;
 			upstream.y = 25;
+			this.momom_up = upstream;
 			this.cont_momom.addChild(upstream);
 
 			//downstream
 			let downstream = this.getArrowBand(width, height, mempool.params.blockchain.params.color);
-			downstream.x = this.params.width;
+			downstream.x = -15 + this.params.width;
 			downstream.y = -25 - height;
 			downstream.rotation = 180;
+			this.momom_down = downstream;
 			this.cont_momom.addChild(downstream);
 
 	}
@@ -309,13 +349,15 @@ class Mempool extends createjs.Container {
 		bkg.graphics.beginFill(color).drawRect(0,0, width, height);
 		bkg.x = 0;
 		bkg.y = - height;
-		bkg.alpha = 0.3;
+		bkg.alpha = 0.4;
 		stream.addChild(bkg);
 		let band = new createjs.Bitmap(queue.getResult('arrowband'));
-		band.x = -22;
+		band.x = -40;
 		band.y = -height;
-		band.scaleX = 1.5;
-		band.alpha = 0.1;
+		band.scaleX = 3;
+		band.scaleY = 1;
+		band.alpha = 1;
+		stream.band = band;
 		let mask = new createjs.Shape();
 		mask.graphics.beginFill("red").drawRect(0, 0, width, height);
 		mask.x = 0;
@@ -323,8 +365,7 @@ class Mempool extends createjs.Container {
 		mask.alpha = 0;
 		band.mask = mask;
 		stream.addChild(band);
-		let tw = createjs.Tween.get(band, {loop: true, timeScale: TimeScale}).to({ y: - band.image.height }, 5000);
-		Tweens.add(tw, false);
+
 
 		return stream;
 	}

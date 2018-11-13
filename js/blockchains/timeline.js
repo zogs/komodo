@@ -9,7 +9,7 @@ class Timeline extends createjs.Container {
 			minuteWidth: 120,
 			minuteSeconds: 2,
 			minutePause: 500,
-			paddingTop: 60,
+			paddingTop: 0,
 			paddingBottom: 0,
 			defaultTime: 5,
 		};
@@ -17,36 +17,46 @@ class Timeline extends createjs.Container {
 		this.params = extend(defaults,params);
 		this.currentBar = null;
 		this.time = this.params.defaultTime;
+		this.lines = [];
 		this.totalTime = 0;
 		this.timeInterval = null;
 		this.runing = false;
+
+		this.cont_background = new createjs.Container();
+		this.cont_lines = new createjs.Container();
+		this.cont_blockchains = new createjs.Container();
+		this.cont_sliding = new createjs.Container();
+		this.cont_foreground = new createjs.Container();
+
+		this.cont_sliding.addChild(this.cont_lines, this.cont_blockchains);
+		this.addChild(this.cont_background, this.cont_sliding, this.cont_foreground);
 
 		this.init(params);
 	}
 
 	init(params) {
 
-		this.drawObjects();
+		this.drawLines();
 		this.initTimeline();
 		this.initCurrentTime();
 
 		Stage.on('newminute', function(event) {
 			if(event.time >=5) {
-				this.slide(- this.params.minuteWidth);
 				this.addLine(this.totalTime+1);
+				this.removeLines();
 			}
 		}, this);
 	}
 
 	initTimeline() {
 
-		let nb_columns = this.params.width / this.params.minuteWidth;
+		let nb_columns = this.params.width / this.params.minuteWidth + 1;
 		for(let i=1,ln=nb_columns; i<ln; i++) {
 			this.addLine(i);
 		}
 	}
 
-	drawObjects() {
+	drawLines() {
 
 		let line = new createjs.Shape();
 		line.graphics.setStrokeStyle(1).beginStroke('#DDD')
@@ -57,7 +67,7 @@ class Timeline extends createjs.Container {
 		this.lineImage = new createjs.Bitmap(line.cacheCanvas);
 
 		let lineBold = new createjs.Shape();
-		lineBold.graphics.setStrokeStyle(2).beginStroke('#AAA')
+		lineBold.graphics.setStrokeStyle(1).beginStroke('#AAA')
 				.moveTo(0, this.params.height - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
 				.closePath();
@@ -72,43 +82,69 @@ class Timeline extends createjs.Container {
 		let line = this.lineImage.clone();
 		if(i%10 == 0) line = this.lineBoldImage.clone();
 		line.x = i*this.params.minuteWidth;
-		this.addChild(line);
+		this.cont_lines.addChild(line);
+		this.lines.push(line);
 
 		let color = (i%10 == 0)? '#AAA' : '#DDD';
-		let minute = new createjs.Text(i+' min','20px Arial', color);
-			minute.x = i*this.params.minuteWidth - minute.getMeasuredWidth()/2;
-			minute.y = this.params.paddingTop - 25;
+		let minute = new createjs.Text(i+' min','13px Arial', color);
+			minute.x = i*this.params.minuteWidth - minute.getMeasuredWidth() - 2;
+			minute.y = this.params.paddingTop + 5;
 		minute.cache(0, 0, minute.getMeasuredWidth(), minute.getMeasuredHeight());
-		this.addChild(minute);
+		this.cont_lines.addChild(minute);
+		this.lines.push(minute);
 
 		this.totalTime = i;
+	}
+
+	removeLines() {
+
+		for(let i=0,ln=this.lines.length-3; i<=ln; i++) {
+			let line = this.lines[i];
+			let pos = line.localToGlobal(0,0);
+			if(pos.x < 100) {
+				this.removeChild(line);
+				this.lines.splice(i, 1);
+			}
+		}
 	}
 
 	initCurrentTime() {
 
 		this.currentBar = new createjs.Shape();
-		this.currentBar.graphics.setStrokeStyle(1).beginStroke('red')
+		this.currentBar.graphics.setStrokeStyle(1).beginStroke('#ff6c6c')
 			.moveTo(0, this.params.height - this.params.paddingBottom)
 			.lineTo(0, 0 + this.params.paddingTop)
 			.closePath();
 		this.currentBar.cache(-1, -1, 2, this.params.height);
 
 		this.currentBar.x = this.time * this.params.minuteWidth;
-		Cont_main.addChild(this.currentBar);
+		Cont_currenttime.addChild(this.currentBar);
 	}
 
 	start() {
 
-		let tw = createjs.Tween.get(this, {loop: true, timeScale: TimeScale}).to({z: 0}, 1000 * this.params.minuteSeconds).call(this.incrementTime);
-		Tweens.add(tw, false);
-
-		let tw2 = createjs.Tween.get(this, { timeScale: TimeScale }).to({x: this.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds);
-		Tweens.add(tw2);
-
-		let tw3 = createjs.Tween.get(Cont_blockchain, { timeScale: TimeScale }).to({x: - this.params.minuteWidth}, 1000 * this.params.minuteSeconds);
-		Tweens.add(tw3);
+		let tw = createjs.Tween.get(this.cont_sliding, { timeScale: TimeScale }).to({x: this.cont_sliding.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds)
+							.call(proxy(this.incrementTime, this));
+		Tweens.add(tw);
 
 		Emitters.map(e => e.start());
+		Platforms.map(p => p.start());
+
+		Blockchains.map(function(chain) {
+
+
+			chain.mempool.start();
+			if(chain.mempool.momom_up) {
+				let band = chain.mempool.momom_up.band;
+				let tw = createjs.Tween.get(band, {loop: true, timeScale: TimeScale}).to({ y: - band.image.height * band.scaleY }, this.params.minuteSeconds/2*1000);
+				Tweens.add(tw, false);
+			}
+			if(chain.mempool.momom_down) {
+				let band = chain.mempool.momom_down.band;
+				let tw = createjs.Tween.get(band, {loop: true, timeScale: TimeScale}).to({ y: - band.image.height * band.scaleY }, this.params.minuteSeconds/2*1000);
+				Tweens.add(tw, false);
+			}
+		}, this);
 
 	}
 
@@ -119,14 +155,10 @@ class Timeline extends createjs.Container {
 		ev.time = this.time;
 		Stage.dispatchEvent(ev);
 
-		let tw = createjs.Tween.get(Cont_blockchain, { timeScale: TimeScale }).to({x: Cont_blockchain.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds);
+		let tw = createjs.Tween.get(this.cont_sliding, { timeScale: TimeScale }).to({x: this.cont_sliding.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds)
+							.call(proxy(this.incrementTime, this));
 		Tweens.add(tw);
 
 	}
 
-	slide(x) {
-
-		let tw = createjs.Tween.get(this, { timeScale: TimeScale }).to({x: this.x + x}, 1000 * this.params.minuteSeconds);
-		Tweens.add(tw);
-	}
 }

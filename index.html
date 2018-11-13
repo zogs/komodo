@@ -38,12 +38,15 @@
 	<script src="lib/canvas.pointiller.js"></script>
 	<script src="commons/utils.js" type="text/javascript"></script>
 	<script src="commons/tweens.js" type="text/javascript"></script>
+    <script src="js/blockchains/platform.js" type="text/javascript"></script>
 	<script src="js/blockchains/blockchain.js" type="text/javascript"></script>
 	<script src="js/blockchains/block.js" type="text/javascript"></script>
 	<script src="js/blockchains/emitter.js" type="text/javascript"></script>
 	<script src="js/blockchains/mempool.js" type="text/javascript"></script>
 	<script src="js/blockchains/timeline.js" type="text/javascript"></script>
-	<script src="js/blockchains/transaction.js" type="text/javascript"></script>
+    <script src="js/blockchains/transaction.js" type="text/javascript"></script>
+	<script src="js/blockchains/contract.js" type="text/javascript"></script>
+    <script src="js/particle.js" type="text/javascript"></script>
 	<script src="js/dialog.js" type="text/javascript"></script>
 	<script src="js/main.js" type="text/javascript"></script>
 
@@ -51,110 +54,74 @@
 
 	window.initStage = function() {
 
-		Cont_main = new createjs.Container();
-		Stage.addChild(Cont_main);
-
-		Cont_background = new createjs.Container();
-		Cont_main.addChild(Cont_background);
-
-    Cont_timeline = new createjs.Container();
-    Cont_main.addChild(Cont_timeline);
-
-    Cont_blockchain = new createjs.Container();
-    Cont_main.addChild(Cont_blockchain);
-
-    Cont_mempool = new createjs.Container();
-    Cont_main.addChild(Cont_mempool);
-
-    Cont_emitter = new createjs.Container();
-    Cont_main.addChild(Cont_emitter);
-
-    let minuteWidth = 120;
-    let minuteSeconds = 2;
-
     TimeLine = new Timeline({
       width: STAGEWIDTH,
       height: STAGEHEIGHT,
-      minuteWidth: minuteWidth,
-      minuteSeconds: minuteSeconds,
+      minuteWidth: MinuteWidth,
+      minuteSeconds: MinuteSeconds,
       defaultTime: 7,
     });
     Cont_timeline.addChild(TimeLine);
 
 
-    let bitcoin = new Blockchain({name: 'bitcoin', blockTime: 10, color: 'orange', 'premined': 0, maxTps: 10});
-    bitcoin.x = 0;
-    bitcoin.y = 100;
-    bitcoin.initMempool();
-    Cont_blockchain.addChild(bitcoin);
-    Blockchains.push(bitcoin);
-
-    let komodo = new Blockchain({name: 'komodo', color:'#306565', premined: 6, notarizeTo: 'bitcoin', notarizeInterval: 10, notarizeNBlock: 1, showBigNotaryLabel: true});
-    komodo.x = 0;
-    komodo.y = 300;
-    komodo.initMempool();
-    Cont_blockchain.addChild(komodo);
-    Blockchains.push(komodo);
-
-    let SC1 = new Blockchain({name: 'SC1', color:'#569b9b', type: 'SC', premined: 6, notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
-    SC1.x = 0;
-    SC1.y = 400;
-    SC1.initMempool();
-    Cont_blockchain.addChild(SC1);
-    Blockchains.push(SC1);
-    SC1.drawMoMoMMagic();
-
-    let AC1 = new Blockchain({name: 'AC1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
-    AC1.x = 0;
-    AC1.y = 500;
-    AC1.initMempool();
-    Cont_blockchain.addChild(AC1);
-    Blockchains.push(AC1);
-    AC1.drawMoMoMMagic();
-
-    let AC2 = new Blockchain({name: 'AC2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'komodo', notarizeInterval: 1, notarizeNBlock: 1});
-    AC2.x = 0;
-    AC2.y = 600;
-    AC2.initMempool();
-    Cont_blockchain.addChild(AC2);
-    Blockchains.push(AC2);
-    AC2.drawMoMoMMagic();
+    let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", maxTps: 100 });
+    let SC1 = new Blockchain({id: 'SC1', name: 'Scaling Chain', color:'#569b9b', type: 'SC', premined: 6, notarizeTo: 'kmd'});
+    let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd'});
+    let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd'});
 
 
-		const pointiller = new Pointiller(500, 500);
+    var komodoPlatform = new Platform({y: 250, id: 'komodo', name: 'KOMODO PLATFORM',color: '#306565',backgroundColor: '#306565',backgroundAlpha: 0.2,chains: [komodo],emitterTPS: 50});
+    komodoPlatform.addChain(SC1);
+    komodoPlatform.addChain(AC1);
+    komodoPlatform.addChain(AC2);
+    Platforms.push(komodoPlatform);
+
+
+    let bitcoin = new Blockchain({id: 'btc', name: 'BTC Chain', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
+    var bitcoinPlatform = new Platform({y: 100,name: 'BITCOIN',color: '#d38d10',backgroundColor: null,chains: [bitcoin],height: 120, emitterTPS: 8,});
+    Platforms.push(bitcoinPlatform);
+
+
+
+
+    /*const pointiller = new Pointiller(500, 500);
     const logo = document.querySelector('#komodo-logo');
     pointiller.addImage(logo,500,500);
     pointiller.excludeColor([255,255,255], 10);
     const points = pointiller.toPoints(5);
     for(let i=0,ln=points.length; i<ln; i++) {
-    	let point = points[i];
-    	let circle = new createjs.Shape();
-    	circle.graphics.beginFill('rgba('+point.r+','+point.g+','+point.b+','+point.a+')').drawCircle(point.x, point.y, point.w/2);
-    	Cont_background.addChild(circle);
+        let point = points[i];
+        let target = new Victor(point.x + STAGEWIDTH/4, point.y + STAGEHEIGHT/4);
+        let angle = i * (360/ln);
+        let init = findPointFromAngle(STAGEWIDTH/2, STAGEHEIGHT/2, angle, 400);
+        let position = new Victor(init.x, init.y);
+        let particle = new Particle({
+            r: point.r,
+            g: point.g,
+            b: point.b,
+            a: point.a,
+            w: point.w,
+            });
+        particle.setPosition(position.x, position.y);
+        particle.moveRandomly = true;
+        particle.setTarget(target.x, target.y);
+        //particle.addImpulsion(new Victor(Math.random()*100, Math.random()*100), 0.3);
+        Cont_background.addChild(particle);
+        Particles.push(particle);
     }
-    Cont_background.x = STAGEWIDTH/2 - 250;
-    Cont_background.y = STAGEHEIGHT/2 - 250;
-    Cont_background.alpha = 0.1;
-    Cont_background.cache(0, 0, STAGEWIDTH, STAGEHEIGHT);
 
-    var emitter = new Emitter({name:"komodo", size: 100, color: '#306565'});
-    emitter.x = STAGEWIDTH;
-    emitter.y = komodo.y;
-    emitter.addChain(komodo);
-    emitter.addChain(SC1);
-    emitter.addChain(AC1);
-    emitter.addChain(AC2);
-    Cont_emitter.addChild(emitter);
-    Emitters.push(emitter);
-
-    var emitter = new Emitter({name:"bitcoin", size: 100, color: 'orange'});
-    emitter.x = STAGEWIDTH;
-    emitter.y = bitcoin.y;
-    emitter.addChain(bitcoin);
-    Cont_emitter.addChild(emitter);
-    Emitters.push(emitter);
+    */
+    //Stage.on('tick', tick);
 
 
+  }
+
+
+  function moveParticles() {
+
+    for(let i=0, ln=Particles.length; i<ln; ++i) {
+        Particles[i].move();
+    }
   }
 
   </script>
