@@ -29,12 +29,12 @@ class Platform extends createjs.Container {
     this.cont_emitter.y = this.params.y;
     this.cont_text.y = this.params.y;
 
-    TimeLine.cont_background.addChild(this.cont_background);
-    TimeLine.cont_blockchains.addChild(this.cont_blockchain);
-    TimeLine.cont_foreground.addChild(this.cont_foreground);
-    TimeLine.cont_foreground.addChild(this.cont_tpstext);
-    TimeLine.cont_foreground.addChild(this.cont_text);
-    TimeLine.cont_foreground.addChild(this.cont_emitter);
+    Timelines.cont_background.addChild(this.cont_background);
+    Timelines.cont_blockchains.addChild(this.cont_blockchain);
+    Timelines.cont_foreground.addChild(this.cont_foreground);
+    Timelines.cont_foreground.addChild(this.cont_tpstext);
+    Timelines.cont_foreground.addChild(this.cont_text);
+    Timelines.cont_foreground.addChild(this.cont_emitter);
 
     this.init();
   }
@@ -122,6 +122,32 @@ class Platform extends createjs.Container {
 
   start() {
 
+    this.emitter.start();
+    this.chains.map(c => c.start());
+
+  }
+
+  stop() {
+
+    this.chains.map(c => c.stop());
+
+  }
+
+  activateAutoScalingChain() {
+
+    Stage.on('newminute', proxy(this.checkTotalTps, this));
+  }
+
+  checkTotalTps() {
+
+    if(this.totalTps) {
+      let maxTps = this.chains.reduce((a,b) => a + b.params.maxTps, 0);
+
+      if(this.totalTps >= maxTps) {
+        //console.log('totalTps '+this.totalTps+' > '+maxTps);
+        this.addScalingChain();
+      }
+    }
   }
 
 
@@ -149,13 +175,11 @@ class Platform extends createjs.Container {
 
   updateTotalTps() {
 
-    let tps = 0;
-    for(let i=0,ln=this.chains.length; i<ln; ++i) {
-      let chain = this.chains[i];
-      if(typeof chain.mempool == 'undefined') return;
-      tps += chain.tps;
-    }
-    if(this.totalTpsTx) this.totalTpsTx.text = Math.ceil(tps);
+    if(Paused === true) return;
+
+    let tps = this.chains.reduce((a,b) => a + b.tps, 0);
+    this.totalTps = Math.floor(tps);
+    if(this.totalTpsTx) this.totalTpsTx.text = Math.floor(tps);
 
   }
 
@@ -198,7 +222,30 @@ class Platform extends createjs.Container {
     this.drawForeground();
     this.drawEmitter();
 
+    return chain;
   }
+
+  addScalingChain() {
+
+    if(this.params.id !== 'komodo') return;
+
+    let n = this.chains.length+1;
+    let prev = this.chains[this.chains.length-1];
+    let bloc = prev.blocks[prev.blocks.length-2];
+
+    if(bloc == undefined) return;
+
+    let chain = new Blockchain({id: 'SC'+n, name: "Scaling Chain "+n, color:'#569b9b', type: 'SC', notarizeTo: 'kmd'});
+    chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2;
+
+    chain = this.addChain(chain);
+    chain.start();
+
+    console.log('addScalingChain', (this.chains.length)+' chains ('+this.chains.filter(c => c.params.visible === true).length+' visibles)');
+
+    return chain;
+  }
+
 
   hide() {
 

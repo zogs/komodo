@@ -80,5 +80,6 @@ class Chapter extends createjs.Container {
 
     this.dialogs.push(dialog);
     this.addChild(dialog);
+
   }
 }

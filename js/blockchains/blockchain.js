@@ -21,6 +21,7 @@ class Blockchain extends createjs.Container {
 			notaryLabelSize: 'small',
 			ccc: [],
 			maxTps: 100,
+			visible: true,
 		};
 		this.params = extend(defaults,params);
 		this.blocks = [];
@@ -50,9 +51,25 @@ class Blockchain extends createjs.Container {
 
 		this.premineBlocks(this.params.premined);
 
-		Stage.on('newminute', function(event) {
+	}
 
-			if(this.parent === null) return;
+	start() {
+
+		this.mempool.start();
+
+		this.minuteListener = Stage.on('newminute', this.onNewMinute, this);
+	}
+
+	stop() {
+
+		this.mempool.stop();
+
+		if(this.minuteListener) Stage.off('newminute', this.minuteListener);
+	}
+
+	onNewMinute(event) {
+
+		if(this.parent === null) return;
 
 			if(event.time % this.params.blockTime === 0) {
 				this.mineBlock();
@@ -66,13 +83,11 @@ class Blockchain extends createjs.Container {
 				this.notarize();
 			}
 
+			if(this.params.type == 'SC' || this.params.type == 'AC') {
+				this.mempool.sendMoMoM();
+			}
+
 			this.removeInvisibles();
-
-
-
-		},this);
-
-
 	}
 
 	genesis() {
@@ -90,8 +105,8 @@ class Blockchain extends createjs.Container {
 		this.blocks.push(block);
 		this.genblock = block;
 
-		this.tps = this.params.maxTps;
-		this.mempool.tps = this.params.maxTps;
+		this.tps = 0;
+		this.mempool.tps = 0;
 
 	}
 
@@ -134,7 +149,7 @@ class Blockchain extends createjs.Container {
 		this.blockheight++;
 
 		let block = new Block({blockchain: this, blockheight: this.blockheight});
-		let timex = TimeLine.currentBar.localToLocal(0,0, this).x;
+		let timex = Timelines.currentBar.localToLocal(0,0, this).x;
 		block.x = timex - this.params.blockWidth/2 - this.params.blockPadding/3;
 		block.y = 0;
 
@@ -289,7 +304,7 @@ class Blockchain extends createjs.Container {
 			icon.scaleX = icon.scaleY = 0;
 			icon.alpha = 0;
 			blockchain.cont_notary_link.addChild(icon);
-			let tw2 = createjs.Tween.get(icon, {timeScale: TimeScale}).wait(1000).to({alpha: 1, scaleX: scale, scaleY: scale}, 1000, createjs.Ease.bounceOut);
+			let tw2 = createjs.Tween.get(icon, {timeScale: TimeScale}).wait(1000).to({alpha: 1, scaleX: scale, scaleY: scale}, 650, createjs.Ease.bounceOut);
 			Tweens.add(tw2);
 
 		});
@@ -299,7 +314,7 @@ class Blockchain extends createjs.Container {
 
 		let mempool = new Mempool({blockchain: this});
 
-		mempool.x = TimeLine.params.defaultTime * ( this.params.blockWidth + this.params.blockPadding) + mempool.params.width/2 + 20;
+		mempool.x = Timelines.params.defaultTime * ( this.params.blockWidth + this.params.blockPadding) + mempool.params.width/2 + 20;
 		mempool.y = 0;
 
 		this.cont_mempool.addChild(mempool);
@@ -319,7 +334,7 @@ class Blockchain extends createjs.Container {
 			this.cont_links.addChild(this._linkMempool);
 		}
 
-		let coor = this.globalToLocal(TimeLine.currentBar.x, 0);
+		let coor = this.globalToLocal(Timelines.currentBar.x, 0);
 		this.mempool.x = coor.x + this.mempool.params.width/2 + 10;
 
 		let thick = 4;
@@ -437,6 +452,10 @@ class Blockchain extends createjs.Container {
 		createjs.Tween.get(this.cont_mempool).to({alpha: 0}, ms);
 
 		createjs.Tween.get(this.mempool).to({alpha: 0}, ms);
+	}
+
+	getTps() {
+		return this.tps;
 	}
 
 }

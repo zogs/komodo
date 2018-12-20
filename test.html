@@ -1,0 +1,129 @@
+<html lang="fr">
+  <head>
+  <meta charset="UTF-8">
+  <meta name='viewport' content="width=device-width,user-scalable=no, initial-scale=1,maximum-scale=1,user-scalable=0" />
+  <meta name='apple-mobile-web-app-capable' content="yes" />
+  <meta name='apple-mobile-we-app-status-bar-style' content="black-translucent" />
+
+  <style type="text/css">
+      @font-face {
+          font-family: 'Roboto';
+          src: url('assets/font/RobotoCondensed/RobotoCondensed-bold.ttf'); /* IE */
+      }
+      body { margin: 0; padding: 0; background: #DFEFEE; }
+      #canvas-container { position: relative; margin: 0 auto; }
+      canvas { position: relative; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
+      .dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; background: #FFF; padding: 10px 30px; }
+      .dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
+  </style>
+
+  </head>
+
+  <body onload="loaded()">
+      <div id="canvas-container">
+        <canvas id="canvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
+      </div>
+      <div style="display: none;">
+        <img src="assets/img/Komodo-icon.png" alt="" id="komodo-logo">
+      </div>
+  </body>
+
+
+  <script src="lib/createjs/1.0/createjs.min.js"></script>
+  <script src="lib/justice.mapped.min.js"></script>
+  <script src="lib/gl-matrix-min.js"></script>
+  <script src="lib/victor/victor.min.js"></script>
+  <script src="lib/victor/victor_custom.js"></script>
+  <script src="lib/dat/dat.gui.min.js"></script>
+  <script src="lib/canvas.pointiller.js"></script>
+  <script src="commons/utils.js" type="text/javascript"></script>
+  <script src="commons/tweens.js" type="text/javascript"></script>
+    <script src="js/blockchains/platform.js" type="text/javascript"></script>
+  <script src="js/blockchains/blockchain.js" type="text/javascript"></script>
+  <script src="js/blockchains/block.js" type="text/javascript"></script>
+  <script src="js/blockchains/emitter.js" type="text/javascript"></script>
+  <script src="js/blockchains/mempool.js" type="text/javascript"></script>
+  <script src="js/blockchains/timeline.js" type="text/javascript"></script>
+    <script src="js/blockchains/transaction.js" type="text/javascript"></script>
+  <script src="js/blockchains/contract.js" type="text/javascript"></script>
+    <script src="js/particle.js" type="text/javascript"></script>
+  <script src="js/dialog.js" type="text/javascript"></script>
+  <script src="js/main.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+
+  window.initStage = function() {
+
+    TimeLine = new Timeline({
+      width: STAGEWIDTH,
+      height: STAGEHEIGHT,
+      minuteWidth: MinuteWidth,
+      minuteSeconds: MinuteSeconds,
+      defaultTime: 7,
+    });
+    Cont_timeline.addChild(TimeLine);
+
+
+    let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", maxTps: 100 });
+    let SC1 = new Blockchain({id: 'SC1', name: 'Scaling Chain', color:'#569b9b', type: 'SC', premined: 6, notarizeTo: 'kmd'});
+    let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd'});
+    let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd'});
+
+
+    var komodoPlatform = new Platform({y: 250, id: 'komodo', name: 'KOMODO PLATFORM',color: '#306565',backgroundColor: '#306565',backgroundAlpha: 0.2,chains: [komodo],emitterTPS: 50});
+    komodoPlatform.addChain(SC1);
+    komodoPlatform.addChain(AC1);
+    komodoPlatform.addChain(AC2);
+    Platforms.push(komodoPlatform);
+    komodoPlatform.drawTotalTps();
+
+
+    let bitcoin = new Blockchain({id: 'btc', name: 'BTC Chain', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
+    var bitcoinPlatform = new Platform({y: 100, id:'bitcoin', name: 'BITCOIN',color: '#d38d10',backgroundColor: null,chains: [bitcoin],height: 120, emitterTPS: 8,});
+    Platforms.push(bitcoinPlatform);
+
+
+    komodoPlatform.activateAutoScalingChain();
+
+    /*const pointiller = new Pointiller(500, 500);
+    const logo = document.querySelector('#komodo-logo');
+    pointiller.addImage(logo,500,500);
+    pointiller.excludeColor([255,255,255], 10);
+    const points = pointiller.toPoints(5);
+    for(let i=0,ln=points.length; i<ln; i++) {
+        let point = points[i];
+        let target = new Victor(point.x + STAGEWIDTH/4, point.y + STAGEHEIGHT/4);
+        let angle = i * (360/ln);
+        let init = findPointFromAngle(STAGEWIDTH/2, STAGEHEIGHT/2, angle, 400);
+        let position = new Victor(init.x, init.y);
+        let particle = new Particle({
+            r: point.r,
+            g: point.g,
+            b: point.b,
+            a: point.a,
+            w: point.w,
+            });
+        particle.setPosition(position.x, position.y);
+        particle.moveRandomly = true;
+        particle.setTarget(target.x, target.y);
+        //particle.addImpulsion(new Victor(Math.random()*100, Math.random()*100), 0.3);
+        Cont_background.addChild(particle);
+        Particles.push(particle);
+    }
+
+    */
+    //Stage.on('tick', tick);
+
+
+  }
+
+
+  function moveParticles() {
+
+    for(let i=0, ln=Particles.length; i<ln; ++i) {
+        Particles[i].move();
+    }
+  }
+
+  </script>
+</html>

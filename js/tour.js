@@ -56,7 +56,14 @@ class Tour extends createjs.Container {
 
   clearStage() {
 
-    Cont_main.removeAllChildren();
+    Cont_background.removeAllChildren();
+    Cont_blockchain.removeAllChildren();
+    Cont_timeline.removeAllChildren();
+    Cont_platform.removeAllChildren();
+    Cont_mempool.removeAllChildren();
+    Cont_emitter.removeAllChildren();
+    Cont_currenttime.removeAllChildren();
+    Cont_tour.removeAllChildren();
   }
 
   stop() {

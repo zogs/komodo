@@ -2,23 +2,24 @@ const Security = new Chapter({name: 'Security'});
 
 Security.init = function() {
 
-  TimeLine = new Timeline({
+  Timelines = new Timeline({
     width: STAGEWIDTH,
     height: STAGEHEIGHT,
     minuteWidth: MinuteWidth,
     minuteSeconds: MinuteSeconds,
     defaultTime: 7,
   });
-  Cont_timeline.addChild(TimeLine);
+  Cont_timeline.addChild(Timelines);
 
   let komodo = new Blockchain({id: 'kmd', name: 'komodo', color:'#306565', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
-  var komodoPlatform = new Platform({y: 250,name: 'komodo',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 2,});
-  Platforms.push(komodoPlatform);
+  var platform = new Platform({y: 250, id: 'komodo', name: 'komodo',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 35,});
+  Platforms.push(platform);
+
+  platform.hide();
+  Timelines.hide();
 
 
-  Platforms.map(p => p.alpha = 0);
-  Emitters.map(e=> e.alpha = 0);
-  Mempools.map(m=> m.alpha = 0);
+  console.log(Stage.numChildren);
 
 }
 
@@ -30,10 +31,11 @@ Security.set = function() {
   // #1
   let dial = new Dialog([
     new Text('SECURITY', '60px Roboto', {color: '#316565'}),
-    new Text('How to recycle bitcoin power', '20px Arial', {paddingTop: 20, paddingBottom: 20}),
+    new Text('"RECYCLING BITCOIN POWER"', 'italic 18px Arial', {paddingTop: 20, paddingBottom: 20}),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
+      backgroundColor: '#d6e0e0',
   });
   this.addDialog(dial);
 
@@ -42,12 +44,13 @@ Security.set = function() {
     new Text('So there is the Komodo blockchain.', '20px Arial'),
     ], [
     ], {
-      dy: -50, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
+      dy: -50, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
       lifetime: 2000, call: proxy(this.continue, this), onload: function() {
         let komodo = Platforms.find(b => b.params.name == 'komodo');
         komodo.hide();
         komodo.fadeIn(500);
-        TimeLine.start();
+        Timelines.start();
+        Timelines.fadeIn(500);
       },
     });
   this.addDialog(dialog);
@@ -59,26 +62,26 @@ Security.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
-      arrow: {x:0, y:100}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
+      arrow: {x:0, y:100}, arrowFrom: 'bottom', animate: true,
       dx: 0, dy: -280
     });
   this.addDialog(dialog);
 
   // #4
   dialog = new Dialog([
-    new Text("Now, every 10 minutes, Komodo will reuse the Bitcoin security !"),
+    new Text("Every 10 minutes, Komodo will reuse the Bitcoin security !"),
     new Text(""),
-    new Text("Let's wait for the next notarization..."),
+    new Text("Now, let's wait for the next notarization..."),
     ], [
     ], {
-      arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
+      arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true,
       dx: 0, dy: 0,
       onload: function(_this) {
 
-        let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0});
+        let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, 'maxTps': 10});
         Blockchains.push(bitcoin);
-        let platform = new Platform({ y: 100, name: 'bitcoin', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 0.5});
-        platform.emitter.start();
+        let platform = new Platform({ y: 100, name: 'bitcoin', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 50});
+        platform.start();
         Platforms.push(platform);
 
         platform.hide();
@@ -94,7 +97,7 @@ Security.set = function() {
 
         let line = _this.content[2];
         let text = new createjs.Text('', '20px Arial', '#31656580');
-        text.x = line.x + line.getBounds().x + 330;
+        text.x = line.x + line.getBounds().x + 360;
         text.y = line.y + 5;
         _this.addChild(text);
 
@@ -123,10 +126,10 @@ Security.set = function() {
 
   // #5
   dialog = new Dialog([
-    new Text("Look here !")
+    new Text("Here it is.")
     ], [
     ], {
-      x:1050, y: 170, arrow: {x:-150, y:0}, arrowFrom: 'left', arrowWidth:20, animate: true, backgroundColor: '#FFF',
+      x:1050, y: 170, arrow: {x:-150, y:0}, arrowFrom: 'left', arrowWidth:20, animate: true,
       lifetime: 3000, call: proxy(this.continue, this)
     });
   this.addDialog(dialog);
@@ -138,7 +141,7 @@ Security.set = function() {
     new Text("That was the notarization process !"),
     ], [
     ], {
-      dx: 100, dy: -60, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
+      dx: 100, dy: -60, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
       lifetime: 3500, call: proxy(this.continue, this)
     });
   this.addDialog(dialog);
@@ -162,7 +165,7 @@ Security.set = function() {
     new Text('This means that for a 51% attack, you needs to gain the majority of Komodo hashrate'),
     new Text('Plus the majority of the Bitcoin hashrate !'),
     new Text(' '),
-    new Text('I wish you good luck with that !'),
+    new Text('And good luck with that !'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -174,50 +177,47 @@ Security.set = function() {
   dialog = new Dialog([
     new Text("Wait, that's not all !")
     ], [], {
-      lifetime: 1000, call: proxy(this.continue, this), backgroundColor: '#FFF'
+      lifetime: 1000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
   // #10
   dialog = new Dialog([
-    new Text("Komodo can now provide Bitcoin security to others independant blockchain !"),
+    new Text("Do you know that Komodo can provide Bitcoin level security to others independant blockchain ?"),
     new Text(""),
-    new Text("Do you want to see an example ?"),
+    new Text("Let's see an example."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
-      animate : true, backgroundColor: '#FFF',
+      animate : true,
     });
   this.addDialog(dialog);
 
   // #11
   dialog = new Dialog([
-    new Text("These are 2 external blockchains that have choose to trust Komodo to secure their network."),
+    new Text("These 2 independant blockchains that have choose to trust Komodo to secure their network :"),
     new Text(""),
     new Text("GameCredits and Einsteinum."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
-      dx: 0, dy: 300, arrow: {x:0, y:-90}, arrowFrom: 'top', backgroundColor: '#FFF',
+      dx: 0, dy: 300, arrow: {x:0, y:-90}, arrowFrom: 'top',
       onload: function(_this) {
-          let emc2 = new Blockchain({id: 'emc2', name: 'Einsteinum', color: '#32cbd4', premined: 5, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_einsteinium' })
-          let game = new Blockchain({id: 'game', name: 'GameCredits', color: '#8bca2a', premined: 5, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_gamecredits' })
+          let emc2 = new Blockchain({id: 'emc2', name: 'Einsteinum', color: '#32cbd4', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_einsteinium' })
+          let game = new Blockchain({id: 'game', name: 'GameCredits', color: '#8bca2a', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_gamecredits' })
           Blockchains.push(emc2);
           Blockchains.push(game);
 
-          var einsPlatform = new Platform({y: 400, name: 'einsteinium', color: '#32cbd4', backgroundColor: null, chains: [emc2], emitterTPS: 2,});
-          einsPlatform.emitter.start();
+          var einsPlatform = new Platform({y: 400, name: 'einsteinium', color: '#32cbd4', backgroundColor: null, chains: [emc2], emitterTPS: 40,});
+          var gamePlatform = new Platform({y: 550,name: 'game',color: '#8bca2a',backgroundColor: null,chains: [game], emitterTPS: 40});
           Platforms.push(einsPlatform);
-
-          var gamePlatform = new Platform({y: 550,name: 'game',color: '#8bca2a',backgroundColor: null,chains: [game],emitterTPS: 2});
-          gamePlatform.emitter.start();
           Platforms.push(gamePlatform);
 
-          einsPlatform.hide();
-          gamePlatform.hide();
+          einsPlatform.start();
+          gamePlatform.start();
 
-          einsPlatform.fadeIn(1000);
-          gamePlatform.fadeIn(1000);
+          einsPlatform.emitter.start();
+          gamePlatform.emitter.start();
 
           einsPlatform.y = 500;
           einsPlatform.emitter.y = 500;
@@ -226,6 +226,12 @@ Security.set = function() {
           gamePlatform.y = 650;
           gamePlatform.emitter.y = 650;
           gamePlatform.slideY(550, 1000);
+
+          let kmd = Blockchains.find(b => b.params.id == 'kmd');
+          let block = kmd.blocks[kmd.blocks.length-1-8];
+          let x = block.x - block.params.width/2;
+          emc2.x = x;
+          game.x = x;
 
       }
     });
@@ -248,13 +254,16 @@ Security.set = function() {
   // #13
   dialog = new Dialog([
     new Text("If you are interested in the dPoW mechanism for securing your blockchain,"),
-    new Text("Dont hesitate to contact the Komodo team! "),
-    new Text(""),
+    new Text("You can read this detailed article :"),
+    new Link("https://blog.komodoplatform.com/delayed-proof-of-work-explained","https://blog.komodoplatform.com/delayed-proof-of-work-explained-9a74250dbb86"),
+    new Text(" "),
+    new Text("Or you can contact the Komodo team on the official Discord !"),
+    new Text(" "),
     ], [
       new Button("REPLAY CHAPTER", proxy(this.replay, this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
-      new Button("NEXT CHAPTER", proxy(this.continue, this), { float: 'right'}),
+      new Button("NEXT CHAPTER", proxy(Tour.goToChapter,Tour,['Scalability']), { float: 'right'}),
     ], {
-      dy: 300,
+      dy: 0,
     });
   this.addDialog(dialog);
 

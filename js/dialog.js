@@ -18,7 +18,7 @@ class Dialog extends createjs.Container {
       onload: null,
       radius: 0,
       paddings: [10,10,10,10],
-      backgroundColor: '#d6e0e0',
+      backgroundColor: '#FFF',
       borderColor: 'grey',
       borderWidth: 1,
       arrowTo: null,
@@ -109,6 +109,7 @@ class Dialog extends createjs.Container {
     let H = 0;
     let W = 0;
 
+    // HTML element
     let content;
     let element;
     if(typeof this.content == 'string') {
@@ -122,6 +123,7 @@ class Dialog extends createjs.Container {
       H = element.offsetHeight;
     }
 
+    // TEXT elements
     if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
         let text = this.content[i];
@@ -133,6 +135,10 @@ class Dialog extends createjs.Container {
       }
     }
 
+    if(this.params.width !== null) W = this.params.width;
+
+    // BUTTON elements
+    let totalw = 0;
     for(let i=0,ln=this.buttons.length; i<ln; i++) {
       let button = this.buttons[i];
       let w = button.width;
@@ -140,21 +146,22 @@ class Dialog extends createjs.Container {
       H += (i==0)? h/2 : 0;
       button.y = H + button.params.y;
       button.dialogBox = this;
-      if(button.params.float == 'center') button.x = W/2;
-      if(button.params.float == 'left') button.x = 0 + button.width/2;
-      if(button.params.float == 'right') button.x = W - button.width/2;
-      button.x += button.params.x;
       H += (i==this.buttons.length-1)? h*2/3 : 0;
+      totalw += w + 20;
     }
+    if(totalw > W) W = totalw;
 
+    // box size
     this.width = W;
     this.height = H;
 
+    // draw background
     let bg = new createjs.Shape();
     let pad = this.params.paddings;
     bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
     this.addChild(bg);
 
+    // draw arrow
     if(this.params.arrowTo !== null && typeof this.params.arrowTo == 'object' && this.params.arrowTo.x !== undefined && this.params.arrowTo.y !== undefined) {
       let to = this.globalToLocal(this.params.arrowTo.x, this.params.arrowTo.y);
       this.drawArrow(to);
@@ -165,7 +172,7 @@ class Dialog extends createjs.Container {
       this.drawArrow(to);
     }
 
-
+    // Add TEXT elements
     if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
         let text = this.content[i];
@@ -173,13 +180,19 @@ class Dialog extends createjs.Container {
       }
     }
 
+    // Add HTML element
     if(typeof this.content == 'string') {
 
       this.addChild(content);
     }
 
+    // Add BUTTON elements
     for(let i=0; i<this.buttons.length; i++) {
       let button = this.buttons[i];
+      if(button.params.float == 'center') button.x = this.width /2;
+      if(button.params.float == 'left') button.x = 0 + button.width/2;
+      if(button.params.float == 'right') button.x = this.width  - button.width/2;
+      button.x += button.params.x;
       this.addChild(button);
     }
 
@@ -189,6 +202,8 @@ class Dialog extends createjs.Container {
 
     this.x -= W/2;
     this.y -= H/2;
+
+
 
   }
 
@@ -275,6 +290,7 @@ class Dialog extends createjs.Container {
       text.y = this.params.paddingTop;
 
       this.addChild(text);
+      this.text = text;
 
       this.width = W;
       this.height = H;
@@ -286,6 +302,30 @@ class Dialog extends createjs.Container {
 
   }
 
+  class Link extends Text {
+
+   constructor(text = 'http://perdu.com', link = null, font = null, params = {}) {
+
+      params.color = params.color ? params.color : '#1a0dab';
+      params.link = link ? link : text;
+
+      super(text, font, params);
+
+      this.cursor = 'pointer';
+      this.addEventListener('click', proxy(this.openLink, this));
+
+    }
+
+    openLink(e) {
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      window.open(this.params.link, '_self');
+
+    }
+  }
 
   class Button extends createjs.Container {
 

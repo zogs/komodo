@@ -130,22 +130,6 @@ class Timeline extends createjs.Container {
 		Emitters.map(e => e.start());
 		Platforms.map(p => p.start());
 
-		Blockchains.map(function(chain) {
-
-
-			chain.mempool.start();
-			if(chain.mempool.momom_up) {
-				let band = chain.mempool.momom_up.band;
-				let tw = createjs.Tween.get(band, {loop: true, timeScale: TimeScale}).to({ y: - band.image.height * band.scaleY }, this.params.minuteSeconds/2*1000);
-				Tweens.add(tw, false);
-			}
-			if(chain.mempool.momom_down) {
-				let band = chain.mempool.momom_down.band;
-				let tw = createjs.Tween.get(band, {loop: true, timeScale: TimeScale}).to({ y: - band.image.height * band.scaleY }, this.params.minuteSeconds/2*1000);
-				Tweens.add(tw, false);
-			}
-		}, this);
-
 	}
 
 	incrementTime() {
@@ -159,6 +143,40 @@ class Timeline extends createjs.Container {
 							.call(proxy(this.incrementTime, this));
 		Tweens.add(tw);
 
+	}
+
+	scrollY(y) {
+
+		let time = 777;
+		createjs.Tween.get(this.cont_blockchains).to({y: this.cont_blockchains.y + y}, time).call(proxy(this.scrollEnd, this));
+
+		Platforms.map(p => {
+			createjs.Tween.get(p.cont_background).to({y: p.cont_background.y + y}, time);
+			createjs.Tween.get(p.cont_text).to({y: p.cont_background.y + y}, time);
+		})
+	}
+
+	scrollEnd() {
+
+		Platforms.map(p => p.chains.map(c => {
+			let pos = c.localToGlobal(0,0);
+      if(pos.y < 0 || pos.y > STAGEHEIGHT) c.params.visible = false;
+		}));
+	}
+
+	hide() {
+		this.alpha = 0;
+		this.currentBar.alpha = 0;
+	}
+
+	fadeIn(ms) {
+		createjs.Tween.get(this).to({alpha: 1}, ms);
+		createjs.Tween.get(this.currentBar).to({alpha: 1}, ms);
+	}
+
+	fadeOut(ms) {
+		createjs.Tween.get(this).to({alpha: 0}, ms);
+		createjs.Tween.get(this.currentBar).to({alpha: 0}, ms);
 	}
 
 }

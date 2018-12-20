@@ -6,7 +6,7 @@ var Platforms = [];
 var Emitters = [];
 var Particles = [];
 var Mempools = [];
-var TimeLine;
+var Timelines;
 var Tweens = new Tweens();
 var Paused = 0;
 var TimeScale = 1;
@@ -124,7 +124,7 @@ window.resetGlobals = function() {
   Emitters = [];
   Particles = [];
   Mempools = [];
-  TimeLine = null;
+  Timelines = null;
 
 }
 
@@ -154,7 +154,7 @@ window.keyDownHandler = function(e)
    switch(e.key)
    {
     case ' ':  window.pause(); break;
-    case 's':  TimeLine.start(); break;
+    case 's':  Timelines.start(); break;
     case 'w':  slowMo(0.5,1000); break;
     case 'z':  zoom(1.6,700); break;
     case 'a':  dezoom(700); break;
@@ -177,7 +177,7 @@ window.particleTest = function() {
 
 window.addAssetChain = function() {
 
-	let platform = Platforms.find(p => p.params.name == 'KOMODO PLATFORM');
+	let platform = Platforms.find(p => p.params.id == 'komodo');
 	let chains = platform.chains;
 
 	let n = chains.length+1;
@@ -193,17 +193,14 @@ window.addAssetChain = function() {
 
 window.addScalingChain = function() {
 
-	let platform = Platforms.find(p => p.params.name == 'KOMODO PLATFORM');
-	let chains = platform.chains;
+	let platform = Platforms.find(p => p.params.id == 'komodo');
+	let chain = platform.addScalingChain();
 
-	let n = chains.length+1;
-	let prev = chains[chains.length-1];
-	let bloc = prev.blocks[prev.blocks.length-2];
-	let blocX = (typeof bloc !== 'undefined')? bloc.x : 0;
+  if(chain && chain.localToGlobal(0,0).y > STAGEHEIGHT - chain.params.blockHeight*2) {
+    Timelines.scrollY(-chain.params.blockHeight*2);
+  }
 
-	let SC = new Blockchain({id: 'SC'+n, name: "Scaling Chain "+n, color:'#569b9b', type: 'SC', notarizeTo: 'kmd'});
-	SC.x = prev.x + blocX + SC.params.blockWidth/2 + SC.params.blockPadding/2;
-	platform.addChain(SC);
+  return chain;
 
 }
 
@@ -233,18 +230,18 @@ window.getMouseVector = function(n) {
 	return new Victor(getMousePoint(n).x - getMousePoint(n+1).x, getMousePoint(n).y - getMousePoint(n+1).y );
 }
 
-window.increaseTps = function() {
+window.increaseTps = function(n = 100) {
 
-	let emit = Emitters.find(e => e.params.name == 'KOMODO PLATFORM');
-	emit.params.tps = Math.ceil(emit.params.tps*2);
-	console.log(emit.params.name + ' - Tps: '+emit.params.tps+' tx/s total');
+	let platform = Platforms.find(e => e.params.id == 'komodo');
+	platform.emitter.params.tps = Math.ceil(platform.emitter.params.tps+n);
+	setTimeout(function() { console.log(platform.emitter.params.name + ' - Tps: '+platform.emitter.params.tps+' tx/s total ('+platform.emitter.ms+' ms)') }, 500);
 
 }
-window.decreaseTps = function() {
+window.decreaseTps = function(n = 100) {
 
-	let emit = Emitters.find(e => e.params.name == 'KOMODO PLATFORM');
-	emit.params.tps = Math.ceil(emit.params.tps/2);
-	console.log(emit.params.name + ' - Tps: '+emit.params.tps+' tx/s total');
+	let platform = Platforms.find(e => e.params.id == 'komodo');
+	platform.emitter.params.tps = Math.ceil(platform.emitter.params.tps-n);
+	setTimeout(function() { console.log(platform.emitter.params.name + ' - Tps: '+platform.emitter.params.tps+' tx/s total ('+platform.emitter.ms+' ms)') }, 500);
 }
 
 window.slowMo = function(scale,time) {
@@ -293,11 +290,13 @@ window.pause = function() {
 	if(Paused === 1) {
 		Paused = 0;
 		createjs.Ticker.paused = false;
-		console.log('PAUSE DESACTIVATED');
-	}
-	else {
-		Paused = 1;
-		createjs.Ticker.paused = true;
+    Platforms.map(p => p.start());
+    console.log('PAUSE DESACTIVATED');
+  }
+  else {
+    Paused = 1;
+    createjs.Ticker.paused = true;
+    Platforms.map(p => p.stop());
 		console.log('PAUSE ACTIVATED !');
 	}
 
