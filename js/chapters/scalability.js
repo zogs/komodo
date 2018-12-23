@@ -42,8 +42,8 @@ Scalability.set = function() {
 
   // #1
   dialog = new Dialog([
-  new Text('Scalability', '60px Roboto', {color: '#316565'}),
-  new Text('"ONE CHAIN IS NOT ENOUGH"', 'italic 18px Arial', {paddingTop: 20, paddingBottom: 20}),
+  new Text('Scalability', '60px Roboto', {color: '#316565', textAlign: 'center'}),
+  new Text('ONE CHAIN IS NOT ENOUGH', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
   ], [
   new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
   ], {

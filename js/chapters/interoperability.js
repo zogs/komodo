@@ -44,7 +44,7 @@ Interoperability.set = function() {
   // #1
   dialog = new Dialog([
   new Text('Interoperability', '60px Roboto', {color: '#316565'}),
-  new Text(' [TO DO] ', 'italic 20px Arial', {paddingTop: 20, paddingBottom: 20}),
+  new Text(' [TO DO] ', '20px Arial', {paddingTop: 20, paddingBottom: 20}),
   ], [
   new Button('CONTINUE', function() {}, {float: 'center'}),
   ], {

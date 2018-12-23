@@ -30,8 +30,8 @@ Security.set = function() {
 
   // #1
   let dial = new Dialog([
-    new Text('SECURITY', '60px Roboto', {color: '#316565'}),
-    new Text('"RECYCLING BITCOIN POWER"', 'italic 18px Arial', {paddingTop: 20, paddingBottom: 20}),
+    new Text('SECURITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
+    new Text('RECYCLING BITCOIN POWER', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {

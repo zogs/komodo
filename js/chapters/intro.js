@@ -23,8 +23,8 @@ Intro.init = function() {
 Intro.set = function() {
 
   let dialog = new Dialog([
-  new Text('KOMODO', '60px Roboto', {color: '#316565'}),
-  new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20}),
+  new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
+  new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
   ], [
   new Button('BEGIN', proxy(this.continue, this), {float: 'center'}),
   ], {
@@ -65,7 +65,7 @@ Intro.set = function() {
     ], {
       lifetime: 2000, call: proxy(this.continue, this),
       dx: 350, dy: -50, backgroundColor: '#FFF',
-      arrow: {x:0, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
+      arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
   this.addDialog(dialog);
 

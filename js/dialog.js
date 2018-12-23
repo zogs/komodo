@@ -127,11 +127,15 @@ class Dialog extends createjs.Container {
     if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
         let text = this.content[i];
-        let w = text.width;
-        let h = text.height;
+        W = (text.width > W)? text.width : W;
+      }
+      if(this.params.width) W = this.params.width;
+      for(let i=0; i<this.content.length; i++) {
+        let text = this.content[i];
         text.y = H;
-        H += h;
-        W = (w > W)? w : W;
+        H += text.height;
+        text.params.width = W; // set all text the same width
+        text.redraw(); // redraw allow us to align text (left, right, center)
       }
     }
 
@@ -252,9 +256,9 @@ class Dialog extends createjs.Container {
     constructor(text = 'KOMODO', font = null, params = {}) {
 
       super();
-      this.text = text;
-      this.font = (font === null)? '20px Arial' : font;
       var defaults = {
+        text: text,
+        font: (font === null)? '20px Arial' : font,
         width: null,
         height: null,
         color: '#31656580',
@@ -262,10 +266,12 @@ class Dialog extends createjs.Container {
         paddingBottom: 5,
         paddingLeft: 10,
         paddingRight: 10,
-        textAlign: 'center',
+        textAlign: 'left',
       };
 
       this.params = extend(defaults,params);
+
+
       this.init();
     }
 
@@ -274,29 +280,58 @@ class Dialog extends createjs.Container {
       this.drawText();
     }
 
+    redraw() {
+
+      this.removeAllChildren();
+      this.drawText();
+    }
+
     drawText() {
 
-      if(this.text.length == 0) {
+      if(this.params.text.length == 0) {
         this.params.paddingTop = 0, this.params.paddingBottom = 0, this.params.paddingLeft = 0, this.params.paddingRight = 0;
       }
 
-      let text = new createjs.Text(this.text, this.font, this.params.color);
-      let w = (this.text.length > 0)? text.getBounds().width : 0;
-      let h = (this.text.length > 0)? text.getBounds().height : 0;
+      let text = new createjs.Text(this.params.text, this.params.font, this.params.color);
+
+      //calcul width
+      let w = 0;
+      if(this.params.text.length > 0) w = text.getMeasuredWidth();
+      if(this.params.width) w = this.params.width;
+      
+      //calcul height
+      let h = 0;
+      if(this.params.text.length > 0) h = text.getMeasuredHeight();
+      if(this.params.height) h = this.params.height;
+      
+      // add padding
       let W = w + this.params.paddingLeft + this.params.paddingRight;
       let H = h + this.params.paddingTop + this.params.paddingBottom;
-      text.textAlign = this.params.textAlign;
-      text.x = W/2;
+
+      this.width = W;
+      this.height = H;
+
+      // align text horizonaly
+      if(this.params.textAlign == 'left') {
+        text.textAlign = 'left';
+      }
+      if(this.params.textAlign == 'right') {
+        text.textAlign = 'right';
+        text.x = this.width - this.params.paddingRight*2;
+      }
+      if(this.params.textAlign == 'center') {
+        text.textAlign = 'center';
+        text.x = this.width /2 - this.params.paddingLeft;
+      }
+
+      //align text vertically (to do)
       text.y = this.params.paddingTop;
 
       this.addChild(text);
       this.text = text;
 
-      this.width = W;
-      this.height = H;
-
-      let mid = new createjs.Shape();
-      mid.graphics.beginFill('red').drawCircle(0,0,3);
+      //let mid = new createjs.Shape();
+      //mid.graphics.beginFill('red').drawCircle(0,0,3);
       //this.addChild(mid);
     }
 
@@ -372,7 +407,7 @@ class Dialog extends createjs.Container {
       let bg = new createjs.Shape();
       bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
       bg.regX = w/2;
-      bg.regY = h/2 - 2;
+      bg.regY = h/2;
 
       this.addChild(bg);
       this.addChild(text);
