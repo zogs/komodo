@@ -54,14 +54,14 @@
 
   window.initStage = function() {
 
-    TimeLine = new Timeline({
+    Timelines = new Timeline({
       width: STAGEWIDTH,
       height: STAGEHEIGHT,
       minuteWidth: MinuteWidth,
       minuteSeconds: MinuteSeconds,
       defaultTime: 7,
     });
-    Cont_timeline.addChild(TimeLine);
+    Cont_timeline.addChild(Timelines);
 
 
     let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", maxTps: 100 });
