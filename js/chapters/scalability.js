@@ -193,7 +193,7 @@ Scalability.set = function() {
     new Text('The Komodo ecosystem can spawn at any time a scaling chain that can validate'),
     new Text('and confirm transaction from the main chain.'),
     new Text('It is possible through a technology that Komodo have cleverly used:'),
-    new Text('the Merkleroot of Merkleroot of Merkleroot (or MoMoM),'),
+    new Text('the Merkleroot of Merkleroot of Merkleroot (MoMoM),'),
     new Text('associated with a special mechanism : the Burn protocol.'),
     new Text(' '),
     new Text("Exactly what is happening ?"),
@@ -206,8 +206,8 @@ Scalability.set = function() {
 
   // #13
   dialog = new Dialog([
-    new Text('At each block, the side chain sends to the main chain a summary of all transaction ( the MoM) that have appends, '),
-    new Text('At the same time, the main chain shares a summary of all previous transaction of all chains ( the MoMoM), '),
+    new Text('At each block, the side chain sends to the main chain a summary of all transaction (MoM) that have appends, '),
+    new Text('At the same time, the main chain shares a summary of all previous transaction of all chains (MoMoM), '),
     new Text('That way, each chain can validate a transaction from another chain, and with the use of '),
     new Text('the Burn protocol, can maintain a constant level of coin across the whole ecosystem. '),
     new Text(' '),
@@ -223,8 +223,8 @@ Scalability.set = function() {
     new Text('You can see it there !'),
     ], [
     ], {
-      dx:-100, dy: -110,
-      arrow: {x:170, y:0}, arrowFrom: 'right',
+      dx:-60, dy: -100,
+      arrow: {x:170, y:0}, arrowWidth:20, arrowFrom: 'right',
       lifetime: 4000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);

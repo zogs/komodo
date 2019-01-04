@@ -209,8 +209,8 @@ Security.set = function() {
           Blockchains.push(emc2);
           Blockchains.push(game);
 
-          var einsPlatform = new Platform({y: 400, name: 'einsteinium', color: '#32cbd4', backgroundColor: null, chains: [emc2], emitterTPS: 40,});
-          var gamePlatform = new Platform({y: 550,name: 'game',color: '#8bca2a',backgroundColor: null,chains: [game], emitterTPS: 40});
+          var einsPlatform = new Platform({y: 400, name: ' ', color: '#32cbd4', backgroundColor: null, chains: [emc2], emitterTPS: 40,});
+          var gamePlatform = new Platform({y: 550,name: ' ',color: '#8bca2a',backgroundColor: null,chains: [game], emitterTPS: 40});
           Platforms.push(einsPlatform);
           Platforms.push(gamePlatform);
 
