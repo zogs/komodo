@@ -227,8 +227,6 @@ class Platform extends createjs.Container {
 
   addScalingChain() {
 
-    if(this.params.id !== 'komodo') return;
-
     let n = this.chains.length+1;
     let prev = this.chains[this.chains.length-1];
     let bloc = prev.blocks[prev.blocks.length-2];

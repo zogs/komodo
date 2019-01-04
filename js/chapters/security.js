@@ -11,8 +11,8 @@ Security.init = function() {
   });
   Cont_timeline.addChild(Timelines);
 
-  let komodo = new Blockchain({id: 'kmd', name: 'komodo', color:'#306565', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
-  var platform = new Platform({y: 250, id: 'komodo', name: 'komodo',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 35,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
+  var platform = new Platform({y: 250, id: 'kmd', name: ' ',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 35,});
   Platforms.push(platform);
 
   platform.hide();
@@ -31,7 +31,7 @@ Security.set = function() {
   // #1
   let dial = new Dialog([
     new Text('SECURITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
-    new Text('RECYCLING BITCOIN POWER', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
+    new Text('RECYCLING BITCOIN', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
@@ -46,7 +46,7 @@ Security.set = function() {
     ], {
       dy: -50, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
       lifetime: 2000, call: proxy(this.continue, this), onload: function() {
-        let komodo = Platforms.find(b => b.params.name == 'komodo');
+        let komodo = Platforms.find(b => b.params.id == 'kmd');
         komodo.hide();
         komodo.fadeIn(500);
         Timelines.start();
@@ -57,7 +57,7 @@ Security.set = function() {
 
   // #3
   dialog = new Dialog([
-    new Text('It is a Proof-of-Work blockchain, with a blocktime of 1min.'),
+    new Text('It is a Proof-of-Work blockchain, with a average blocktime of one minute.'),
     new Text("So every minute or so, a new block is mined by a pool of miners all arround the world."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -69,9 +69,10 @@ Security.set = function() {
 
   // #4
   dialog = new Dialog([
-    new Text("Every 10 minutes, Komodo will reuse the Bitcoin security !"),
+    new Text("But to increase the security of his network, Komodo notarize his status periodically to the Bitcoin blockchain."),
+    new Text("That way, every 10 minutes, Komodo reuse the Bitcoin security !"),
     new Text(""),
-    new Text("Now, let's wait for the next notarization..."),
+    new Text("Let's wait for the next notarization..."),
     ], [
     ], {
       arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true,
@@ -80,7 +81,7 @@ Security.set = function() {
 
         let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, 'maxTps': 10});
         Blockchains.push(bitcoin);
-        let platform = new Platform({ y: 100, name: 'bitcoin', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 50});
+        let platform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 50});
         platform.start();
         Platforms.push(platform);
 
@@ -95,7 +96,7 @@ Security.set = function() {
         let komodo = Blockchains.find(b => b.params.id == 'kmd');
         komodo.params.notarizeTo = 'btc';
 
-        let line = _this.content[2];
+        let line = _this.content[3];
         let text = new createjs.Text('', '20px Arial', '#31656580');
         text.x = line.x + line.getBounds().x + 360;
         text.y = line.y + 5;
@@ -270,7 +271,7 @@ Security.set = function() {
 }
 
 Security.slowDown = function() {
-  window.slowMo(0.2, 1000);
+  window.slowMo(0.4, 1000);
 }
 
 Security.slowUp = function() {

@@ -11,8 +11,8 @@ Intro.init = function() {
   });
   Cont_timeline.addChild(Timelines);
 
-  let komodo = new Blockchain({id: 'kmd', name: 'komodo', color:'#306565', premined: 6 });
-  var platform = new Platform({y: 250, id: 'kmd', name: 'komodo', color: '#306565', backgroundColor: null, chains: [komodo], emitterTPS: 10 });
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6 });
+  var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#306565', backgroundColor: null, chains: [komodo], emitterTPS: 10 });
   Platforms.push(platform);
 
   platform.hide();
@@ -37,6 +37,7 @@ Intro.set = function() {
     new Text('This is the KOMODO blockchain.', '20px Arial'),
     ], [
     ], {
+      dx: -50, dy: -40,
       arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
       lifetime: 2000, call: proxy(this.continue, this), onload: function() {
 
@@ -64,7 +65,7 @@ Intro.set = function() {
     ], [
     ], {
       lifetime: 2000, call: proxy(this.continue, this),
-      dx: 350, dy: -50, backgroundColor: '#FFF',
+      dx: 150, dy: -50, backgroundColor: '#FFF',
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
   this.addDialog(dialog);
@@ -79,7 +80,7 @@ Intro.set = function() {
       new Button('Add Z-transaction', function() {
 
         let komodo = Blockchains.find(b => b.params.id == 'kmd');
-        let platform = Platforms.find(p => p.params.name == 'komodo');
+        let platform = Platforms.find(p => p.params.id == 'kmd');
         let trans = new Transaction({blockchain: komodo, mempool: komodo.mempool, type: 'z'});
         platform.emitter.emitWithMotion(trans, komodo);
 

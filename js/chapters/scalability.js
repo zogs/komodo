@@ -12,12 +12,12 @@ Scalability.init = function() {
   Cont_timeline.addChild(Timelines);
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", maxTps: 100 });
-  var komodoPlatform = new Platform({y: 250, id: 'komodo', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo], emitterTPS: 40,});
+  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo], emitterTPS: 40,});
   Platforms.push(komodoPlatform);
 
   let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
   Blockchains.push(bitcoin);
-  let bitcoinPlatform = new Platform({ y: 100, id: 'bitcoin', name: 'Bitcoin', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10});
+  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10});
   Platforms.push(bitcoinPlatform);
 
   //add some transaction to bitcoin
@@ -42,7 +42,7 @@ Scalability.set = function() {
 
   // #1
   dialog = new Dialog([
-  new Text('Scalability', '60px Roboto', {color: '#316565', textAlign: 'center'}),
+  new Text('SCALABILITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
   new Text('ONE CHAIN IS NOT ENOUGH', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
   ], [
   new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
@@ -58,9 +58,9 @@ Scalability.set = function() {
     ], {
       dx: 0, dy: -50, lifetime: 2000, call: proxy(this.continue, this),
       onload: function(_this) {
-        let komodo = Platforms.find(b => b.params.id == 'komodo');
+        let komodo = Platforms.find(b => b.params.id == 'kmd');
         komodo.fadeIn(500);
-        let bitcoin = Platforms.find(b => b.params.id == 'bitcoin');
+        let bitcoin = Platforms.find(b => b.params.id == 'btc');
         bitcoin.fadeIn(500);
         Timelines.fadeIn(500);
         Timelines.start();
@@ -116,7 +116,7 @@ Scalability.set = function() {
       arrow: {x:0, y:-100}, arrowFrom: 'top',
       onload: function(_this) {
 
-        let platform = Platforms.find(e => e.params.id == 'komodo');
+        let platform = Platforms.find(e => e.params.id == 'kmd');
         platform.drawTotalTps();
       }
     });
@@ -133,7 +133,7 @@ Scalability.set = function() {
       lifetime: 2000, call: proxy(this.continue, this),
       onload: function(_this) {
 
-        let komodo = Platforms.find(e => e.params.id == 'komodo');
+        let komodo = Platforms.find(e => e.params.id == 'kmd');
         komodo.emitter.params.tps = 100;
 
       }
@@ -152,7 +152,7 @@ Scalability.set = function() {
 
   // #9
   dialog = new Dialog([
-    new Text('Just pop up an other chain !'),
+    new Text('Well, just pop another chain !'),
     ], [
     ], {
       dx: 180, dy: -30,
@@ -168,7 +168,7 @@ Scalability.set = function() {
       dx: 0, dy: 1000,
       lifetime: 5000, call: proxy(this.continue, this),
       onload: function() {
-        let komodo = Platforms.find(e => e.params.id == 'komodo');
+        let komodo = Platforms.find(e => e.params.id == 'kmd');
         let chain = komodo.addScalingChain(false);
       }
     });
@@ -192,9 +192,9 @@ Scalability.set = function() {
   dialog = new Dialog([
     new Text('The Komodo ecosystem can spawn at any time a scaling chain that can validate'),
     new Text('and confirm transaction from the main chain.'),
-    new Text('It is possible through an clever technology that Komodo have developed:'),
+    new Text('It is possible through a technology that Komodo have cleverly used:'),
     new Text('the Merkleroot of Merkleroot of Merkleroot (or MoMoM),'),
-    new Text('associated with the Burn protocol.'),
+    new Text('associated with a special mechanism : the Burn protocol.'),
     new Text(' '),
     new Text("Exactly what is happening ?"),
     ], [
@@ -209,7 +209,7 @@ Scalability.set = function() {
     new Text('At each block, the side chain sends to the main chain a summary of all transaction ( the MoM) that have appends, '),
     new Text('At the same time, the main chain shares a summary of all previous transaction of all chains ( the MoMoM), '),
     new Text('That way, each chain can validate a transaction from another chain, and with the use of '),
-    new Text('a burn protocol, can maintain a constant level of coin across the whole ecosystem. '),
+    new Text('the Burn protocol, can maintain a constant level of coin across the whole ecosystem. '),
     new Text(' '),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
@@ -236,7 +236,7 @@ Scalability.set = function() {
     new Text("Thousands of chain can be spawn !"),
     new Text(" "),
     new Text("Earlier this year, Komodo has successfully tested a 16000 tx/s stress test"),
-    new Text("And now they are preparing a 1 million tx/s test for 2019 !!"),
+    new Text("And now Komodo is preparing a 1 million tx/s test for 2019 !!"),
     new Text(" "),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
@@ -278,12 +278,12 @@ Scalability.set = function() {
 
 
 Scalability.addTps = function() {
-  let komodo = Platforms.find(e => e.params.id == 'komodo');
+  let komodo = Platforms.find(e => e.params.id == 'kmd');
   komodo.emitter.params.tps += 100;
 }
 
 Scalability.addChain = function() {
-  let komodo = Platforms.find(e => e.params.id == 'komodo');
+  let komodo = Platforms.find(e => e.params.id == 'kmd');
   let chain = komodo.addScalingChain();
 
   if(chain && chain.localToGlobal(0,0).y > STAGEHEIGHT - chain.params.blockHeight*2) {
