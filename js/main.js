@@ -160,11 +160,21 @@ window.keyDownHandler = function(e)
     case 'a':  dezoom(700); break;
     case 'b':  window.addAssetChain(); break;
     case 'c':  window.addScalingChain(); break;
+    case 'g':  window.showBanner(); break;
+    case 'h':  window.hideBanner(); break;
     case '+':  window.increaseTps(); break;
     case '-':  window.decreaseTps(); break;
     case 'l':  window.particleTest(); break;
     default: console.log('Key "'+e.key+'" have no handler.');
    }
+}
+
+window.showBanner = function() {
+  if(CurrentBanner) CurrentBanner.show();
+}
+
+window.hideBanner = function() {
+  if(CurrentBanner) CurrentBanner.hide();
 }
 
 

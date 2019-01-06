@@ -11,6 +11,7 @@ class Particle extends createjs.Container {
       x: 0,
       y: 0,
       w: 2,
+      i: null,
     };
 
     this.params = extend(defaults,params);
@@ -24,9 +25,12 @@ class Particle extends createjs.Container {
     this.moveRandomly = false;
     this.maxForce = 4;
     this.maxSpeed = 50;
+    this.alphaChange = 0;
     this.init(params);
+    this.constrainByEdges = false;
     this.tickChildren = false;
     this.mouseEnabled = false;
+    this.arrived = false;
   }
 
   init(params) {
@@ -37,11 +41,22 @@ class Particle extends createjs.Container {
   }
 
   redraw() {
-    let circle = new createjs.Shape();
-    circle.graphics.beginFill('rgba('+this.params.r+','+this.params.g+','+this.params.b+','+this.params.a+')').drawCircle(this.params.x, this.params.y, this.params.w/2);
-    circle.regX = this.params.w/2;
-    circle.regY = this.params.w/2;
-    this.addChild(circle);
+
+    if(this.params.i === null) {
+      let circle = new createjs.Shape();
+      circle.graphics.beginFill('rgba('+this.params.r+','+this.params.g+','+this.params.b+','+this.params.a+')').drawCircle(this.params.x, this.params.y, this.params.w/2);
+      circle.regX = this.params.w/2;
+      circle.regY = this.params.w/2;
+      this.addChild(circle);
+    }
+    else {
+      let img = new createjs.Bitmap(this.params.i);
+      this.addChild(img);
+    }
+  }
+
+  cache() {
+    this.cache(-this.params.w, -this.params.w, this.params.w*2, this.params.w*2);
   }
 
   setPosition(x, y) {
@@ -56,15 +71,31 @@ class Particle extends createjs.Container {
     this.target = new Victor(x,y);
   }
 
+  isArrived() {
+    if(
+      this.position.x.toFixed(4) === this.target.x.toFixed(4)
+      && this.position.y.toFixed(4) === this.target.y.toFixed(4)
+      )
+    {
+      this.arrived = true;
+      return true;
+    }
+    this.arrived = false;
+    return false;
+  }
+
   move() {
+
+    this.isArrived();
 
     this.behaviors();
     this.position.add(this.velocity);
     this.velocity.add(this.acceleration);
     this.acceleration.zero();
     if(TimeScale < 1) this.velocity.multiplyScalar(TimeScale/2);
-    this.x = this.position.x;
-    this.y = this.position.y;
+    this.x = this.position.x.toFixed(4);
+    this.y = this.position.y.toFixed(4);
+    this.alpha += this.alphaChange;
   }
 
   behaviors() {
@@ -77,7 +108,11 @@ class Particle extends createjs.Container {
       this.applyForce(arrive);
     }
 
-    this.applyBounces();
+    if(this.constrainByEdges) {
+      this.applyBounces();
+    }
+
+
     this.applyImpulsions();
 
     //this.linkParticles();
@@ -145,8 +180,8 @@ class Particle extends createjs.Container {
     return steer;
   }
 
-  addImpulsion(imp, desc) {
-    this.impulsions.push([imp, desc]);
+  addImpulsion(x, y, desc = 0.1) {
+    this.impulsions.push([new Victor(x,y), desc]);
   }
 
   applyImpulsions() {
