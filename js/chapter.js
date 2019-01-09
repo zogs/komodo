@@ -14,7 +14,7 @@ class Chapter extends createjs.Container {
   }
 
   init(params) {
-    //
+
   }
 
   start() {

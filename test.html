@@ -38,7 +38,8 @@
   <script src="lib/victor/victor_custom.js"></script>
   <script src="lib/dat/dat.gui.min.js"></script>
   <script src="lib/canvas.pointiller.js"></script>
-  <script src="assets/bannerpts.json"></script>
+  <script src="assets/json/banners/komodo.json"></script>
+  <script src="assets/json/banners/discovery.json"></script>
   <script src="commons/utils.js" type="text/javascript"></script>
   <script src="commons/tweens.js" type="text/javascript"></script>
     <script src="js/blockchains/platform.js" type="text/javascript"></script>
@@ -102,8 +103,14 @@
       points: komodo_banner.points,
       width: komodo_banner.width,
       height: komodo_banner.height,
-      stage: StageGL
+      stage: StageGL,
+      subtitle: {
+        text: 'THE DISCOVERY TOUR',
+        x: STAGEWIDTH/2 - 60,
+        y: STAGEHEIGHT/2 + 10,
+      }
     });
+    CurrentBanner.show();
 
   }
 

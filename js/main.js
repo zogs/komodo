@@ -1,6 +1,7 @@
 
 // define usefull const
 var Stage;
+var StageGL;
 var Blockchains = [];
 var Platforms = [];
 var Emitters = [];
@@ -9,9 +10,14 @@ var Mempools = [];
 var Timelines;
 var Tweens = new Tweens();
 var Paused = 0;
+var Mouse = new Victor(0,0);
+var MouseActive = false;
+var CurrentWidthRatio = 1;
+var CurrentHeightRatio = 1;
 var TimeScale = 1;
 var ZoomScale = 1;
 var SlowMotion = false;
+var CurrentBanner = null;
 var Cont_main;
 var Cont_timeline;
 var Cont_blockchain;
@@ -31,6 +37,10 @@ window.loaded = function() {
 	Stage = new createjs.Stage('canvas');
 	Stage.enableMouseOver(10);
 	Stage.snapToPixelEnabled = true;
+
+  StageGL = new createjs.StageGL('backcanvas');
+  StageGL.setClearColor("#FFF");
+  StageGL.update();
 
 	queue = new createjs.LoadQueue();
 	queue.addEventListener('complete',assetsLoaded);
@@ -107,12 +117,17 @@ window.assetsLoaded = function() {
 	window.onkeyup = keyUpHandler;
 	window.onkeydown = keyDownHandler;
 
-	//call the init stage function
-	window.initStage();
-
 	//resize event
 	window.onresize = browserResize;
 	window.resizeCanvas();
+
+  //call the init stage function
+  window.initStage();
+
+  //mouse event
+  document.querySelector('canvas#canvas').addEventListener('mouseover', ()=>{ MouseActive = true });
+  document.querySelector('canvas#canvas').addEventListener('mouseout', ()=>{ MouseActive = false });
+  document.querySelector('canvas#canvas').addEventListener('mousemove', (e)=>{ Mouse.x = e.offsetX / CurrentWidthRatio; Mouse.y = e.offsetY / CurrentHeightRatio;});
 
 }
 
@@ -323,7 +338,7 @@ window.browserResizeEnded = function() {
 }
 
 window.resizeCanvas = function() {
-
+console.log('resizeCanvas');
 	var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 
@@ -332,19 +347,24 @@ window.resizeCanvas = function() {
 	if(windowHeight < Stage.canvas.height) {
 		currentHeight = windowHeight;
 		currentWidth = currentHeight * RATIO;
-	}
-	if(windowWidth < Stage.canvas.width) {
-		currentWidth = windowWidth;
-		currentHeight = currentWidth / RATIO;
-	}
+  }
+  if(windowWidth < Stage.canvas.width) {
+    currentWidth = windowWidth;
+    currentHeight = currentWidth / RATIO;
+  }
 
-	document.getElementById('canvas').style.width = currentWidth+'px';
-	document.getElementById('canvas').style.height = currentHeight+'px';
+  CurrentWidthRatio = currentWidth / Stage.canvas.width;
+  CurrentHeightRatio = currentHeight / Stage.canvas.height;
+
+  document.getElementById('canvas').style.width = currentWidth+'px';
+  document.getElementById('canvas').style.height = currentHeight+'px';
+  document.getElementById('backcanvas').style.width = currentWidth+'px';
+	document.getElementById('backcanvas').style.height = currentHeight+'px';
 
 	document.getElementById('canvas-container').style.width = currentWidth+'px';
 	document.getElementById('canvas-container').style.height = currentHeight+'px';
 	//scroll to top
-	window.setTimeout(function() { //rowsers don't fire if there is not short delay
+	window.setTimeout(function() { //browsers don't fire if there is not short delay
 		window.scrollTo(0,1);
     }, 1);
 
@@ -354,5 +374,6 @@ window.resizeCanvas = function() {
 	event.newWidth = currentWidth;
 	event.newHeight = currentHeight;
 	Stage.dispatchEvent(event);
+  StageGL.dispatchEvent(event);
 
 }

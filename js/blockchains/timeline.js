@@ -169,12 +169,12 @@ class Timeline extends createjs.Container {
 		this.currentBar.alpha = 0;
 	}
 
-	fadeIn(ms) {
+	fadeIn(ms = 500) {
 		createjs.Tween.get(this).to({alpha: 1}, ms);
 		createjs.Tween.get(this.currentBar).to({alpha: 1}, ms);
 	}
 
-	fadeOut(ms) {
+	fadeOut(ms = 500) {
 		createjs.Tween.get(this).to({alpha: 0}, ms);
 		createjs.Tween.get(this.currentBar).to({alpha: 0}, ms);
 	}

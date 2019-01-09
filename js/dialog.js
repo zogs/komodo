@@ -17,7 +17,7 @@ class Dialog extends createjs.Container {
       call: null,
       onload: null,
       radius: 0,
-      paddings: [10,10,10,10],
+      paddings: [20,20,10,20],
       backgroundColor: '#FFF',
       borderColor: 'grey',
       borderWidth: 1,
@@ -160,10 +160,13 @@ class Dialog extends createjs.Container {
     this.height = H;
 
     // draw background
-    let bg = new createjs.Shape();
-    let pad = this.params.paddings;
-    bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
-    this.addChild(bg);
+    if(this.params.backgroundColor) {
+      let bg = new createjs.Shape();
+      let pad = this.params.paddings;
+      bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], W + pad[1]*2, H + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
+      this.addChild(bg);
+
+    }
 
     // draw arrow
     if(this.params.arrowTo !== null && typeof this.params.arrowTo == 'object' && this.params.arrowTo.x !== undefined && this.params.arrowTo.y !== undefined) {
@@ -298,12 +301,12 @@ class Dialog extends createjs.Container {
       let w = 0;
       if(this.params.text.length > 0) w = text.getMeasuredWidth();
       if(this.params.width) w = this.params.width;
-      
+
       //calcul height
       let h = 0;
       if(this.params.text.length > 0) h = text.getMeasuredHeight();
       if(this.params.height) h = this.params.height;
-      
+
       // add padding
       let W = w + this.params.paddingLeft + this.params.paddingRight;
       let H = h + this.params.paddingTop + this.params.paddingBottom;
@@ -408,8 +411,8 @@ class Dialog extends createjs.Container {
       bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
       bg.regX = w/2;
       bg.regY = h/2;
-
       this.addChild(bg);
+
       this.addChild(text);
 
       this.addEventListener("click", this.callback);

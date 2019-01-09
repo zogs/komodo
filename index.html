@@ -12,7 +12,8 @@
       }
       body { margin: 0; padding: 0; background: #DFEFEE; }
       #canvas-container { position: relative; margin: 0 auto; }
-      canvas { position: relative; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
+      canvas#canvas { position: absolute; z-index: 2; display:block; margin:0 auto; margin-top: 10px; margin-bottom: 10px;}
+      canvas#backcanvas { position: absolute; z-index: 1; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
       .dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; padding: 10px 30px; }
       .dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
   </style>
@@ -22,9 +23,10 @@
   <body onload="loaded()">
       <div id="canvas-container">
         <div class="dialog" id="secu1"><h1>SECURITY</h1> Recycling bitcoin hashrate !</div>
-        <div class="dialog" id="secu2">Lets begin with dPOW...</div>
-        <div class="dialog" id="secu3">This was dPOW !</div>
-        <canvas id="canvas" width="1500" height="800"> <!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
+        <div id="canvas-container">
+          <canvas id="canvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
+          <canvas id="backcanvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
+      </div>
       </div>
   </body>
 
@@ -37,6 +39,7 @@
   <script src="lib/dat/dat.gui.min.js"></script>
   <script src="commons/utils.js" type="text/javascript"></script>
   <script src="commons/tweens.js" type="text/javascript"></script>
+  <script src="assets/json/banners/komodo.json"></script>
   <script src="js/blockchains/platform.js" type="text/javascript"></script>
   <script src="js/blockchains/blockchain.js" type="text/javascript"></script>
   <script src="js/blockchains/block.js" type="text/javascript"></script>
@@ -51,6 +54,8 @@
   <script src="js/chapters/security.js" type="text/javascript"></script>
   <script src="js/chapters/scalability.js" type="text/javascript"></script>
   <script src="js/chapters/interoperability.js" type="text/javascript"></script>
+  <script src="js/particle.js" type="text/javascript"></script>
+  <script src="js/banner.js" type="text/javascript"></script>
   <script src="js/tour.js" type="text/javascript"></script>
   <script src="js/main.js" type="text/javascript"></script>
 
@@ -58,6 +63,7 @@
 
   window.initStage = function() {
 
+    // init Tour
     Tour = new Tour();
     // Intro chapter
     Tour.addChapter(Intro);
@@ -68,7 +74,50 @@
     // Third chapter
     Tour.addChapter(Interoperability);
 
-    Tour.start();
+
+
+    // if WebGL is supported
+    if(StageGL.isWebGL) {
+
+      // Show banner
+      CurrentBanner = new Banner({
+        points: komodo_banner.points,
+        width: komodo_banner.width,
+        height: komodo_banner.height,
+        stage: StageGL,
+        subtitle: {
+          text: 'THE DISCOVERY TOUR',
+          x: STAGEWIDTH/2 - 60,
+          y: STAGEHEIGHT/2 + 10,
+        }
+      });
+      CurrentBanner.show();
+
+      // When Banner is displayed, show Start Tour button
+      StageGL.on('banner_in_place', function() {
+        setTimeout(function() {
+          Cont_tour.y -= 50;
+          Cont_tour.alpha = 0;
+          createjs.Tween.get(Cont_tour).to({alpha: 1, y: Cont_tour.y+50}, 500);
+          Tour.start();
+        }, 200);
+      }, null, true);
+
+      // When Banner is terminated, destroy it
+      StageGL.on('banner_terminated', function() {
+          CurrentBanner.destroy();
+          CurrentBanner = null;
+      });
+
+    }
+    // if no WebGL
+    else {
+      // simply start the Tour
+      Tour.start();
+    }
+
+
+
 
   }
 

@@ -22,30 +22,49 @@ Intro.init = function() {
 
 Intro.set = function() {
 
-  let dialog = new Dialog([
-  new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
-  new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
-  ], [
-  new Button('BEGIN', proxy(this.continue, this), {float: 'center'}),
-  ], {
-     backgroundColor: '#d6e0e0',
-  });
+  let that = this;
+  let dialog;
 
+  // show specific button if animated banner
+  if(CurrentBanner) {
+    dialog = new Dialog([
+    ], [
+    new Button('CLICK TO BEGIN', function() {
+      Intro.startAfterBanner();
+    }, {float: 'right'}),
+    ], {
+        dx: 40, dy: 70,
+       backgroundColor: null,
+    });
+  }
+  // else show traditionnal button
+  else {
+    dialog = new Dialog([
+      new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
+      new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
+    ], [
+    new Button('BEGIN', function() {
+        that.continue();
+    }, {float: 'center'}),
+    ], {
+       backgroundColor: '#d6e0e0',
+    });
+  }
   this.addDialog(dialog);
+
 
   dialog = new Dialog([
     new Text('This is the KOMODO blockchain.', '20px Arial'),
     ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
       dx: -50, dy: -40,
-      arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true, backgroundColor: '#FFF',
-      lifetime: 2000, call: proxy(this.continue, this), onload: function() {
+      animate: true, backgroundColor: '#FFF',
+      onload: function() {
 
         let kmd = Platforms.find(p => p.params.id == 'kmd');
         kmd.fadeIn(500);
 
-        Timelines.fadeIn();
-        Timelines.start();
       },
     });
   this.addDialog(dialog);
@@ -102,4 +121,13 @@ Intro.set = function() {
       dy: 100
     });
   this.addDialog(dialog);
+}
+
+
+Intro.startAfterBanner = function() {
+
+  CurrentBanner.hide();
+  createjs.Tween.get(Intro.dialogs[0]).to({alpha: 0}, 500);
+  setTimeout(function() { Timelines.fadeIn(1000); Timelines.start(); }, 1000);
+  setTimeout(function() {Intro.continue(); }, 2000);
 }
