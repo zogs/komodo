@@ -55,8 +55,9 @@ Scalability.set = function() {
   dialog = new Dialog([
     new Text('Ok. Lets view how scaling works at the Komodo Platform'),
     ], [
+    new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
-      dx: 0, dy: -50, lifetime: 2000, call: proxy(this.continue, this),
+      dx: 0, dy: -50,
       onload: function(_this) {
         let komodo = Platforms.find(b => b.params.id == 'kmd');
         komodo.fadeIn(500);
@@ -73,10 +74,10 @@ Scalability.set = function() {
     new Text('First, looking at Bitcoin, we know that Bitcoin have a maximum capacity of 10 transaction per secound.'),
     new Text(' '),
     ], [
-    new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
       dx: -100, dy: -200,
-      arrow: {x:0, y:-90}, arrowFrom: 'top'
+      arrow: {x:0, y:-90}, arrowFrom: 'top',
+      lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 

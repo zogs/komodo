@@ -147,8 +147,8 @@ class Banner extends createjs.Container {
   showSubtitle() {
 
     console.log('showSubtitle');
-    this.subtitle_cont.y -= 50;
-    createjs.Tween.get(this.subtitle_cont).to({ alpha: 1, y: this.subtitle_cont.y + 50 }, 500)
+    this.subtitle_cont.y -= 30;
+    createjs.Tween.get(this.subtitle_cont).to({ alpha: 1, y: this.subtitle_cont.y + 30 }, 500)
       .wait(500)
       .call(proxy(this.showEnded, this));
   }
@@ -156,7 +156,7 @@ class Banner extends createjs.Container {
   hideSubtitle() {
 
     console.log('hideSubtitle');
-    createjs.Tween.get(this.subtitle_cont).to({ alpha: 0, y: this.subtitle_cont.y + 50}, 500);
+    createjs.Tween.get(this.subtitle_cont).to({ alpha: 0, y: this.subtitle_cont.y + 30}, 500);
   }
 
   hide() {

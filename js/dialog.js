@@ -17,7 +17,7 @@ class Dialog extends createjs.Container {
       call: null,
       onload: null,
       radius: 0,
-      paddings: [20,20,10,20],
+      paddings: [10,20,10,20],
       backgroundColor: '#FFF',
       borderColor: 'grey',
       borderWidth: 1,
@@ -147,7 +147,7 @@ class Dialog extends createjs.Container {
       let button = this.buttons[i];
       let w = button.width;
       let h = button.height;
-      H += (i==0)? h/2 : 0;
+      H += (i==0)? h/2 + 15 : 0;
       button.y = H + button.params.y;
       button.dialogBox = this;
       H += (i==this.buttons.length-1)? h*2/3 : 0;
