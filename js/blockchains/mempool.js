@@ -10,8 +10,6 @@ class Mempool extends createjs.Container {
 			rows: 2,
 			padding: 10,
 			radius: 10,
-			transSize: 10,
-			transPadding: 2,
 		};
 
 		this.params = extend(defaults,params);
@@ -150,15 +148,6 @@ class Mempool extends createjs.Container {
 		if(this.params.blockchain.params.type == 'AC') asset = queue.getResult('icon_kmd_ac');
 		if(this.params.blockchain.params.logo !== null) asset = queue.getResult(this.params.blockchain.params.logo);
 
-		/*
-			logo = queue.getResult('cog');
-			if(this.params.blockchain.params.ccc == 'dice') logo = queue.getResult('icon_dice');
-			if(this.params.blockchain.params.ccc == 'asset') logo = queue.getResult('icon_asset');
-			if(this.params.blockchain.params.ccc == 'faucet') logo = queue.getResult('icon_faucet');
-			if(this.params.blockchain.params.ccc == 'oracle') logo = queue.getResult('icon_oracle');
-			if(this.params.blockchain.params.ccc == 'reward') logo = queue.getResult('icon_reward');
-		*/
-
 		//logo
 		let bg = new createjs.Shape();
 		let logo = new createjs.Bitmap(asset);
@@ -173,15 +162,19 @@ class Mempool extends createjs.Container {
 		this.cont_block.addChild(logo);
 
 		// ccc icons
-		if(this.params.blockchain.params.ccc.length > 0) {
-			let cccs = this.params.blockchain.params.ccc;
+		let cccs = this.params.blockchain.params.ccc;
+		if(cccs.length > 0) {
 			for(let i=0; i< cccs.length; i++) {
 				let ccc = cccs[i];
-				let cc = new CContract({icon: ccc});
-				if(ccc == 'dice') {
-					cc = new Dice();
+				let cc;
+				if(typeof ccc == 'string') {
+					cc = new CContract({icon: ccc, name: ccc});
+					if(ccc == 'dice') cc = new Dice();
+					cc.name = ccc;
 				}
-				cc.name = ccc;
+				if(typeof ccc == 'object' && ccc instanceof CContract) {
+					cc = ccc;
+				}
 				let w = cc.icon.image.width/2;
 				let h = cc.icon.image.height/2;
 				cc.x = logo.x + w*2 + 5 + (w*2+5)*i;
@@ -436,26 +429,11 @@ class Mempool extends createjs.Container {
 		return stream;
 	}
 
-	getRandomContract() {
-
-		return this.ccc[Math.floor(Math.random()*this.ccc.length)];
-	}
-
-	getValidTransactions(n) {
-
-		let res = [];
-		for(let i=0; i< this.transactions.length; i++) {
-			let trans = this.transactions[i];
-			if(trans.params.valid === true) {
-				res.push(trans);
-			}
-			if(res.length == n) break;
-		}
-		return res;
+	getContract(name) {
+		return this.ccc.find(c => c.name == name);
 	}
 
 	getRandomContract() {
-
 		return this.ccc[Math.floor(Math.random()*this.ccc.length)];
 	}
 

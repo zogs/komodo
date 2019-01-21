@@ -8,6 +8,7 @@ class Transaction extends createjs.Container {
       alpha: 1,
       valid: false,
       type: null,
+      shape: null,
       priority: 0,
       image: null,
       imageX: 0,
@@ -28,6 +29,7 @@ class Transaction extends createjs.Container {
     this.maxForce = 4;
     this.moving = false;
     this.impulsions = [];
+    this.appearance = (this.params.shape)? this.params.shape : this.params.type;
 
     this.init(params);
     this.tickChildren = false;
@@ -130,7 +132,7 @@ class Transaction extends createjs.Container {
 
     let shape;
 
-    if(this.params.type == null) {
+    if(this.appearance == null) {
 
       shape = Transaction.getNormalShape(this.params.blockchain, this.params.radius);
       shape.regX = this.params.radius/2+2;
@@ -138,7 +140,7 @@ class Transaction extends createjs.Container {
       this.addChild(shape);
     }
 
-    if(this.params.type == 'notary') {
+    if(this.appearance == 'notary') {
 
       shape = Transaction.getNotaryShape(this.params.blockchain, this.params.radius);
       shape.regX = this.params.radius*2;
@@ -146,7 +148,7 @@ class Transaction extends createjs.Container {
       this.addChild(shape);
     }
 
-    if(this.params.type == 'ccc') {
+    if(this.appearance == 'ccc') {
 
       shape = Transaction.getCCShape(this.params.blockchain, this.params.radius);
       shape.regX = this.params.radius*3;
@@ -154,7 +156,7 @@ class Transaction extends createjs.Container {
       this.addChild(shape);
     }
 
-    if(this.params.type == 'z') {
+    if(this.appearance == 'z') {
 
       shape = Transaction.getZShape(this.params.blockchain, this.params.radius);
       shape.regX = this.params.radius*2+2;
@@ -202,7 +204,7 @@ class Transaction extends createjs.Container {
 
   static getNormalShape(blockchain, radius) {
 
-    let name = blockchain.params.name;
+    let name = blockchain.params.id;
 
     if(this.shapeCircle[name] !== undefined) {
       return this.shapeCircle[name].clone();

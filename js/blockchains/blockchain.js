@@ -19,9 +19,11 @@ class Blockchain extends createjs.Container {
 			notarizeAdvance: 1,
 			notarizeNBlock: 1,
 			notaryLabelSize: 'small',
+			privacy: 0,
 			ccc: [],
-			maxTps: 100,
+			maxTps: 200,
 			visible: true,
+			active: true,
 		};
 		this.params = extend(defaults,params);
 		this.blocks = [];
@@ -97,6 +99,8 @@ class Blockchain extends createjs.Container {
 			width: this.params.blockWidth,
 			height: this.params.blockHeight,
 			blockheight: 0,
+			genesis: true,
+			image: this.params.logo,
 		});
 		block.x = this.params.blockWidth/2 + this.params.blockPadding/2;
 		block.y = 0; //block.params.height;

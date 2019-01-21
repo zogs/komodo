@@ -34,6 +34,16 @@ class Chapter extends createjs.Container {
     this.current = dialog;
   }
 
+  goToID(id) {
+
+    if(this.current !== null) {
+      this.dialogs.map(d => d.close());
+    }
+    let dialog = this.dialogs.find(d => d.params.id == id);
+    dialog.open();
+    this.current = dialog;
+  }
+
   continue() {
 
     this.dialogs.map(d => d.close());

@@ -21,9 +21,11 @@ var CurrentBanner = null;
 var Cont_main;
 var Cont_timeline;
 var Cont_blockchain;
+var Cont_transaction;
 var ColorAsset = ['#f3de8a', '#eb9486', '#7e7f9a', '#97a7b3'];
 var MinuteWidth = 120;
 var MinuteSeconds = 2;
+var Env = null;
 
 
 // define global usefull constant
@@ -64,7 +66,12 @@ window.loaded = function() {
 		{id:'icon_oracle',src:'assets/img/icon/oracle.png'},
     {id:'icon_reward',src:'assets/img/icon/reward.png'},
     {id:'icon_gamecredits',src:'assets/img/icon/game.png'},
-		{id:'icon_einsteinium',src:'assets/img/icon/emc2.png'},
+    {id:'icon_einsteinium',src:'assets/img/icon/emc2.png'},
+    {id:'icon_chameleon',src:'assets/img/icon/chameleon.png'},
+    {id:'icon_penguin',src:'assets/img/icon/penguin.png'},
+    {id:'icon_snail',src:'assets/img/icon/snail.png'},
+    {id:'icon_unicorn',src:'assets/img/icon/unicorn.png'},
+		{id:'icon_wolf',src:'assets/img/icon/wolf.png'},
 	]);
 
 }
@@ -166,6 +173,8 @@ window.tick = function() {
 
 window.keyDownHandler = function(e)
 {
+  if(Env != 'test') return;
+
    switch(e.key)
    {
     case ' ':  window.pause(); break;
@@ -202,7 +211,7 @@ window.particleTest = function() {
 
 window.addAssetChain = function() {
 
-	let platform = Platforms.find(p => p.params.id == 'komodo');
+	let platform = Platforms.find(p => p.params.id == 'kmd');
 	let chains = platform.chains;
 
 	let n = chains.length+1;
@@ -218,7 +227,7 @@ window.addAssetChain = function() {
 
 window.addScalingChain = function() {
 
-	let platform = Platforms.find(p => p.params.id == 'komodo');
+	let platform = Platforms.find(p => p.params.id == 'kmd');
 	let chain = platform.addScalingChain();
 
   if(chain && chain.localToGlobal(0,0).y > STAGEHEIGHT - chain.params.blockHeight*2) {
@@ -257,14 +266,14 @@ window.getMouseVector = function(n) {
 
 window.increaseTps = function(n = 100) {
 
-	let platform = Platforms.find(e => e.params.id == 'komodo');
+	let platform = Platforms.find(e => e.params.id == 'kmd');
 	platform.emitter.params.tps = Math.ceil(platform.emitter.params.tps+n);
 	setTimeout(function() { console.log(platform.emitter.params.name + ' - Tps: '+platform.emitter.params.tps+' tx/s total ('+platform.emitter.ms+' ms)') }, 500);
 
 }
 window.decreaseTps = function(n = 100) {
 
-	let platform = Platforms.find(e => e.params.id == 'komodo');
+	let platform = Platforms.find(e => e.params.id == 'kmd');
 	platform.emitter.params.tps = Math.ceil(platform.emitter.params.tps-n);
 	setTimeout(function() { console.log(platform.emitter.params.name + ' - Tps: '+platform.emitter.params.tps+' tx/s total ('+platform.emitter.ms+' ms)') }, 500);
 }

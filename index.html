@@ -16,6 +16,20 @@
       canvas#backcanvas { position: absolute; z-index: 1; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
       .dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; padding: 10px 30px; }
       .dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
+      .dialog div.row { width: 100%; margin: 10px 0;}
+      .dialog#dialog-AC { padding: 20px 50px 0 50px; }
+      .dialog#dialog-AC form { margin:0; }
+      .dialog#dialog-AC label { cursor: pointer; }
+      .dialog#dialog-AC label.label { cursor: default; display: inline-block; padding-right: 20px;}
+      .dialog#dialog-AC label img { margin-bottom: -5px; }
+      .dialog#dialog-AC input[type=text],
+      .dialog#dialog-AC select { font-size: 16px; width: 170px; padding: 5px 10px; border:1px solid grey;}
+      .dialog#dialog-AC input[type=checkbox],
+      .dialog#dialog-AC input[type=radio] { display: none; }
+      .dialog#dialog-AC label.choice { display: inline-block; width: 50px; text-align: center;}
+      .dialog#dialog-AC label.choice input { display: none; }
+      .dialog#dialog-AC label.choice img {}
+      .dialog#dialog-AC label.choice input:checked ~ img { width: 40px; }
   </style>
 
   </head>
@@ -23,6 +37,48 @@
   <body onload="loaded()">
       <div id="canvas-container">
         <div class="dialog" id="secu1"><h1>SECURITY</h1> Recycling bitcoin hashrate !</div>
+        <div class="dialog" id="dialog-AC">
+          <form action="" id="form-AC">
+            <div class="row"><label class="label" for="name">Name</label><input type="text" name="name" value="NameOfYourAsset"></div>
+            <div class="row">
+              <label class="label">Logo</label>
+              <label class="choice"><input type="radio" name="logo" value="chameleon" checked> <img src="assets/img/icon/chameleon.png"></label>
+              <label class="choice"><input type="radio" name="logo" value="wolf"> <img src="assets/img/icon/wolf.png"></label>
+              <label class="choice"><input type="radio" name="logo" value="snail"> <img src="assets/img/icon/snail.png"></label>
+              <label class="choice"><input type="radio" name="logo" value="penguin"> <img src="assets/img/icon/penguin.png"></label>
+              <label class="choice"><input type="radio" name="logo" value="unicorn"> <img src="assets/img/icon/unicorn.png"></label>
+            </div>
+            <div class="row"><label class="label" for="supply">Supply</label><input type="text" name="supply" value="100000"></div>
+            <div class="row"><label class="label" for="rewards">Rewards</label><input type="text" name="rewards" value="10"></div>
+            <div class="row"><label class="label" for="halving">Halving</label><input type="text" name="halving" value="777"></div>
+            <div class="row">
+              <label class="label" for="consensus">Consensus</label>
+              <select name="consensus">
+                <option value="POW">Proof-of-Work</option>
+                <option value="POS">Proof-of-Stake</option>
+                <option value="BOTH">Mix of the two</option>
+              </select>
+            </div>
+            <div class="row">
+              <label class="label" for="privacy">Privacy</label>
+              <select name="privacy">
+                <option value="0">Only transparent</option>
+                <option value="1">Only z-address</option>
+                <option value="0" selected>Both allowed</option>
+              </select>
+            </div>
+            <div class="row">
+              <label class="label">Smart Contracts</label><br>
+              <label class="choice"><input type="checkbox" name="cc_dice" value="dice"><img src="assets/img/icon/dice.png"></label>
+              <label class="choice"><input type="checkbox" name="cc_asset" value="asset"><img src="assets/img/icon/asset.png"></label>
+              <label class="choice"><input type="checkbox" name="cc_reward" value="reward"><img src="assets/img/icon/reward.png"></label>
+              <label class="choice"><input type="checkbox" name="cc_oracle" value="oracle"><img src="assets/img/icon/oracle.png"></label>
+              <label class="choice"><input type="checkbox" name="cc_faucet" value="faucet"><img src="assets/img/icon/faucet.png"></label>
+              <label class="choice"><input type="checkbox" name="cc_cog" value="cog"><img src="assets/img/icon/cog.png"></label>
+            </div>
+            <small style="font-size: 12px; color:#2f6767;">(some examples of smart contract...)</small>
+          </form>
+        </div>
         <div id="canvas-container">
           <canvas id="canvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
           <canvas id="backcanvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
@@ -77,7 +133,7 @@
 
 
     // if WebGL is supported
-    if(StageGL.isWebGL) {
+    if(StageGL.isWebGL && 1==2) {
 
       // Show banner
       CurrentBanner = new Banner({

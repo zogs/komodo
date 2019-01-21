@@ -26,7 +26,8 @@ class Dialog extends createjs.Container {
       arrowWidth: 50,
       arrowCenter: 0,
       animate: false,
-      animateSpeed: 500
+      animateSpeed: 500,
+      id: 0,
     };
 
     this.params = extend(defaults,params);
@@ -53,6 +54,8 @@ class Dialog extends createjs.Container {
 
     if(this.htmlElement) {
       this.htmlElement.style.pointerEvents = 'auto';
+      this.htmlElement.style.zIndex = 10;
+      window.resizeCanvas();
     }
 
     if(this.params.onload) {
@@ -79,6 +82,7 @@ class Dialog extends createjs.Container {
 
     if(this.htmlElement) {
       this.htmlElement.style.pointerEvents = 'none';
+      this.htmlElement.style.zIndex = 1;
     }
   }
 

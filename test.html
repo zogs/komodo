@@ -59,7 +59,7 @@
 
   window.initStage = function() {
 
-
+    Env = 'test';
 
 
     Timelines = new Timeline({
@@ -71,14 +71,13 @@
     });
     Cont_timeline.addChild(Timelines);
 
-
-    let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", maxTps: 100 });
+    let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
     let SC1 = new Blockchain({id: 'SC1', name: 'Scaling Chain', color:'#569b9b', type: 'SC', premined: 6, notarizeTo: 'kmd'});
-    let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd'});
-    let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd'});
+    let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd', privacy: 1});
+    let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd', logo: 'icon_wolf'});
 
 
-    var komodoPlatform = new Platform({y: 250, id: 'komodo', name: 'KOMODO PLATFORM',color: '#306565',backgroundColor: '#306565',backgroundAlpha: 0.2,chains: [komodo],emitterTPS: 50});
+    var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM',color: '#306565',backgroundColor: '#306565',backgroundAlpha: 0.2,chains: [komodo],emitterTPS: 50});
     komodoPlatform.addChain(SC1);
     komodoPlatform.addChain(AC1);
     komodoPlatform.addChain(AC2);
@@ -87,7 +86,7 @@
 
 
     let bitcoin = new Blockchain({id: 'btc', name: 'BTC Chain', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
-    var bitcoinPlatform = new Platform({y: 100, id:'bitcoin', name: 'BITCOIN',color: '#d38d10',backgroundColor: null,chains: [bitcoin],height: 120, emitterTPS: 8,});
+    var bitcoinPlatform = new Platform({y: 100, id:'bitcoin', name: 'BITCOIN',color: '#d38d10',backgroundColor: null,chains: [bitcoin],height: 120, emitterTPS: 8, txWeight: 1});
     Platforms.push(bitcoinPlatform);
 
 

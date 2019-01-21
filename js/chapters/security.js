@@ -33,7 +33,7 @@ Security.set = function() {
     new Text('SECURITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
     new Text('RECYCLING BITCOIN', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
     ], [
-    new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
+    new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
     ], {
       backgroundColor: '#d6e0e0',
   });
@@ -58,7 +58,7 @@ Security.set = function() {
   // #3
   dialog = new Dialog([
     new Text('It is a Proof-of-Work blockchain, with a average blocktime of one minute.'),
-    new Text("So every minute or so, a new block is mined by a pool of miners all arround the world."),
+    new Text("So every minute or so, a new block is mined by a pool of miners all around the world."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -69,7 +69,7 @@ Security.set = function() {
 
   // #4
   dialog = new Dialog([
-    new Text("But to increase the security of his network, Komodo notarize his status periodically to the Bitcoin blockchain."),
+    new Text("In order to increase the security of his network, Komodo notarize his status periodically to the Bitcoin blockchain."),
     new Text("That way, every 10 minutes, Komodo reuse the Bitcoin security !"),
     new Text(""),
     new Text("Let's wait for the next notarization..."),
@@ -81,7 +81,7 @@ Security.set = function() {
 
         let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, 'maxTps': 10});
         Blockchains.push(bitcoin);
-        let platform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 50});
+        let platform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10, txWeight:1});
         platform.start();
         Platforms.push(platform);
 
@@ -196,7 +196,7 @@ Security.set = function() {
 
   // #11
   dialog = new Dialog([
-    new Text("These 2 independant blockchains that have choose to trust Komodo to secure their network :"),
+    new Text("These 2 independant blockchains have chosen Komodo to secure their network :"),
     new Text(""),
     new Text("GameCredits and Einsteinum."),
     ], [

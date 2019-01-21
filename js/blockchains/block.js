@@ -7,7 +7,9 @@ class Block extends createjs.Container {
 			width: 100,
 			height: 50,
 			cols: 5,
-			rows: 2
+			rows: 2,
+			image: null,
+			genesis: false,
 		};
 
 		this.params = extend(defaults,params);
@@ -53,6 +55,25 @@ class Block extends createjs.Container {
 				.beginFill('#FFF')
 				.drawRect(0,0, this.params.width, this.params.height);
 		this.cont_block_bkg.addChild(rect);
+
+		if(this.params.image) {
+			let asset = queue.getResult(this.params.image);
+			let img = new createjs.Bitmap(asset);
+			img.regX = img.image.width/2;
+			img.regY = img.image.height/2;
+			img.x = this.params.width/2;
+			img.y = this.params.height/2;
+			this.cont_block_trans.addChild(img);
+		}
+
+		if(this.params.genesis && !this.params.image) {
+			let title = new createjs.Text(this.params.blockchain.params.id.toUpperCase(), 'bold 18px Arial', this.params.blockchain.params.color);
+			title.regX = title.getMeasuredWidth()/2;
+			title.regY = title.getMeasuredHeight()/2;
+			title.x = this.params.width/2;
+			title.y = this.params.height/2;
+			this.cont_block_trans.addChild(title);
+		}
 
 		var matrix = new createjs.ColorMatrix().adjustHue(180).adjustSaturation(100);
 		 rect.filters = [

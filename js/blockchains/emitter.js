@@ -9,6 +9,7 @@ class Emitter extends createjs.Container {
       color: '#000',
       blockchains: [],
       tps: 2,
+      txWeight: 1,
     };
 
     this.params = extend(defaults,params);
@@ -69,7 +70,7 @@ class Emitter extends createjs.Container {
 
   continuousTime() {
 
-    let nbt = 10;
+    let nbt = this.params.txWeight;
     let tps = this.params.tps / nbt;
     let msb = this.params.blockchains[0].params.blockTime * MinuteSeconds * 1000;
     let ms = msb / tps;
@@ -82,25 +83,32 @@ class Emitter extends createjs.Container {
   blockchainToEmit() {
 
     let i = Math.ceil(Math.random()*this.params.blockchains.length-1);
-    return this.params.blockchains[i];
+    let chain = this.params.blockchains[i];
+    if(chain.params.active === false) return this.blockchainToEmit();
+    return chain;
   }
 
   emit() {
 
     let blockchain = this.blockchainToEmit();
-    let trans;
+    let mempool = blockchain.mempool;
+    let ccc;
+    let type;
+    let shape;
 
+    if(blockchain.params.privacy === 1) {
+      shape = 'z';
+    }
     if(blockchain.params.type == 'AC' && blockchain.params.ccc.length > 0) {
-        let ccc = blockchain.mempool.getRandomContract();
-        trans = new Transaction({ blockchain: blockchain, mempool: blockchain.mempool, type: 'ccc' , ccc: ccc });
+      type = 'ccc';
+      ccc = mempool.getRandomContract();
     }
-    else if(blockchain.params.type == 'SC') {
-        let kmd = this.params.blockchains.find(b => b.params.id == 'kmd');
-        trans = new Transaction({ blockchain: kmd, mempool: blockchain.mempool });
+    if(blockchain.params.type == 'SC') {
+      let kmd = this.params.blockchains.find(b => b.params.id == 'kmd');
+      mempool = kmd.mempool;
     }
-    else {
-        trans = new Transaction({ blockchain: blockchain, mempool: blockchain.mempool });
-    }
+
+    let trans = new Transaction({ blockchain: blockchain, mempool: mempool, type: type, shape: shape, ccc: ccc });
 
     if(blockchain.params.visible === true) {
       this.emitWithMotion(trans, blockchain);
@@ -115,7 +123,7 @@ class Emitter extends createjs.Container {
 
     let pos = this.localToLocal(0,this.height/2, blockchain.mempool);
     let x = pos.x;
-    let y = blockchain.mempool.y;// + ( 25 - Math.random()*50);
+    let y = blockchain.mempool.y + ( 25 - Math.random()*50);
     trans.setPosition(x,y);
 
     if(trans.params.type === 'ccc') {

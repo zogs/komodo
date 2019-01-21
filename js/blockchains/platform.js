@@ -11,6 +11,7 @@ class Platform extends createjs.Container {
       backgroundColor: null,
       backgroundAlpha: 1,
       emitterTPS: 1,
+      txWeight: 20,
       chains : []
     }
     this.params = extend(defaults,params);
@@ -48,7 +49,7 @@ class Platform extends createjs.Container {
 
   initEmitter() {
 
-    this.emitter = new Emitter({name: this.params.name, color: this.params.color, height: this.params.height, blockchains: this.params.chains, tps: this.params.emitterTPS});
+    this.emitter = new Emitter({name: this.params.name, color: this.params.color, height: this.params.height, blockchains: this.params.chains, tps: this.params.emitterTPS, txWeight: this.params.txWeight});
     this.emitter.x = STAGEWIDTH;
     this.emitter.y = this.y;
     this.emitter.platform = this;
@@ -240,6 +241,24 @@ class Platform extends createjs.Container {
     chain.start();
 
     console.log('addScalingChain', (this.chains.length)+' chains ('+this.chains.filter(c => c.params.visible === true).length+' visibles)');
+
+    return chain;
+  }
+
+
+  addAssetChain(chain) {
+
+    let n = this.chains.length+1;
+    let prev = this.chains[this.chains.length-1];
+    let bloc = prev.blocks[prev.blocks.length-2];
+
+    if(bloc == undefined) return;
+
+    chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2;
+    chain = this.addChain(chain);
+    chain.start();
+
+    console.log('addAssetChain', chain.params.name);
 
     return chain;
   }

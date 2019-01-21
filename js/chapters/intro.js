@@ -44,7 +44,7 @@ Intro.set = function() {
       new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
     ], [
     new Button('BEGIN', function() {
-        that.continue();
+        that.startWithoutBanner();
     }, {float: 'center'}),
     ], {
        backgroundColor: '#d6e0e0',
@@ -70,20 +70,20 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('It has a 1 minute block time...', '20px Arial'),
+    new Text("It has a 1 minute block time, and block's size are around 4MB...", '20px Arial'),
     ], [
     ], {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 4000, call: proxy(this.continue, this),
       dx: -250, dy: -250
     });
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('And it is live since September 2016.', '20px Arial'),
+    new Text('And the chain is live since September 2016 !', '20px Arial'),
     ], [
     ], {
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 4000, call: proxy(this.continue, this),
       dx: 150, dy: -50, backgroundColor: '#FFF',
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
@@ -100,7 +100,7 @@ Intro.set = function() {
 
         let komodo = Blockchains.find(b => b.params.id == 'kmd');
         let platform = Platforms.find(p => p.params.id == 'kmd');
-        let trans = new Transaction({blockchain: komodo, mempool: komodo.mempool, type: 'z'});
+        let trans = new Transaction({blockchain: komodo, mempool: komodo.mempool, type: null, shape: 'z'});
         platform.emitter.emitWithMotion(trans, komodo);
 
 
@@ -129,5 +129,12 @@ Intro.startAfterBanner = function() {
   CurrentBanner.hide();
   createjs.Tween.get(Intro.dialogs[0]).to({alpha: 0}, 500);
   setTimeout(function() { Timelines.fadeIn(1000); Timelines.start(); }, 1000);
-  setTimeout(function() {Intro.continue(); }, 2000);
+  setTimeout(function() { Intro.continue(); }, 2000);
+}
+
+Intro.startWithoutBanner = function() {
+
+  Timelines.fadeIn(1000);
+  Timelines.start();
+  Intro.continue();
 }

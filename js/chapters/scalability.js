@@ -11,13 +11,13 @@ Scalability.init = function() {
   });
   Cont_timeline.addChild(Timelines);
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", maxTps: 100 });
-  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo], emitterTPS: 40,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
+  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo], emitterTPS: 80,});
   Platforms.push(komodoPlatform);
 
   let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
   Blockchains.push(bitcoin);
-  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10});
+  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10, txWeight:1});
   Platforms.push(bitcoinPlatform);
 
   //add some transaction to bitcoin
@@ -45,7 +45,7 @@ Scalability.set = function() {
   new Text('SCALABILITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
   new Text('ONE CHAIN IS NOT ENOUGH', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
   ], [
-  new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
+  new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
   ], {
     backgroundColor: '#d6e0e0',
   });
@@ -71,7 +71,8 @@ Scalability.set = function() {
 
   // #3
   dialog = new Dialog([
-    new Text('First, looking at Bitcoin, we know that Bitcoin have a maximum capacity of 10 transaction per secound.'),
+    new Text('First, looking at Bitcoin,'),
+    new Text('we know that Bitcoin have a maximum capacity of 10 transactions per second.'),
     new Text(' '),
     ], [
     ], {
@@ -83,7 +84,7 @@ Scalability.set = function() {
 
   // #4
   dialog = new Dialog([
-    new Text('More realistically mostly around 8tps...'),
+    new Text('More realistically mostly around 8tx/s...'),
     ], [
     ], {
       lifetime: 3000, call: proxy(this.continue, this),
@@ -94,21 +95,19 @@ Scalability.set = function() {
 
   // #5
   dialog = new Dialog([
-    new Text('The Komodo blockchain can handle nearly 100 tx/s !'),
-    new Text(' '),
+    new Text('The Komodo blockchain can handle nearly 200 tx/s !'),
     new Text("Let's try out !", '20px Arial'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
-      dx: 180, dy: 30,
-      arrow: {x:0, y:-130}, arrowFrom: 'top'
+      dx: 180, dy: 20,
+      arrow: {x:0, y:-110}, arrowFrom: 'top'
     });
   this.addDialog(dialog);
 
   // #6
   dialog = new Dialog([
-    new Text('Right now we are arround 50tx/s...'),
-    new Text(''),
+    new Text('Right now, we are around 100tx/s...'),
     new Text("Let's double that !", '20px Arial'),
     ], [
     new Button('DOUBLE', proxy(this.continue, this), {float: 'center'}),
@@ -135,7 +134,7 @@ Scalability.set = function() {
       onload: function(_this) {
 
         let komodo = Platforms.find(e => e.params.id == 'kmd');
-        komodo.emitter.params.tps = 100;
+        komodo.emitter.params.tps = 200;
 
       }
     });
@@ -178,8 +177,8 @@ Scalability.set = function() {
   // #11
   dialog = new Dialog([
     new Text('See ? Now the transactions flow is split between two chain ! '),
-    new Text(' '),
-    new Text('How is this possible ? There is no magic, let me explain.'),
+    new Text('How is this possible ?'),
+    new Text('There is no magic, let me explain.'),
     new Text(' '),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
