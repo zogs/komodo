@@ -74,7 +74,6 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
 
-
   // #3
   dialog = new Dialog([
     new Text('These asset-chains are highly configurable :'),
@@ -91,8 +90,8 @@ Interoperability.set = function() {
   // #4
   dialog = new Dialog([
     new Text("We firmly believe the choice should be yours !"),
-    new Text("And we are working constantly to bring new customization possibilities,"),
-    new Text("to match yours needs and every needs that will come !"),
+    new Text("And we are constantly working to bring new customization possibilities,"),
+    new Text("to match yours needs and every needs that will come in the future !"),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {

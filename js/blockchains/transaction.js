@@ -222,7 +222,7 @@ class Transaction extends createjs.Container {
 
   static getNotaryShape(blockchain, radius) {
 
-    let name = blockchain.params.name;
+    let name = blockchain.params.id;
 
     if(this.shapeNotary[name] !== undefined) {
       return this.shapeNotary[name].clone();
@@ -242,7 +242,7 @@ class Transaction extends createjs.Container {
 
   static getCCShape(blockchain, radius) {
 
-    let name = blockchain.params.name;
+    let name = blockchain.params.id;
 
     if(this.shapeContract[name] !== undefined) {
       return this.shapeContract[name].clone();
@@ -261,8 +261,10 @@ class Transaction extends createjs.Container {
 
   static getZShape(blockchain, radius) {
 
-    if(this.shapeContract['z'] !== undefined) {
-      return this.shapeContract['z'].clone();
+    let name = blockchain.params.id + '_z';
+
+    if(this.shapeContract[name] !== undefined) {
+      return this.shapeContract[name].clone();
     }
 
     radius += radius*1/5;
@@ -272,8 +274,8 @@ class Transaction extends createjs.Container {
       .moveTo(-radius/2 - radius*1/5, -radius/2).lineTo(radius/2, -radius/2).lineTo(-radius/2, radius/2).lineTo(radius/2 + radius*1/5, radius/2);
     shape.cache(-radius*2, -radius*2, radius*4, radius*4);
 
-    this.shapeContract['z'] = new createjs.Bitmap(shape.cacheCanvas);
-    return this.shapeContract['z'].clone();
+    this.shapeContract[name] = new createjs.Bitmap(shape.cacheCanvas);
+    return this.shapeContract[name].clone();
 
   }
 }
