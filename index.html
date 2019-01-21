@@ -14,6 +14,7 @@
       #canvas-container { position: relative; margin: 0 auto; }
       canvas#canvas { position: absolute; z-index: 2; display:block; margin:0 auto; margin-top: 10px; margin-bottom: 10px;}
       canvas#backcanvas { position: absolute; z-index: 1; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
+      .footer { position: absolute; top: 820px; width: 100%; text-align: center; font: 12px Arial;}
       .dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; padding: 10px 30px; }
       .dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
       .dialog div.row { width: 100%; margin: 10px 0;}
@@ -82,7 +83,11 @@
         <div id="canvas-container">
           <canvas id="canvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
           <canvas id="backcanvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
-      </div>
+        </div>
+        <div class="footer">
+          <span>This is a draft. This version is not ready for distribution and is still in active developement.</span><br>
+          <span>Made by Pumtchak - contact: pumtchak@gmail.com - Tip (KMD) : RUFXowtPTh4sXiKrkHxvdXsTPQGifhLwA3</span>
+        </div>
       </div>
   </body>
 
