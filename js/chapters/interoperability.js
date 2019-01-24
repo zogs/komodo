@@ -2,14 +2,7 @@ const Interoperability = new Chapter({name: 'Interoperability'});
 
 Interoperability.init = function() {
 
-  Timelines = new Timeline({
-    width: STAGEWIDTH,
-    height: STAGEHEIGHT,
-    minuteWidth: MinuteWidth,
-    minuteSeconds: MinuteSeconds,
-    defaultTime: 7,
-  });
-  Cont_timeline.addChild(Timelines);
+  Timelines.reset();
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
   let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#b97183', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
@@ -271,11 +264,19 @@ Interoperability.set = function() {
 
   // #17
   dialog = new Dialog([
-    new Text("I'll stop here for now... What more can be said ? :)"),
+    new Text("There is much more to say about Komodo but i'll stop here for now :)"),
     new Text(" "),
+    new Text("If you want more information, come join our Discord !"),
+    new Link("https://komodoplatform.com/discord","https://komodoplatform.com/discord"),
+    new Text("Or follow us on Twitter"),
+    new Link("https://twitter.com/KomodoPlatform","https://twitter.com/KomodoPlatform"),
+    new Text("Or type 'Komodo' on Telegram, Facebook, Youtube, Medium... :)"),
+    new Text(" "),
+
+
     ], [
-     new Button("CREATE MOAR CHAIN", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
-     new Button("REPLAY CHAPTER", proxy(this.replay, this), { x: 80, float: 'center', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+     new Button("CREATE MORE CHAIN", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
+     new Button("GO TO CHAPTER", function() { Interoperability.goToID('chapters'); }, { x: 80, float: 'center', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
      new Button("END", proxy(this.stop, this), {float: 'right'}),
     ], {
       dx: 0, dy: -150,
@@ -289,6 +290,18 @@ Interoperability.set = function() {
      new Button("CLOSE", function() { Interoperability.goToID('part3'); }, {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
     ], {
       dx: 0, dy: -150,
+    });
+  this.addDialog(dialog);
+
+  dialog = new Dialog([
+      new Text("You can replay a chapter if you want.")
+    ],[
+    new Button("SECURITY", proxy(Tour.goToChapter,Tour,['Security']), { float: 'left'}),
+    new Button("SCALABILITY", proxy(Tour.goToChapter,Tour,['Scalability']), { float: 'center', x: -40}),
+    new Button("INTEROPERABILITY", proxy(this.replay, this), { float: 'right'}),
+    ], {
+      dx: 0, dy: 0,
+      id: 'chapters'
     });
   this.addDialog(dialog);
 }

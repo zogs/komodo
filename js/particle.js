@@ -19,20 +19,16 @@ class Particle extends createjs.Container {
     this.target = new Victor(0,0);
     this.acceleration = new Victor(0,0);
     this.velocity = new Victor(0,0);
-    this.sinusoid = new Victor(0,0);
-    this.entropy = Math.random()*1000;
     this.baseSpeed = 1;
     this.baseVelocity = new Victor(Math.random()-0.5, Math.random()-0.5);
     this.impulsions = [];
-    this.moveRandomly = false;
     this.maxForce = 1;
     this.maxSpeed = 50;
+    this.alpha = 1;
     this.alphaChange = 0;
     this.init(params);
-    this.constrainByEdges = false;
     this.tickChildren = false;
     this.mouseEnabled = false;
-    this.arrived = false;
   }
 
   init(params) {
@@ -94,42 +90,23 @@ class Particle extends createjs.Container {
     this.position.add(this.velocity);
     this.velocity.add(this.acceleration);
     this.acceleration.zero();
-    if(TimeScale < 1) this.velocity.multiplyScalar(TimeScale/2);
     this.x = this.position.x.toFixed(2);
     this.y = this.position.y.toFixed(2);
     this.alpha += this.alphaChange;
-    this.isArrived();
+    return !this.isArrived();
   }
 
   behaviors() {
 
-    if(this.moveRandomly) {
-      this.applyForce(this.baseVelocity.multiplyScalar(this.baseSpeed));
-    }
-    else {
-      let arrive = this.arrive(this.target);
-      this.applyForce(arrive);
+    let arrive = this.arrive(this.target);
+    this.applyForce(arrive);
 
-      let flee = this.flee(Mouse);
-      flee.multiplyScalar(5);
-      this.applyForce(flee);
-    }
-
-    if(this.constrainByEdges) {
-      this.applyBounces();
-    }
+    let flee = this.flee(Mouse);
+    flee.multiplyScalar(5);
+    this.applyForce(flee);
 
     this.applyImpulsions();
-
     //this.linkParticles();
-  }
-
-  applyBounces() {
-
-    if(this.position.x + this.params.w > STAGEWIDTH) this.velocity.invertX();
-    else if(this.position.x - this.params.w < 0) this.velocity.invertX();
-    if(this.position.y + this.params.w > STAGEHEIGHT) this.velocity.invertY();
-    else if(this.position.y - this.params.w < 0) this.velocity.invertY();
   }
 
   applyForce(f) {

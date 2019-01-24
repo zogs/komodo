@@ -81,9 +81,6 @@ class Chapter extends createjs.Container {
     this.removeAllChildren();
     this.dialogs = [];
     Cont_tour.removeChild(this);
-
-    window.clearStage();
-    window.resetGlobals();
   }
 
   addDialog(dialog) {

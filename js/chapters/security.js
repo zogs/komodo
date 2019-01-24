@@ -2,14 +2,7 @@ const Security = new Chapter({name: 'Security'});
 
 Security.init = function() {
 
-  Timelines = new Timeline({
-    width: STAGEWIDTH,
-    height: STAGEHEIGHT,
-    minuteWidth: MinuteWidth,
-    minuteSeconds: MinuteSeconds,
-    defaultTime: 7,
-  });
-  Cont_timeline.addChild(Timelines);
+  Timelines.reset();
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
   var platform = new Platform({y: 250, id: 'kmd', name: ' ',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 35,});
@@ -17,9 +10,6 @@ Security.init = function() {
 
   platform.hide();
   Timelines.hide();
-
-
-  console.log(Stage.numChildren);
 
 }
 

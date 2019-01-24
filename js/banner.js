@@ -18,10 +18,10 @@ class Banner extends createjs.Container {
 
     this.params = deepExtend(defaults,params);
     this.points = [];
+    this.cols = [];
     this.circles = [];
     this.particles = [];
     this.tictac = 0;
-    this.autoUpdate = true;
     this.in_place = false;
 
     this.particle_cont = new createjs.Container();
@@ -30,8 +30,6 @@ class Banner extends createjs.Container {
 
     StageGL.addChild(this);
     this.init();
-
-    document.querySelector('canvas#canvas').addEventListener('mousemove', proxy(this.onMouseMove,this));
 
   }
 
@@ -58,13 +56,16 @@ class Banner extends createjs.Container {
   initPoints() {
 
     for(let i=0, ln= this.params.points.length; i<ln; ++i) {
+
         let point = this.params.points[i];
 
-        if(this.points[point.x] === undefined) {
-          this.points[point.x] = [point];
+        this.points.push(point);
+
+        if(this.cols[point.x] === undefined) {
+          this.cols[point.x] = [point];
         }
         else {
-          this.points[point.x].push(point);
+          this.cols[point.x].push(point);
         }
 
         if(this.circles[point.r+''+point.g+''+point.b+''+point.a] === undefined) {
@@ -77,54 +78,43 @@ class Banner extends createjs.Container {
   }
 
   show() {
-
-    console.log('showBanner');
-
     this.particles = [];
-
     this.particle_cont.removeAllChildren();
     if(this.particleTickListener) Stage.off('tick', this.particleTickListener);
 
-    this.points.forEach((col, index) => {
+    for(let i=0, ln=this.points.length; i<ln; ++i) {
 
-      for(let i=0, ln=col.length; i<ln; ++i) {
+      let point = this.points[i];
 
-        let point = col[i];
+      let particle = new Particle({
+          r: point.r,
+          g: point.g,
+          b: point.b,
+          a: point.a,
+          w: point.w,
+          i: this.circles[point.r+''+point.g+''+point.b+''+point.a]
+          });
 
-        let particle = new Particle({
-            r: point.r,
-            g: point.g,
-            b: point.b,
-            a: point.a,
-            w: point.w,
-            i: this.circles[point.r+''+point.g+''+point.b+''+point.a]
-            });
+      // initial position
+      let x = this.params.width - point.x + STAGEWIDTH;
+      let y = point.y + STAGEHEIGHT/4 + (STAGEHEIGHT - Math.random()*STAGEHEIGHT*2);
+      particle.setPosition(x, y);
 
-        // initial position
-        let x = this.params.width - point.x + STAGEWIDTH;
-        let y = point.y + STAGEHEIGHT/4;
-        particle.setPosition(x, y);
+      // target position
+      x = point.x + STAGEWIDTH/4;
+      y = point.y + STAGEHEIGHT/4;
+      particle.setTarget(x, y);
 
-        // target position
-        x = point.x + STAGEWIDTH/4;
-        y = point.y + STAGEHEIGHT/4;
-        particle.setTarget(x, y);
+      // random impulsion
+      let impl = 100;
+      x = impl - Math.random()*(impl*2);
+      y = impl - Math.random()*(impl*2);
+      particle.addImpulsion(x, y, 0.1);
 
-        // random impulsion
-        let impl = 100;
-        x = impl - Math.random()*(impl*2);
-        y = impl - Math.random()*(impl*2);
-        particle.addImpulsion(x, y, 0.1);
-
-        //opacity
-        particle.alpha = 1;
-        particle.alphaChange = 0;
-
-        point.particle = particle;
-        this.particle_cont.addChild(particle);
-        this.particles.push(particle);
-      }
-    });
+      point.particle = particle;
+      this.particle_cont.addChild(particle);
+      this.particles.push(particle);
+    }
 
 
     // enable tick event
@@ -137,50 +127,33 @@ class Banner extends createjs.Container {
   }
 
   showEnded() {
-
-    console.log('showEnded');
-    Stage.off('tick', this.particleTickListener);
-    this.particleTickListener = null;
-    this.autoUpdate = false;
   }
 
   showSubtitle() {
-
-    console.log('showSubtitle');
-    this.subtitle_cont.y -= 30;
-    createjs.Tween.get(this.subtitle_cont).to({ alpha: 1, y: this.subtitle_cont.y + 30 }, 500)
+    createjs.Tween.get(this.subtitle_cont).to({ alpha: 1 }, 500)
       .wait(500)
       .call(proxy(this.showEnded, this));
   }
 
   hideSubtitle() {
-
-    console.log('hideSubtitle');
-    createjs.Tween.get(this.subtitle_cont).to({ alpha: 0, y: this.subtitle_cont.y + 30}, 500);
+    createjs.Tween.get(this.subtitle_cont).to({ alpha: 0}, 500);
   }
 
   hide() {
-
-    console.log('hideBanner');
-
     if(this.particleTickListener) Stage.off('tick', this.particleTickListener);
 
-    this.points.reverse();
-    this.points.forEach((col, index) => {
-      for(let i=0, ln=col.length; i<ln; ++i) {
+    let spread = 1000;
 
-        let point = col[i];
-        let x = this.params.width - point.x - STAGEWIDTH/2;
-        let y = point.y + (STAGEHEIGHT/2+100 - Math.random()*STAGEHEIGHT);
+    for(let i=0, ln=this.particles.length; i<ln; ++i) {
 
-        setTimeout(function() {
-          point.particle.setTarget(x, y);
-          point.particle.alphaChange = -0.1;
-          //point.particle.addImpulsion(-Math.random()*100, 100 - Math.random()*100*2, 0.2);
-        }, Math.random()*(2*index) + Math.random()*10);
-      }
-    });
-    this.points.reverse();
+        let particle = this.particles[i];
+        let x = particle.position.x + (spread - Math.random()*spread*2);
+        let y = particle.position.y + (spread - Math.random()*spread*2);
+
+        particle.maxSpeed = 10;
+        particle.setTarget(x, y);
+        particle.alphaChange = - Math.random()*0.1 - 0.05;
+    }
 
     // hide subtitle
     this.hideSubtitle();
@@ -195,8 +168,6 @@ class Banner extends createjs.Container {
   }
 
   hideEnded() {
-
-    console.log('hideEnded');
     this.particles = [];
     Stage.off('tick', this.particleTickListener);
     this.particleTickListener = null;
@@ -207,19 +178,16 @@ class Banner extends createjs.Container {
 
 
   moveParticles() {
-
     if(this.disabled) return;
 
-    let arrived = 0;
-    let particle;
-    for(let i=0, ln=this.particles.length; i<ln; ++i) {
+    let particle, moving, i = 0, arrived = 0, ln = this.particles.length;
+    for(i=0; i<ln; ++i) {
       particle = this.particles[i];
-      particle.move();
-      if(particle.arrived) ++arrived;
+      moving = particle.move();
+      if(moving === false) ++arrived;
     }
 
-    if(this.particles.length != 0 && arrived == this.particles.length) {
-
+    if(this.particles.length !== 0 && arrived === this.particles.length) {
       if(this.in_place === false) {
         StageGL.dispatchEvent('banner_in_place');
         this.in_place = true;
@@ -230,14 +198,6 @@ class Banner extends createjs.Container {
     }
 
     StageGL.update();
-    this.tictac++;
-  }
-
-  onMouseMove() {
-
-    if(this.autoUpdate === false) {
-      this.moveParticles();
-    }
   }
 
   destroy() {
@@ -248,6 +208,7 @@ class Banner extends createjs.Container {
     StageGL.removeAllChildren();
     this.particles = null;
     this.points = null;
+    this.cols = null;
   }
 
 }

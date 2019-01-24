@@ -122,16 +122,12 @@ class Platform extends createjs.Container {
   }
 
   start() {
-
     this.emitter.start();
     this.chains.map(c => c.start());
-
   }
 
   stop() {
-
     this.chains.map(c => c.stop());
-
   }
 
   activateAutoScalingChain() {

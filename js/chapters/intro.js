@@ -2,14 +2,6 @@ const Intro = new Chapter({name: 'Intro'});
 
 Intro.init = function() {
 
-  Timelines = new Timeline({
-    width: STAGEWIDTH,
-    height: STAGEHEIGHT,
-    minuteWidth: MinuteWidth,
-    minuteSeconds: MinuteSeconds,
-    defaultTime: 7,
-  });
-  Cont_timeline.addChild(Timelines);
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6 });
   var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#306565', backgroundColor: null, chains: [komodo], emitterTPS: 10 });
@@ -17,6 +9,7 @@ Intro.init = function() {
 
   platform.hide();
   Timelines.hide();
+  Timelines.start();
 
 }
 
@@ -33,7 +26,7 @@ Intro.set = function() {
       Intro.startAfterBanner();
     }, {float: 'right'}),
     ], {
-        dx: 40, dy: 70,
+        dx: 30, dy: 58,
        backgroundColor: null,
     });
   }
@@ -43,7 +36,7 @@ Intro.set = function() {
       new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
       new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
     ], [
-    new Button('BEGIN', function() {
+    new Button('CLICK TO BEGIN', function() {
         that.startWithoutBanner();
     }, {float: 'center'}),
     ], {
@@ -51,7 +44,6 @@ Intro.set = function() {
     });
   }
   this.addDialog(dialog);
-
 
   dialog = new Dialog([
     new Text('This is the KOMODO blockchain.', '20px Arial'),
@@ -68,6 +60,7 @@ Intro.set = function() {
       },
     });
   this.addDialog(dialog);
+
 
   dialog = new Dialog([
     new Text("It has a 1 minute block time, and block's size are around 4MB...", '20px Arial'),
@@ -128,13 +121,12 @@ Intro.startAfterBanner = function() {
 
   CurrentBanner.hide();
   createjs.Tween.get(Intro.dialogs[0]).to({alpha: 0}, 500);
-  setTimeout(function() { Timelines.fadeIn(1000); Timelines.start(); }, 1000);
-  setTimeout(function() { Intro.continue(); }, 2000);
+  setTimeout(function() { Timelines.fadeIn(1000); }, 1000);
+  setTimeout(function() { Intro.continue(); }, 1500);
 }
 
 Intro.startWithoutBanner = function() {
 
   Timelines.fadeIn(1000);
-  Timelines.start();
   Intro.continue();
 }

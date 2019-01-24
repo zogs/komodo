@@ -37,9 +37,11 @@ class Emitter extends createjs.Container {
   }
 
   start() {
-
     this.continuousEmit();
+  }
 
+  stop() {
+    createjs.Tween.removeTweens(this);
   }
 
   continuousEmit() {

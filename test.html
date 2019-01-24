@@ -11,6 +11,8 @@
           src: url('assets/font/RobotoCondensed/RobotoCondensed-Bold.ttf'); /* IE */
       }
       body { margin: 0; padding: 0; background: #DFEFEE; }
+      .header { width: 100%; text-align: right; font: 12px Arial;}
+      .footer { position: absolute; top: 850px; width: 100%; text-align: center; font: 12px Arial; }
       #canvas-container { position: relative; margin: 0 auto; }
       canvas#canvas { position: absolute; z-index: 2; display:block; margin:0 auto; margin-top: 10px; margin-bottom: 10px;}
       canvas#backcanvas { position: absolute; z-index: 1; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
@@ -21,12 +23,16 @@
   </head>
 
   <body onload="loaded()">
+      <div class="header">
+          <span><i id="fps"></i> fps</span>
+      </div>
       <div id="canvas-container">
         <canvas id="canvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
         <canvas id="backcanvas" width="1500" height="800"><!-- dont touch the dimension, it is use to calculate the proportion --></canvas>
       </div>
-      <div style="display: none;">
-        <img src="assets/img/Komodo-icon.png" alt="" id="komodo-logo">
+      <div class="footer">
+        <span>This is a draft. This version is not ready for distribution and is still in active developement.</span><br>
+        <span>Made by Pumtchak - contact: pumtchak@gmail.com - Tip (KMD) : RUFXowtPTh4sXiKrkHxvdXsTPQGifhLwA3</span>
       </div>
   </body>
 

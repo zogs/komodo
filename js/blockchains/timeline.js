@@ -40,12 +40,30 @@ class Timeline extends createjs.Container {
 		this.initTimeline();
 		this.initCurrentTime();
 
-		Stage.on('newminute', function(event) {
+		this.newMinuteListener = Stage.on('newminute', function(event) {
 			if(event.time >=5) {
 				this.addLine(this.totalTime+1);
 				this.removeLines();
 			}
 		}, this);
+	}
+
+	reset() {
+		this.stop();
+		this.clear();
+		Stage.off('newminute', this.newMinuteListener);
+		this.cont_sliding.x = 0;
+		this.cont_blockchains.y = 0;
+		this.removeCurrentBar();
+		this.cont_lines.removeAllChildren();
+		this.lines = [];
+		this.time = this.params.defaultTime;
+		Blockchains = [];
+	  Platforms = [];
+	  Emitters = [];
+	  Particles = [];
+	  Mempools = [];
+		this.init();
 	}
 
 	initTimeline() {
@@ -117,8 +135,13 @@ class Timeline extends createjs.Container {
 			.closePath();
 		this.currentBar.cache(-1, -1, 2, this.params.height);
 
-		this.currentBar.x = this.time * this.params.minuteWidth;
+		this.currentBar.x = this.params.defaultTime * this.params.minuteWidth;
 		Cont_currenttime.addChild(this.currentBar);
+	}
+
+	removeCurrentBar() {
+		Cont_currenttime.removeAllChildren();
+		this.currentBar = null;
 	}
 
 	start() {
@@ -126,10 +149,29 @@ class Timeline extends createjs.Container {
 		let tw = createjs.Tween.get(this.cont_sliding, { timeScale: TimeScale }).to({x: this.cont_sliding.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds)
 							.call(proxy(this.incrementTime, this));
 		Tweens.add(tw);
-
+		this.slideTween = tw;
 		Emitters.map(e => e.start());
 		Platforms.map(p => p.start());
 
+		return this;
+	}
+
+	stop() {
+		createjs.Tween.removeTweens(this.cont_sliding);
+		createjs.Tween.removeTweens(this.cont_background);
+		createjs.Tween.removeTweens(this.cont_foreground);
+		createjs.Tween.removeTweens(this.currentBar);
+		Emitters.map(e => e.stop());
+		Platforms.map(p => p.stop());
+		return this;
+	}
+
+	clear() {
+		this.stop();
+		this.cont_background.removeAllChildren();
+		this.cont_blockchains.removeAllChildren();
+		this.cont_foreground.removeAllChildren();
+		return this;
 	}
 
 	incrementTime() {
@@ -142,6 +184,7 @@ class Timeline extends createjs.Container {
 		let tw = createjs.Tween.get(this.cont_sliding, { timeScale: TimeScale }).to({x: this.cont_sliding.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds)
 							.call(proxy(this.incrementTime, this));
 		Tweens.add(tw);
+		this.slideTween = tw;
 
 	}
 
@@ -167,16 +210,19 @@ class Timeline extends createjs.Container {
 	hide() {
 		this.alpha = 0;
 		this.currentBar.alpha = 0;
+		return this;
 	}
 
 	fadeIn(ms = 500) {
 		createjs.Tween.get(this).to({alpha: 1}, ms);
 		createjs.Tween.get(this.currentBar).to({alpha: 1}, ms);
+		return this;
 	}
 
 	fadeOut(ms = 500) {
 		createjs.Tween.get(this).to({alpha: 0}, ms);
 		createjs.Tween.get(this.currentBar).to({alpha: 0}, ms);
+		return this;
 	}
 
 }

@@ -35,7 +35,7 @@ class Tour extends createjs.Container {
     if(chapter == null) console.error('Chapter "'+name+'" does not exist');
 
     this.current.stop();
-    this.clearStage();
+    this.clear();
     chapter.start();
 
     this.current = chapter;
@@ -48,21 +48,14 @@ class Tour extends createjs.Container {
     if(chapter == null) return this.stop();
 
     this.current.stop();
-    this.clearStage();
+    this.clear();
     chapter.start();
 
     this.current = chapter;
   }
 
-  clearStage() {
+  clear() {
 
-    Cont_background.removeAllChildren();
-    Cont_blockchain.removeAllChildren();
-    Cont_timeline.removeAllChildren();
-    Cont_platform.removeAllChildren();
-    Cont_mempool.removeAllChildren();
-    Cont_emitter.removeAllChildren();
-    Cont_currenttime.removeAllChildren();
     Cont_tour.removeAllChildren();
   }
 

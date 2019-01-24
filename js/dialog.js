@@ -375,7 +375,7 @@ class Dialog extends createjs.Container {
 
       super();
       this.text = text;
-      this.callback = (callback === null)? this.nullCallback : callback;
+      this.callback = callback;
       var defaults = {
         width: null,
         height: null,
@@ -407,6 +407,8 @@ class Dialog extends createjs.Container {
       let w = (this.params.width == null)? text.getBounds().width : this.params.width;
       let h = (this.params.height == null)? text.getBounds().height : this.params.height;
       let pad = this.params.paddings;
+
+      text.mouseEnabled = false;
       text.textAlign = 'center';
       text.regX = 0;
       text.regY = h/2;
@@ -415,11 +417,16 @@ class Dialog extends createjs.Container {
       bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);
       bg.regX = w/2;
       bg.regY = h/2;
+
       this.addChild(bg);
-
       this.addChild(text);
+      this.bg = bg;
+      this.text = text;
 
-      this.addEventListener("click", this.callback);
+      this.addEventListener("click", proxy(this.clicked, this));
+      this.addEventListener("mousedown", proxy(this.down, this));
+      this.addEventListener("mouseover", proxy(this.over, this));
+      this.addEventListener("mouseout", proxy(this.out, this));
 
       this.cursor = "pointer";
       this.width = w + pad[1] + pad[3];
@@ -429,6 +436,25 @@ class Dialog extends createjs.Container {
       c.graphics.beginFill('red').drawCircle(0,0,2);
       //this.addChild(c);
 
+    }
+
+    clicked() {
+      if(this.callback === null) this.nullCallback();
+      this.callback();
+      this.scaleX = this.scaleY = 1;
+    }
+
+    down() {
+      this.scaleX = this.scaleY -= 0.05;
+    }
+
+    over() {
+      this.text.y += 1;
+    }
+
+    out() {
+      this.text.y -= 1;
+      this.scaleX = this.scaleY = 1;
     }
 
     nullCallback() {

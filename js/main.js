@@ -19,9 +19,6 @@ var ZoomScale = 1;
 var SlowMotion = false;
 var CurrentBanner = null;
 var Cont_main;
-var Cont_timeline;
-var Cont_blockchain;
-var Cont_transaction;
 var ColorAsset = ['#f3de8a', '#eb9486', '#7e7f9a', '#97a7b3'];
 var MinuteWidth = 120;
 var MinuteSeconds = 2;
@@ -114,7 +111,10 @@ window.assetsLoaded = function() {
   Stage.addChild(Cont_tour);
 
 	//init onEnterFrame
-	createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
+	//createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
+  //createjs.Ticker.timingMode = createjs.Ticker.RAF;
+  createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
+  createjs.Ticker.framerate = 30;
 	createjs.Ticker.addEventListener('tick',tick);
 
 	//init Mouse move
@@ -146,8 +146,6 @@ window.resetGlobals = function() {
   Emitters = [];
   Particles = [];
   Mempools = [];
-  Timelines = null;
-
 }
 
 window.clearStage = function() {
@@ -168,6 +166,8 @@ window.clearStage = function() {
 window.tick = function() {
 
 	Stage.update();
+
+  document.getElementById('fps').textContent = createjs.Ticker.getMeasuredFPS().toFixed(0);
 }
 
 

@@ -2,14 +2,7 @@ const Scalability = new Chapter({name: 'Scalability'});
 
 Scalability.init = function() {
 
-  Timelines = new Timeline({
-    width: STAGEWIDTH,
-    height: STAGEHEIGHT,
-    minuteWidth: MinuteWidth,
-    minuteSeconds: MinuteSeconds,
-    defaultTime: 7,
-  });
-  Cont_timeline.addChild(Timelines);
+  Timelines.reset();
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
   var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo], emitterTPS: 80,});
@@ -176,14 +169,14 @@ Scalability.set = function() {
 
   // #11
   dialog = new Dialog([
-    new Text('See ? Now the transactions flow is split between two chain ! '),
+    new Text('See ? Now the transaction flow is split between two chain ! '),
     new Text('How is this possible ?'),
     new Text('There is no magic, let me explain.'),
     new Text(' '),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      dx: 180, dy: 150,
+      dx: 180, dy: 130,
       arrow: {x:0, y:-120}, arrowFrom: 'top',
     });
   this.addDialog(dialog);
@@ -192,10 +185,9 @@ Scalability.set = function() {
   dialog = new Dialog([
     new Text('The Komodo ecosystem can spawn at any time a scaling chain that can validate'),
     new Text('and confirm transaction from the main chain.'),
-    new Text('It is possible through a technology that Komodo have cleverly used:'),
-    new Text('the Merkleroot of Merkleroot of Merkleroot (MoMoM),'),
-    new Text('associated with a special mechanism : the Burn protocol.'),
-    new Text(' '),
+    new Text('It is possible through a technology that Komodo have cleverly used: the'),
+    new Text('Merkleroot of Merkleroot of Merkleroot (a.k.a MoMoM).'),
+    new Text('Associated with a special mechanism : the Burn protocol.'),
     new Text("Exactly what is happening ?"),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
@@ -206,15 +198,52 @@ Scalability.set = function() {
 
   // #13
   dialog = new Dialog([
-    new Text('At each block, the side chain sends to the main chain a summary of all transaction (MoM) that have appends, '),
-    new Text('At the same time, the main chain shares a summary of all previous transaction of all chains (MoMoM), '),
-    new Text('That way, each chain can validate a transaction from another chain, and with the use of '),
-    new Text('the Burn protocol, can maintain a constant level of coin across the whole ecosystem. '),
-    new Text(' '),
+    new Text('During the notarization process, the side chain sends a summary of all transaction (MoM) that have appends since'),
+    new Text('the last notarization back to the main chain. Simultaneously, the main chain shares to all the chains a summary of all previous transaction'),
+    new Text('gathered from the last notarization (MoMoM).'),
+    new Text("Let's see that in action !")
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
       dx:0, dy: 0,
+    });
+  this.addDialog(dialog);
+
+  //
+  dialog = new Dialog([
+    new Text(' '),
+    new Text("Waiting for the next notarization...                ", 'italic 20px Arial', '#AAA'),
+    new Text(' '),
+    ], [
+    ], {
+      dx:0, dy: 0,
+      onload: function(_this) {
+
+        let komodo = Blockchains.find(b => b.params.id == 'kmd');
+
+        let line = _this.content[1];
+        let text = new createjs.Text('', 'italic 20px Arial', '#AAA');
+        text.x = line.x + line.getBounds().x + 320;
+        text.y = line.y + 5;
+        _this.addChild(text);
+
+        //wait for notarization
+        Stage.on('newminute', function(ev) {
+
+          let t = komodo.params.notarizeInterval - (ev.time+2)%10;
+          window.setTimeout(function() {
+            text.text = '('+t+'s)';
+          }, 100);
+
+          if((ev.time+3)%10 == 0) {
+            ev.remove();
+          }
+        });
+
+        Stage.on('notarization_start', proxy(that.continue, that), null, true);
+        Stage.on('notarization_start', function() { window.slowMo(0.2, 500);}, null, true);
+        Stage.on('notarization_end', function() { window.slowMo(1, 500);}, null, true);
+      }
     });
   this.addDialog(dialog);
 
@@ -225,18 +254,28 @@ Scalability.set = function() {
     ], {
       dx:-60, dy: -100,
       arrow: {x:170, y:0}, arrowWidth:20, arrowFrom: 'right',
-      lifetime: 4000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
+  // #15bis
+  dialog = new Dialog([
+    new Text('Now, each chain have a records of what appended on other chains !'),
+    new Text('That way, it can validate transactions from another chain, and with the use of the'),
+    new Text('Burn protocol, can maintain a constant level of coin across the whole ecosystem. '),
+    ], [
+    new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
+    ], {
+      dx:-60, dy: -50,
+    });
+  this.addDialog(dialog);
 
   // #15
   dialog = new Dialog([
-    new Text("Actually, there is no theoric limit to this mecanism !"),
-    new Text("Thousands of chain can be spawn !"),
-    new Text(" "),
-    new Text("Earlier this year, Komodo has successfully tested a 16000 tx/s stress test"),
-    new Text("And now Komodo is preparing a 1 million tx/s test for 2019 !!"),
+    new Text("There is no theorical limit to how many chains can be spawn."),
+    new Text("Actually in 2018, Komodo has successfully tested a ~20000 tx/s stress test"),
+    new Text("with thousands of scaling chain being used."),
+    new Text("And right now Komodo is preparing a 1 million tx/s stress test for 2019 !"),
     new Text(" "),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
@@ -248,7 +287,7 @@ Scalability.set = function() {
 
   // #16
   dialog = new Dialog([
-    new Text("Now that we have cover the scalability mecanism,                      "),
+    new Text("Now that we have cover the scalability mechanism,                      "),
     new Text("Let's go to the next chapter: INTEROPERABILITY !"),
     new Text(" "),
     ], [
@@ -257,6 +296,7 @@ Scalability.set = function() {
     new Button("NEXT CHAPTER", proxy(Tour.goToChapter,Tour,['Interoperability']), {float: 'right'}),
     ], {
       dx:0, dy: 0,
+      id: 'end'
     });
   this.addDialog(dialog)
 
@@ -268,7 +308,7 @@ Scalability.set = function() {
     ], [
     new Button("ADD TRANSACTION", function() { Scalability.addTps(); }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2}),
     new Button("ADD CHAIN", function() { Scalability.addChain(); }, {float: 'center', x: 60, backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2}),
-    new Button("STOP", function() { Scalability.goTo(15); }, {float: 'right'}),
+    new Button("STOP", function() { Scalability.goToID('end'); }, {float: 'right'}),
     ], {
       dx:0, dy: -300,
     });

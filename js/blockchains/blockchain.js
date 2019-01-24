@@ -65,7 +65,6 @@ class Blockchain extends createjs.Container {
 	stop() {
 
 		this.mempool.stop();
-
 		if(this.minuteListener) Stage.off('newminute', this.minuteListener);
 	}
 
@@ -83,10 +82,10 @@ class Blockchain extends createjs.Container {
 
 			if(this.params.notarizeTo === 'kmd' && (event.time+this.params.notarizeAdvance+1) % this.params.notarizeInterval === 0) {
 				this.notarize();
-			}
 
-			if(this.params.type == 'SC' || this.params.type == 'AC') {
-				this.mempool.sendMoMoM();
+				if(this.params.type == 'SC' || this.params.type == 'AC') {
+					this.mempool.sendMoMoM();
+				}
 			}
 
 			this.removeInvisibles();
@@ -443,7 +442,7 @@ class Blockchain extends createjs.Container {
 
 		createjs.Tween.get(this.cont_block).to({alpha: 1}, ms);
 		createjs.Tween.get(this.cont_mempool).to({alpha: 1}, ms);
-		createjs.Tween.get(this.cont_links).wait(ms).to({alpha: 1}, ms/2);
+		createjs.Tween.get(this.cont_links).wait(ms/2).to({alpha: 1}, ms/2);
 
 		createjs.Tween.get(this.mempool).to({alpha: 1}, ms);
 	}

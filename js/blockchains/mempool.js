@@ -316,7 +316,7 @@ class Mempool extends createjs.Container {
 
 	drawMoMoMTo(mempool) {
 
-			let width = 40
+			let width = 45
 			let height = 50;
 
 			//upstream
@@ -342,7 +342,7 @@ class Mempool extends createjs.Container {
 
 		if(this.params.blockchain.params.visible === false) return;
 
-		let speed = 0.5;
+		let speed = 0.3;
 
 		if(this.momom_up) {
 			this.momom_up.band1.y -= speed;
@@ -362,8 +362,8 @@ class Mempool extends createjs.Container {
 		if(this.params.blockchain.params.visible === false) return;
 
 		var that = this;
-		createjs.Tween.get(this.momom_up.momom).to({y : -150}, 2000).call(function() { that.momom_up.momom.y = 10; });
-		createjs.Tween.get(this.momom_down.momom).to({y : -150}, 2000).call(function() { that.momom_down.momom.y = 10; });
+		createjs.Tween.get(this.momom_up.momom).to({y : -60}, MinuteSeconds*1000).call(function() { that.momom_up.momom.y = 10; });
+		createjs.Tween.get(this.momom_down.momom).to({y : -60}, MinuteSeconds*1000).call(function() { that.momom_down.momom.y = 10; });
 	}
 
 	hideMoMoM() {
@@ -390,28 +390,30 @@ class Mempool extends createjs.Container {
 		bkg.alpha = 0.4;
 		stream.addChild(bkg);
 		let band1 = new createjs.Bitmap(queue.getResult('arrowband'));
-		band1.x = -40;
+		band1.x = -37;
 		band1.y = -height;
 		band1.scaleX = 3;
 		band1.scaleY = 1;
 		band1.alpha = 1;
 		stream.band1 = band1;
 		let band2 = new createjs.Bitmap(queue.getResult('arrowband'));
-		band2.x = -40;
+		band2.x = -37;
 		band2.y = band1.image.height - height;
 		band2.scaleX = 3;
 		band2.scaleY = 1;
 		band2.alpha = 1;
 		stream.band2 = band2;
-		let MoMoM = new createjs.Text('MoM', '20px Roboto', color);
+		let MoMoM = new createjs.Text('MoM', '14px Roboto', color);
 		MoMoM.regX = MoMoM.getMeasuredWidth()/2;
 		MoMoM.regY = MoMoM.getMeasuredHeight()/2;
-		if(direction == 'down') MoMoM.text = 'MoMoM';
-		MoMoM.rotation = 90;
-		if(direction == 'up') MoMoM.rotation = -90;
-		MoMoM.x =  20;
-		MoMoM.y = 50;
+		MoMoM.x = 25;
+		MoMoM.y = 10;
 		MoMoM.alpha = 0.4;
+		if(direction == 'down') {
+			MoMoM.text = 'MoMoM';
+			MoMoM.x = 30;
+			MoMoM.rotation = 180;
+		}
 		stream.momom = MoMoM;
 		let mask = new createjs.Shape();
 		mask.graphics.beginFill("red").drawRect(0, 0, width, height);
