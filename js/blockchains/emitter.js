@@ -98,9 +98,7 @@ class Emitter extends createjs.Container {
     let type;
     let shape;
 
-    if(blockchain.params.privacy === 1) {
-      shape = 'z';
-    }
+
     if(blockchain.params.type == 'AC' && blockchain.params.ccc.length > 0) {
       type = 'ccc';
       ccc = mempool.getRandomContract();
@@ -109,6 +107,9 @@ class Emitter extends createjs.Container {
       let kmd = this.params.blockchains.find(b => b.params.id == 'kmd');
       mempool = kmd.mempool;
     }
+    if(blockchain.params.privacy === 1) shape = 'z';
+    if(blockchain.params.privacy === 0) shape = null;
+    if(blockchain.params.privacy === null) shape = (Math.random() < blockchain.params.zRatio)? 'z' : null;
 
     let trans = new Transaction({ blockchain: blockchain, mempool: mempool, type: type, shape: shape, ccc: ccc });
 

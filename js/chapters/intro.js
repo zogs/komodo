@@ -2,6 +2,7 @@ const Intro = new Chapter({name: 'Intro'});
 
 Intro.init = function() {
 
+  Timelines.reset();
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6 });
   var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#306565', backgroundColor: null, chains: [komodo], emitterTPS: 10 });
@@ -46,7 +47,7 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('This is the KOMODO blockchain.', '20px Arial'),
+    new Text('This is the KOMODO blockchain.'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
@@ -63,29 +64,29 @@ Intro.set = function() {
 
 
   dialog = new Dialog([
-    new Text("It has a 1 minute block time, and block's size are around 4MB...", '20px Arial'),
+    new Text("It has a 1 minute block time, and block's size is around 4MB..."),
     ], [
     ], {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
-      lifetime: 4000, call: proxy(this.continue, this),
+      lifetime: 2500, call: proxy(this.continue, this),
       dx: -250, dy: -250
     });
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('And the chain is live since September 2016 !', '20px Arial'),
+    new Text('And the chain is live since September 2016 !'),
     ], [
     ], {
-      lifetime: 4000, call: proxy(this.continue, this),
+      lifetime: 2500, call: proxy(this.continue, this),
       dx: 150, dy: -50, backgroundColor: '#FFF',
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('It begans as a fork of Zcash, a privacy coin.', '20px Arial'),
-    new Text('So Komodo inherits all of its features, like the possibility to do anonymous transactions.', '20px Arial'),
-    new Text('Also call Z-transactions.', '20px Arial'),
+    new Text('It begans as a fork of Zcash, which is a fork of Bitcoin.', 'bold'),
+    new Text('So Komodo inherits all the Bitcoin and Zcash features, like the possibility to do anonymous transactions.'),
+    new Text('Also call Z-transactions.'),
     new Text(' '),
     ], [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -104,14 +105,14 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('But Komodo is not *just* a privacy blockchain. There is much more to see.', '20px Arial'),
-    new Text('Lets begin with the more important aspect: SECURITY !', '20px Arial'),
+    new Text('But Komodo is NOT just a privacy blockchain. There is much more to see !', 'bold'),
+    new Text("Let's begin with the more important aspect: SECURITY !"),
     new Text(' '),
     ], [
       new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
       new Button('NEXT CHAPTER', proxy(Tour.goToChapter,Tour,['Security']), {float: 'right'}),
     ], {
-      dy: 100
+      dy: 0
     });
   this.addDialog(dialog);
 }

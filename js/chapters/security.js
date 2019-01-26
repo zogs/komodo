@@ -87,8 +87,8 @@ Security.set = function() {
         komodo.params.notarizeTo = 'btc';
 
         let line = _this.content[3];
-        let text = new createjs.Text('', '20px Arial', '#31656580');
-        text.x = line.x + line.getBounds().x + 360;
+        let text = new createjs.Text('', '20px Arial', '#6b8a8a');
+        text.x = line.x + line.getBounds().x + 340;
         text.y = line.y + 5;
         _this.addChild(text);
 
@@ -132,7 +132,7 @@ Security.set = function() {
     new Text("That was the notarization process !"),
     ], [
     ], {
-      dx: 100, dy: -60, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
+      dx: 100, dy: -70, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
       lifetime: 3500, call: proxy(this.continue, this)
     });
   this.addDialog(dialog);
@@ -140,7 +140,8 @@ Security.set = function() {
   // #7
   dialog = new Dialog([
     new Text('By notarizing its status inside a Bitcoin block, Komodo takes avantage of the Bitcoin hashrate.'),
-    new Text('As soon as the Bitcoin block is mined, there is now an immutable record of Komodo transactions written on the Bitcoin blockchain,'),
+    new Text('As soon as the Bitcoin block is mined, there is now an immutable record of Komodo transactions', 'bold'),
+    new Text('written on the Bitcoin blockchain,'),
     new Text(' '),
     new Text('Therefore, it becomes impossible to reorged the Komodo blockchain before this checkpoint !'),
     ], [
@@ -152,11 +153,11 @@ Security.set = function() {
 
   // #8
   dialog = new Dialog([
-    new Text('This mechanism is called Delayed Proof-of-Work (dPOW). '),
+    new Text('This mechanism is called Delayed Proof-of-Work (dPOW). ', 'bold'),
     new Text('This means that for a 51% attack, you needs to gain the majority of Komodo hashrate'),
-    new Text('Plus the majority of the Bitcoin hashrate !'),
+    new Text('AND the majority of the Bitcoin hashrate !'),
     new Text(' '),
-    new Text('And good luck with that !'),
+    new Text('And good luck with that.'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -176,7 +177,7 @@ Security.set = function() {
   dialog = new Dialog([
     new Text("Do you know that Komodo can provide Bitcoin level security to others independant blockchain ?"),
     new Text(""),
-    new Text("Let's see an example."),
+    new Text("Let's see some examples."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -186,9 +187,9 @@ Security.set = function() {
 
   // #11
   dialog = new Dialog([
-    new Text("These 2 independant blockchains have chosen Komodo to secure their network :"),
+    new Text("These independant blockchains have chosen Komodo to secure their network :"),
     new Text(""),
-    new Text("GameCredits and Einsteinum."),
+    new Text("GameCredits and Einsteinum.", 'bold'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -230,7 +231,7 @@ Security.set = function() {
 
   // #12
   dialog = new Dialog([
-    new Text("These blockchain are notarizing themselves to Komodo. "),
+    new Text("These blockchain are notarizing themselves to Komodo. ", 'bold'),
     new Text("They now beneficit from the Bitcoin hashrate + the Komodo hashrate."),
     new Text("Now attackers needs to attack 3 blockchains instead of 1, that should be pretty hard, don't you think ?"),
     new Text(""),
@@ -249,6 +250,7 @@ Security.set = function() {
     new Link("https://blog.komodoplatform.com/delayed-proof-of-work-explained","https://blog.komodoplatform.com/delayed-proof-of-work-explained-9a74250dbb86"),
     new Text(" "),
     new Text("Or you can contact the Komodo team on the official Discord !"),
+    new Link("https://komodoplatform.com/discord","https://komodoplatform.com/discord"),
     new Text(" "),
     ], [
       new Button("REPLAY CHAPTER", proxy(this.replay, this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),

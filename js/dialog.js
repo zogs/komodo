@@ -17,7 +17,7 @@ class Dialog extends createjs.Container {
       call: null,
       onload: null,
       radius: 0,
-      paddings: [10,20,10,20],
+      paddings: [15,20,15,20],
       backgroundColor: '#FFF',
       borderColor: 'grey',
       borderWidth: 1,
@@ -265,10 +265,10 @@ class Dialog extends createjs.Container {
       super();
       var defaults = {
         text: text,
-        font: (font === null)? '20px Arial' : font,
+        font: 'normal 20px Arial',
         width: null,
         height: null,
-        color: '#31656580',
+        color: '#6b8a8a',
         paddingTop: 5,
         paddingBottom: 5,
         paddingLeft: 10,
@@ -277,6 +277,9 @@ class Dialog extends createjs.Container {
       };
 
       this.params = extend(defaults,params);
+      if(font === 'bold') this.params.font = this.params.font.replace('normal', 'bold');
+      else if(font === 'italic') this.params.font = this.params.font.replace('normal', 'italic');
+      else if(font !== null) this.params.font = font;
 
 
       this.init();

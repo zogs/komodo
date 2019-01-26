@@ -20,6 +20,7 @@ class Blockchain extends createjs.Container {
 			notarizeNBlock: 1,
 			notaryLabelSize: 'small',
 			privacy: 0,
+			zRatio: 0.1,
 			ccc: [],
 			maxTps: 200,
 			visible: true,
@@ -134,7 +135,11 @@ class Blockchain extends createjs.Container {
 
 		let transactions = [];
 		for(let i=0,ln=Math.ceil(Math.random()*10); i<ln; i++) {
-				transactions.push(new Transaction({ blockchain: this, mempool: this.mempool, 'valid': true}));
+				let shape = null;
+				if(this.params.privacy === 1) shape = 'z';
+				if(this.params.privacy === 0) shape = null;
+				if(this.params.privacy === null) shape = (Math.random() < this.params.zRatio)? 'z' : null;
+				transactions.push(new Transaction({ blockchain: this, mempool: this.mempool, valid: true, shape: shape}));
 		}
 		block.addTransactions(transactions);
 		block.finalize();
@@ -205,7 +210,7 @@ class Blockchain extends createjs.Container {
 		//this.cont_notary.addChild(copy);
 
 		let last = this.blocks[this.blocks.length-1];
-		let trans = new Transaction({blockchain: this, mempool: this.mempool, type: 'notary', priority: 1, 'notaryTo': block, valid: true, 'image': copy, 'imageX': 5, 'imageY': 5});
+		let trans = new Transaction({blockchain: this, mempool: this.mempool, type: 'notary', shape: 'notary', priority: 1, 'notaryTo': block, valid: true, 'image': copy, 'imageX': 5, 'imageY': 5});
 
 		let coor = this.cont_block.localToLocal(last.x, last.y, blockchain.mempool.cont_transaction);
 		trans.x = coor.x;

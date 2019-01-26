@@ -29,7 +29,7 @@ class Transaction extends createjs.Container {
     this.maxForce = 4;
     this.moving = false;
     this.impulsions = [];
-    this.appearance = (this.params.shape)? this.params.shape : this.params.type;
+    this.appearance = (typeof this.params.shape !== undefined)? this.params.shape : this.params.type;
 
     this.init(params);
     this.tickChildren = false;

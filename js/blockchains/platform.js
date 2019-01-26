@@ -224,14 +224,14 @@ class Platform extends createjs.Container {
 
   addScalingChain() {
 
-    let n = this.chains.length+1;
+    let n = this.chains.length;
     let prev = this.chains[this.chains.length-1];
     let bloc = prev.blocks[prev.blocks.length-2];
 
     if(bloc == undefined) return;
 
     let chain = new Blockchain({id: 'SC'+n, name: "Scaling Chain "+n, color:'#569b9b', type: 'SC', notarizeTo: 'kmd'});
-    chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2;
+    chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2 - (chain.params.premined) * (chain.params.blockWidth + chain.params.blockPadding);
 
     chain = this.addChain(chain);
     chain.start();
@@ -247,10 +247,11 @@ class Platform extends createjs.Container {
     let n = this.chains.length+1;
     let prev = this.chains[this.chains.length-1];
     let bloc = prev.blocks[prev.blocks.length-2];
+    let kmd = this.chains.find(c => c.params.id == 'kmd');
 
     if(bloc == undefined) return;
 
-    chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2;
+    chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2 - (chain.params.premined) * (chain.params.blockWidth + chain.params.blockPadding);
     chain = this.addChain(chain);
     chain.start();
 

@@ -66,11 +66,10 @@ Scalability.set = function() {
   dialog = new Dialog([
     new Text('First, looking at Bitcoin,'),
     new Text('we know that Bitcoin have a maximum capacity of 10 transactions per second.'),
-    new Text(' '),
     ], [
     ], {
       dx: -100, dy: -200,
-      arrow: {x:0, y:-90}, arrowFrom: 'top',
+      arrow: {x:0, y:-80}, arrowFrom: 'top',
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
@@ -183,8 +182,8 @@ Scalability.set = function() {
 
   // #12
   dialog = new Dialog([
-    new Text('The Komodo ecosystem can spawn at any time a scaling chain that can validate'),
-    new Text('and confirm transaction from the main chain.'),
+    new Text('The Komodo ecosystem can spawn at any time a scaling chain that can validate', 'bold'),
+    new Text('and confirm transaction from the main chain.', 'bold'),
     new Text('It is possible through a technology that Komodo have cleverly used: the'),
     new Text('Merkleroot of Merkleroot of Merkleroot (a.k.a MoMoM).'),
     new Text('Associated with a special mechanism : the Burn protocol.'),
@@ -199,8 +198,8 @@ Scalability.set = function() {
   // #13
   dialog = new Dialog([
     new Text('During the notarization process, the side chain sends a summary of all transaction (MoM) that have appends since'),
-    new Text('the last notarization back to the main chain. Simultaneously, the main chain shares to all the chains a summary of all previous transaction'),
-    new Text('gathered from the last notarization (MoMoM).'),
+    new Text('the last notarization back to the main chain. Simultaneously, the main chain shares to all the chains a summary'),
+    new Text('of all previous transaction gathered from the last notarization (MoMoM).'),
     new Text("Let's see that in action !")
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
@@ -211,9 +210,7 @@ Scalability.set = function() {
 
   //
   dialog = new Dialog([
-    new Text(' '),
-    new Text("Waiting for the next notarization...                ", 'italic 20px Arial', '#AAA'),
-    new Text(' '),
+    new Text("Waiting for the next notarization...           ", 'italic 20px Arial', '#AAA'),
     ], [
     ], {
       dx:0, dy: 0,
@@ -221,8 +218,8 @@ Scalability.set = function() {
 
         let komodo = Blockchains.find(b => b.params.id == 'kmd');
 
-        let line = _this.content[1];
-        let text = new createjs.Text('', 'italic 20px Arial', '#AAA');
+        let line = _this.content[0];
+        let text = new createjs.Text('', 'italic 20px Arial', '#6b8a8a');
         text.x = line.x + line.getBounds().x + 320;
         text.y = line.y + 5;
         _this.addChild(text);
@@ -249,11 +246,11 @@ Scalability.set = function() {
 
   // #14
   dialog = new Dialog([
-    new Text('You can see it there !'),
+    new Text('MoMoM are exchanged now !'),
     ], [
     ], {
-      dx:-60, dy: -100,
-      arrow: {x:170, y:0}, arrowWidth:20, arrowFrom: 'right',
+      dx:420, dy: -100,
+      arrow: {x:-170, y:0}, arrowWidth:20, arrowFrom: 'left',
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
@@ -262,7 +259,7 @@ Scalability.set = function() {
   dialog = new Dialog([
     new Text('Now, each chain have a records of what appended on other chains !'),
     new Text('That way, it can validate transactions from another chain, and with the use of the'),
-    new Text('Burn protocol, can maintain a constant level of coin across the whole ecosystem. '),
+    new Text('Burn protocol, can maintain a constant level of coin across the whole ecosystem. ', 'bold'),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
@@ -273,9 +270,9 @@ Scalability.set = function() {
   // #15
   dialog = new Dialog([
     new Text("There is no theorical limit to how many chains can be spawn."),
-    new Text("Actually in 2018, Komodo has successfully tested a ~20000 tx/s stress test"),
-    new Text("with thousands of scaling chain being used."),
-    new Text("And right now Komodo is preparing a 1 million tx/s stress test for 2019 !"),
+    new Text("Actually, during may 2018 Komodo has successfully conduct a stress test"),
+    new Text("that successfully substain ~20000 transactions per seconds during 14 minutes !", 'bold'),
+    new Text("And now, Komodo is preparing a 1 million tx/s stress test for 2019."),
     new Text(" "),
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})

@@ -50,7 +50,7 @@ Interoperability.set = function() {
   // #2
   dialog = new Dialog([
     new Text('With the Komodo platform, everybody can create its own blockchain.'),
-    new Text('They are called asset-chains...'),
+    new Text('They are called asset-chains !', 'bold'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
@@ -70,9 +70,9 @@ Interoperability.set = function() {
   // #3
   dialog = new Dialog([
     new Text('These asset-chains are highly configurable :'),
-    new Text('total supply, premine, block rewards, hashing algorithm... ', 'italic 20px Arial'),
-    new Text('You can create a Proof-of-Work chain or an 100% Proof-of-Stake chain,'),
-    new Text('Or even choose a 50% POW 50% POS mechanism.'),
+    new Text('total supply, premine, block rewards, hashing algorithm... ', 'italic'),
+    new Text('You can create a Proof-of-Work chain or an 100% Proof-of-Stake chain'),
+    new Text('or even choose a 50%POW / 50%POS mechanism.'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
@@ -82,8 +82,8 @@ Interoperability.set = function() {
 
   // #4
   dialog = new Dialog([
-    new Text("We firmly believe the choice should be yours !"),
-    new Text("And we are constantly working to bring new customization possibilities,"),
+    new Text("We firmly believe the choice should be yours !", 'bold'),
+    new Text("And Komodo is constantly working to bring new customization possibilities,"),
     new Text("to match yours needs and every needs that will come in the future !"),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
@@ -95,8 +95,8 @@ Interoperability.set = function() {
   // #5
   dialog = new Dialog([
     new Text("For that purpose, Komodo have developped a smart contract solution,"),
-    new Text("called Cross-Chain Smart Contracts."),
-    new Text("Let me explain..."),
+    new Text("called Cross-Chain Smart Contracts.", 'bold'),
+    new Text("Let me explain."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
@@ -106,8 +106,8 @@ Interoperability.set = function() {
 
   // #6
   dialog = new Dialog([
-    new Text("Since all chain in the platform can validate other chain transactions,this offers"),
-    new Text("the possibility to create automatic executed contracts between multiple chains ! "),
+    new Text("Since all chain in the platform can validate other chain transactions,"),
+    new Text("this offers the possibility to create automatic executed contracts between multiple chains ! "),
     new Text("Let me show you an example... "),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
@@ -138,7 +138,7 @@ Interoperability.set = function() {
   dialog = new Dialog([
     new Text("It is a chain attached to a smart contract that simulate a dice bet."),
     new Text("If a transaction comes to the smart contract, it is treated as a bet."),
-    new Text("If you win, you will be rewarded !"),
+    new Text("If you win, you will be rewarded !", 'bold'),
     new Text("Want to try ?"),
     ], [
     new Button("PLACE A BET", function() { Interoperability.bet(); window.slowMo(0.7, 2000); that.continue(); }, {float: 'right'})
@@ -154,13 +154,13 @@ Interoperability.set = function() {
     ], {
       dx: 250, dy: 220,
       arrow: {x:30, y:-50}, arrowFrom: 'top',
-      lifetime: 5000, call: proxy(this.continue, this),
+      lifetime: 4000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
   // #10
   dialog = new Dialog([
-    new Text("You win !" , 'bold 20px Arial'),
+    new Text("You win !" , 'bold'),
     new Text("Did you see that transaction going back to the Komodo blockchain?"),
     new Text("That's your payment for the bet. It is automatically created by the smart contract !"),
     ], [
@@ -179,8 +179,8 @@ Interoperability.set = function() {
     new Text("Ok let's play ! "),
     new Text("(spoiler: you gonna win :)", '16px arial'),
     ], [
-    new Button("PLACE A BET", function() { Interoperability.bet(); }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
-    new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
+    new Button("PLACE A BET", function() { Interoperability.bet(); }, {float: 'left'}),
+    new Button("CONTINUE", proxy(this.continue, this), {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
     ], {
       dx: 0, dy: 50,
     });
@@ -190,9 +190,9 @@ Interoperability.set = function() {
   dialog = new Dialog([
     new Text("And there's no need for GAS like in the Ethereum platform ! "),
     new Text('With the architecture of Komodo, fees can remains very low.'),
-    new Text("Also no problem congesting the network, given that each chain is independant !"),
+    new Text("Also no problem congesting the network given that each chain is independant !", 'bold'),
     new Text(" "),
-    new Text("This is just one simple Cross-Chain Smart Contract... There are plenty of others."),
+    new Text("Indeed, Cross-Chain Smart Contract are very powerfull."),
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
@@ -205,9 +205,31 @@ Interoperability.set = function() {
     });
   this.addDialog(dialog);
 
+  dialog = new Dialog([
+    new Text("For example, Komodo have delegated the privacy feature inherited from Zcash"),
+    new Text("to a dedicated chain: KMDCC"),
+    new Text("Maintaining 1:1 ratio with the main KMD chain through the «Asset» crypto-contract,"),
+    new Text("every coin on that chain equals exactly 1 KMD coin of the main chain !", 'bold'),
+    new Text("Pretty amazing, right ?"),
+    new Text(""),
+    ], [
+     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
+    ], {
+      dx: 0, dy: -30,
+      arrow: {x:-30, y:140}, arrowFrom: 'bottom',
+      onload: function() {
+        let platform = Platforms.find(e => e.params.id == 'kmd');
+        platform.emitter.params.tps = 300;
+        let KMDCC = new Blockchain({id: 'KMDCC', name: 'KMDCC', color:'#204040', type: 'AC', ccc: ['asset'], premined: 10, notarizeTo: 'kmd', active: true, privacy: null, zRatio: 0.8});
+        platform.addAssetChain(KMDCC);
+        //Timelines.scrollY(-KMDCC.params.blockHeight*2);
+      }
+    });
+  this.addDialog(dialog);
+
   // temp
   dialog = new Dialog([
-    new Text("[TODO] Maybe we could add here an example of multi-contract interactions ?", 'italic 18px Arial'),
+    new Text("[TODO] Maybe we could add here an example of multi-contract interactions ?", 'italic'),
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
     ], {
@@ -217,11 +239,11 @@ Interoperability.set = function() {
 
   // #13
   dialog = new Dialog([
-    new Text("Now, do you want to create your asset chain ?"),
+    new Text("Do you want to create your own asset chain ?"),
     ], [
      new Button("YES", proxy(this.continue, this), {float: 'center'}),
     ], {
-      dx: 0, dy: 0,
+      dx: 0, dy: -30,
     });
   this.addDialog(dialog);
 
@@ -229,17 +251,17 @@ Interoperability.set = function() {
   dialog = new Dialog('dialog-AC', [
      new Button("CREATE", function() { Interoperability.createAC(); Interoperability.continue(); }, {float: 'center'})
     ], {
-      dx: 0, dy: -150,
+      dx: 0, dy: -100,
     });
   this.addDialog(dialog);
 
   // #15
   dialog = new Dialog([
-    new Text("Congratulation ! Your chain is now live on the Komodo network !"),
+    new Text("Congratulation ! Your chain is now live on the Komodo network !", 'bold'),
     new Text(" "),
     new Text("But don't worry, you are no attach to Komodo. You are totally independant."),
     new Text("Let's say one day Komodo cease to exist (why ? i don't know), then your chain will continue to run normally !"),
-    new Text("That's a good point, right ?"),
+    new Text("That's a good point, isn't it ?"),
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'})
     ], {
@@ -251,7 +273,7 @@ Interoperability.set = function() {
   dialog = new Dialog([
     new Text("There's another good point for using Komodo platform :"),
     new Text(" "),
-    new Text("Your coin is directly tradable !"),
+    new Text("Your coin is directly tradable !", 'bold'),
     new Text("No need to wait for Exchange listing. Your coin will already be tradable on the decentralized exchange"),
     new Text("based on Atomic-Swaps that Komodo have developed : BarterDEX"),
     new Text("Althought the tech is new and still in progress, it can already handle Atomic-Swaps with 95% of coin in existance ! "),
@@ -279,7 +301,7 @@ Interoperability.set = function() {
      new Button("GO TO CHAPTER", function() { Interoperability.goToID('chapters'); }, { x: 80, float: 'center', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
      new Button("END", proxy(this.stop, this), {float: 'right'}),
     ], {
-      dx: 0, dy: -150,
+      dx: 0, dy: -100,
       id: 'part3'
     });
   this.addDialog(dialog);
@@ -289,7 +311,7 @@ Interoperability.set = function() {
      new Button("CREATE", function() { Interoperability.createAC(); }, {float: 'left'}),
      new Button("CLOSE", function() { Interoperability.goToID('part3'); }, {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
     ], {
-      dx: 0, dy: -150,
+      dx: 0, dy: -100,
     });
   this.addDialog(dialog);
 
@@ -350,8 +372,6 @@ Interoperability.createAC = function() {
   let platform = Platforms.find(e => e.params.id == 'kmd');
   let chain = new Blockchain({id: id, name: name, color:color, type: 'AC', ccc: ccc, premined: 0, notarizeTo: 'kmd', logo: 'icon_'+logo, privacy: parseInt(privacy)});
   platform.addAssetChain(chain);
-
-  platform.emitter.params.tps = 300;
 
   if(chain && chain.localToGlobal(0,0).y > STAGEHEIGHT - chain.params.blockHeight*2) {
     Timelines.scrollY(-chain.params.blockHeight*2);

@@ -114,7 +114,7 @@ window.assetsLoaded = function() {
 	//createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
   //createjs.Ticker.timingMode = createjs.Ticker.RAF;
   createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
-  createjs.Ticker.framerate = 30;
+  createjs.Ticker.framerate = 60;
 	createjs.Ticker.addEventListener('tick',tick);
 
 	//init Mouse move
@@ -212,16 +212,15 @@ window.particleTest = function() {
 window.addAssetChain = function() {
 
 	let platform = Platforms.find(p => p.params.id == 'kmd');
-	let chains = platform.chains;
+  let color = ColorAsset[Math.ceil(Math.random()*(ColorAsset.length-1))];
+	let chain = new Blockchain({id: 'AS'+ platform.chains.length, name:"Asset Chain "+ platform.chains.length, color: color, type: 'AC', notarizeTo: 'kmd', premined: 0});
+	platform.addAssetChain(chain);
 
-	let n = chains.length+1;
-	let prev = chains[chains.length-1];
-	let bloc = prev.blocks[prev.blocks.length-2];
-	let color = ColorAsset[Math.ceil(Math.random()*(ColorAsset.length-1))];
+  if(chain && chain.localToGlobal(0,0).y > STAGEHEIGHT - chain.params.blockHeight*2) {
+    Timelines.scrollY(-chain.params.blockHeight*2);
+  }
 
-	let AS = new Blockchain({id: 'AS'+n, name:"Asset Chain "+n, color: color, type: 'AC', notarizeTo: 'kmd'});
-	AS.x = prev.x + bloc.x + AS.params.blockWidth/2 + AS.params.blockPadding/2;
-	platform.addChain(AS);
+  return chain;
 
 }
 
