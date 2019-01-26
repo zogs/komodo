@@ -114,7 +114,7 @@ window.assetsLoaded = function() {
 	//createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
   //createjs.Ticker.timingMode = createjs.Ticker.RAF;
   createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
-  createjs.Ticker.framerate = 60;
+  createjs.Ticker.framerate = 30;
 	createjs.Ticker.addEventListener('tick',tick);
 
 	//init Mouse move
