@@ -1,0 +1,28 @@
+$background: #DFEFEE;
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../assets/font/RobotoCondensed/RobotoCondensed-Bold.ttf'); /* IE */
+}
+body { margin: 0; padding: 0; background: $background; }
+.header { width: 100%; text-align: right; font: 12px Arial;}
+#canvas-container { position: relative; top:20px; margin: 0 auto; }
+canvas#canvas { position: absolute; z-index: 2; display:block; margin:0 auto; margin-top: 10px; margin-bottom: 10px;}
+canvas#backcanvas { position: absolute; z-index: 1; display:block; margin:0 auto; background: #FFF; margin-top: 10px; margin-bottom: 10px;}
+.footer { position: absolute; top: 850px; width: 100%; text-align: center; font: 12px Arial; }
+.dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; padding: 10px 30px; }
+.dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
+.dialog div.row { width: 100%; margin: 10px 0;}
+#dialog-AC { padding: 20px 50px 0 50px; }
+#dialog-AC form { margin:0; }
+#dialog-AC label { cursor: pointer; }
+#dialog-AC label.label { cursor: default; display: inline-block; padding-right: 20px;}
+#dialog-AC label img { margin-bottom: -5px; }
+#dialog-AC input[type=text],
+#dialog-AC select { font-size: 16px; width: 170px; padding: 5px 10px; border:1px solid grey;}
+#dialog-AC input[type=checkbox],
+#dialog-AC input[type=radio] { display: none; }
+#dialog-AC label.choice { display: inline-block; width: 50px; text-align: center;}
+#dialog-AC label.choice input { display: none; }
+#dialog-AC label.choice img {}
+#dialog-AC label.choice input:checked ~ img { width: 40px; }
