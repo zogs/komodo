@@ -151,6 +151,10 @@ window.assetsLoaded = function(env) {
 	window.onresize = browserResize;
 	window.resizeCanvas();
 
+  //window event
+  window.addEventListener('blur', window.onWindowPassive);
+  window.addEventListener('focus', window.onWindowActive);
+
   //mouse event
   document.querySelector('canvas#canvas').addEventListener('mouseover', ()=>{ window.MouseActive = true });
   document.querySelector('canvas#canvas').addEventListener('mouseout', ()=>{ window.MouseActive = false });
@@ -306,10 +310,19 @@ window.clearStage = function() {
 
 window.tick = function(e) {
 
+  if(window.isActive === false) return;
 	window.Stage.update(e);
+
   document.getElementById('fps').textContent = createjs.Ticker.getMeasuredFPS().toFixed(0);
 }
 
+window.onWindowActive = function(e) {
+  window.pause();
+}
+
+window.onWindowPassive = function(e) {
+  window.pause();
+}
 
 window.keyDownHandler = function(e)
 {

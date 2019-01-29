@@ -29,6 +29,7 @@ export class Banner extends createjs.Container {
     this.particles = [];
     this.tictac = 0;
     this.in_place = false;
+    this.particleTickListener = null;
 
     this.particle_cont = new createjs.Container();
     this.subtitle_cont = new createjs.Container();
@@ -43,6 +44,11 @@ export class Banner extends createjs.Container {
 
     this.initPoints();
     this.initSubtitle();
+
+    // if the window lose focus, just stop the anim
+    window.addEventListener('blur', proxy(this.onWindowPassive, this));
+    window.addEventListener('focus', proxy(this.onWindowActive, this));
+
   }
 
   initSubtitle() {
@@ -115,9 +121,9 @@ export class Banner extends createjs.Container {
   }
 
   show() {
+
     this.particles = [];
     this.particle_cont.removeAllChildren();
-    if(this.particleTickListener) window.Stage.off('tick', this.particleTickListener);
 
     for(let i=0, ln=this.points.length; i<ln; ++i) {
 
@@ -177,7 +183,6 @@ export class Banner extends createjs.Container {
   }
 
   hide() {
-    if(this.particleTickListener) window.Stage.off('tick', this.particleTickListener);
 
     let spread = 1000;
 
@@ -236,6 +241,15 @@ export class Banner extends createjs.Container {
 
     window.StageGL.update(e);
   }
+
+  onWindowActive() {
+    this.particleTickListener = window.Stage.on("tick", this.moveParticles, this);
+  }
+
+  onWindowPassive() {
+    if(this.particleTickListener) window.Stage.off('tick', this.particleTickListener);
+  }
+
 
   destroy() {
 
