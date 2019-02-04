@@ -292,12 +292,12 @@ Scalability.set = function() {
   // #16
   dialog = new Dialog([
     new Text("Now after covering the scalability tech of KMD,                      "),
-    new Text("Let's go to the next chapter: INTEROPERABILITY !"),
+    new Text("Let's go to the next chapter: INTEROPERABILITY & Independence!"),
     new Text(" "),
     ], [
     new Button("ADD TRANSACTIONS", proxy(this.continue,this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
     new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'center', x: 20, backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
-    new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Interoperability']), {float: 'right'}),
+    new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Interoperability & Independence']), {float: 'right'}),
     ], {
       dx:0, dy: 0,
       id: 'end'
