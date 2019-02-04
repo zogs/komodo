@@ -96,7 +96,7 @@ Security.set = function() {
 
         let line = _this.content[3];
         let text = new createjs.Text('', '20px Arial', '#6b8a8a');
-        text.x = line.x + line.getBounds().x + 340;
+        text.x = line.x + line.getBounds().x + 500;
         text.y = line.y + 5;
         _this.addChild(text);
 
