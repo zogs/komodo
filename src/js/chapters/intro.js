@@ -44,7 +44,7 @@ Intro.set = function() {
       new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
       new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
     ], [
-    new Button('CLICK TO BEGIN', function() {
+    new Button('CLICK HERE TO START', function() {
         that.startWithoutBanner();
     }, {float: 'center'}),
     ], {
@@ -71,7 +71,7 @@ Intro.set = function() {
 
 
   dialog = new Dialog([
-    new Text("It has a 1 minute block time, and block's size is around 4MB..."),
+    new Text("It has a 1 minute block time and the max. blocksize is 4 MB."),
     ], [
     ], {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
@@ -81,7 +81,7 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('And it is live since October 2016 !'),
+    new Text('Komodo is public since October 2016!'),
     ], [
     ], {
       lifetime: 2500, call: proxy(this.continue, this),
@@ -91,10 +91,10 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('It begans as a fork of Zcash, which is a fork of Bitcoin.', 'bold'),
-    new Text('So Komodo inherits all the Bitcoin and Zcash features, like the possibility to do anonymous transactions.'),
-    new Text('Also call Z-transactions.'),
-    new Text(' '),
+    new Text('It began as a Zcash Fork which is a fork of Bitcoin.', 'bold'),
+    new Text('So Komodo inherits all the Bitcoin and Zcash features plus a dozen of own features'),
+    new Text('A custom consensus framework capable of a unique "smartcontract like" experience,'),
+    new Text('and a security protocol which recycles Bitcoin hash power for a KMD backup on BTC!  '),
     ], [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
       new Button('Add Z-transaction', function() {
@@ -112,8 +112,8 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog([
-    new Text('But Komodo is NOT just a privacy blockchain. There is much more to see !', 'bold'),
-    new Text("Let's begin with the more important aspect: SECURITY !"),
+    new Text('But Komodo is much more than the aforementioned things. There is much more to see !', 'bold'),
+    new Text("Let's get back to the more important aspect: SECURITY!"),
     new Text(' '),
     ], [
       new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
