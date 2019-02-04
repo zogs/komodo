@@ -30,11 +30,11 @@ Intro.set = function() {
   if(window.CurrentBanner) {
     dialog = new Dialog([
     ], [
-    new Button('CLICK TO BEGIN', function() {
+    new Button('CLICK HERE TO START', function() {
       Intro.startAfterBanner();
     }, {float: 'right'}),
     ], {
-        dx: 30, dy: 58,
+        dx: 52, dy: 58,
        backgroundColor: null,
     });
   }
