@@ -131,7 +131,7 @@ Interoperability.set = function() {
 
   // #7
   dialog = new Dialog([
-    new Text("This is the KMDDICE, a Komodo generated Blockchain."),
+    new Text("This is the KMDICE, a Komodo generated Blockchain."),
     ], [
     ], {
       dx: 0, dy: 70,
@@ -139,8 +139,8 @@ Interoperability.set = function() {
       lifetime: 2000, call: proxy(this.continue, this),
       onload: function() {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
-        let KMDDICE = new Blockchain({id: 'KMDDICE', name: 'KMDDICE', color:'#198201', type: 'AC', ccc: ['dice'], premined: 0, notarizeTo: 'kmd', active: false});
-        platform.addAssetChain(KMDDICE);
+        let KMDICE = new Blockchain({id: 'KMDICE', name: 'KMDICE', color:'#198201', type: 'AC', ccc: ['dice'], premined: 0, notarizeTo: 'kmd', active: false});
+        platform.addAssetChain(KMDICE);
       }
     });
   this.addDialog(dialog);
@@ -210,8 +210,8 @@ Interoperability.set = function() {
       dx: 0, dy: 0,
       id: 'part2',
       onload: function() {
-        let kmddice = window.Blockchains.find(b => b.params.id == 'KMDDICE');
-        kmddice.params.active = true;
+        let kmdice = window.Blockchains.find(b => b.params.id == 'KMDICE');
+        kmdice.params.active = true;
       }
     });
   this.addDialog(dialog);
@@ -342,9 +342,9 @@ Interoperability.set = function() {
 Interoperability.bet = function() {
 
   let platform = window.Platforms.find(e => e.params.id == 'kmd');
-  let KMDDICE = window.Blockchains.find(e => e.params.id == 'KMDDICE');
-  let trans = new Transaction({'blockchain': KMDDICE, 'mempool': KMDDICE.mempool, type:'ccc', ccc: KMDDICE.mempool.getContract('dice')});
-  platform.emitter.emitWithMotion(trans, KMDDICE);
+  let KMDICE = window.Blockchains.find(e => e.params.id == 'KMDICE');
+  let trans = new Transaction({'blockchain': KMDICE, 'mempool': KMDICE.mempool, type:'ccc', ccc: KMDICE.mempool.getContract('dice')});
+  platform.emitter.emitWithMotion(trans, KMDICE);
 
 }
 
