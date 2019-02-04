@@ -39,7 +39,7 @@ Security.set = function() {
 
   // #2
   dialog = new Dialog([
-    new Text('So there is the Komodo blockchain.', '20px Arial'),
+    new Text('So this is the [in]famous Komodo blockchain.', '20px Arial'),
     ], [
     ], {
       dy: -50, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
@@ -55,7 +55,7 @@ Security.set = function() {
 
   // #3
   dialog = new Dialog([
-    new Text('It is a Proof-of-Work blockchain, with a average blocktime of one minute.'),
+    new Text('It is a Proof-of-Work blockchain, with an average blocktime of one minute.'),
     new Text("So every minute or so, a new block is mined by a pool of miners all around the world."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -67,10 +67,10 @@ Security.set = function() {
 
   // #4
   dialog = new Dialog([
-    new Text("In order to increase the security of his network, Komodo notarize his status periodically to the Bitcoin blockchain."),
-    new Text("That way, every 10 minutes, Komodo reuse the Bitcoin security !"),
+    new Text("In order to increase the security of the network, Komodo backs up its chain periodically to the Bitcoin blockchain."),
+    new Text("By doing so an attacker would have to first compromise BTC in order to attack the KMD chain!"),
     new Text(""),
-    new Text("Let's wait for the next notarization..."),
+    new Text("Let's wait for the next notarization to see this in action..."),
     ], [
     ], {
       arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true,
@@ -96,7 +96,7 @@ Security.set = function() {
 
         let line = _this.content[3];
         let text = new createjs.Text('', '20px Arial', '#6b8a8a');
-        text.x = line.x + line.getBounds().x + 340;
+        text.x = line.x + line.getBounds().x + 500;
         text.y = line.y + 5;
         _this.addChild(text);
 
@@ -135,9 +135,9 @@ Security.set = function() {
 
   // #6
   dialog = new Dialog([
-    new Text("Did you see that ?"),
+    new Text("Did you see this magic?"),
     new Text(""),
-    new Text("That was the notarization process !", 'bold'),
+    new Text("That was the so called notarization process!", 'bold'),
     ], [
     ], {
       dx: 100, dy: -70, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
@@ -147,11 +147,11 @@ Security.set = function() {
 
   // #7
   dialog = new Dialog([
-    new Text('By notarizing its status inside a Bitcoin block, Komodo takes avantage of the Bitcoin hashrate.'),
-    new Text('As soon as the Bitcoin block is mined, there is now an immutable record of Komodo transactions', 'bold'),
-    new Text('written on the Bitcoin blockchain,'),
+    new Text('By notarizing the KMD chain into Bitcoin, Komodo takes avantage of the Bitcoin hashrate and security.'),
+    new Text('As soon as the notarization is confirmed it equals an immutable record of Komodo transactions', 'bold'),
+    new Text('written onto the Bitcoin blockchain,'),
     new Text(' '),
-    new Text('Therefore, it becomes impossible to reorged the Komodo blockchain before this checkpoint !'),
+    new Text('Therefore, it becomes impossible to reorg (51% attack) the Komodo blockchain beyond this "checkpoint"!'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -161,10 +161,9 @@ Security.set = function() {
 
   // #8
   dialog = new Dialog([
-    new Text('This mechanism is called Delayed Proof-of-Work (dPOW). ', 'bold'),
-    new Text('This means that for a 51% attack, you needs to gain the majority of Komodo hashrate'),
-    new Text('AND the majority of the Bitcoin hashrate !'),
-    new Text(' '),
+    new Text('This security mechanism is called Delayed Proof-of-Work (dPOW). ', 'bold'),
+    new Text('In simple worlds: This technology is a solution for 51% attacks. If you want to attack'),
+    new Text('Komodo you have to first attack Bitcoin'),
     new Text('And good luck with that.'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -183,9 +182,9 @@ Security.set = function() {
 
   // #10
   dialog = new Dialog([
-    new Text("Do you know that Komodo can provide Bitcoin level security to others independant blockchain ?"),
+    new Text("Did you know that Komodo can provide Bitcoin level security to other independant blockchains ?"),
     new Text(""),
-    new Text("Let's see some examples."),
+    new Text("Let's look on some examples."),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -195,9 +194,9 @@ Security.set = function() {
 
   // #11
   dialog = new Dialog([
-    new Text("These independant blockchains have chosen Komodo to secure their network :"),
+    new Text("These external blockchains for example have chosen Komodo to secure their network:"),
     new Text(""),
-    new Text("GameCredits and Einsteinum.", 'bold'),
+    new Text("GameCredits and Einsteinum just to name 2 of many others.", 'bold'),
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -239,11 +238,11 @@ Security.set = function() {
 
   // #12
   dialog = new Dialog([
-    new Text("These blockchain are notarizing themselves to Komodo. ", 'bold'),
-    new Text("They now beneficit from the Bitcoin hashrate + the Komodo hashrate."),
-    new Text("Now attackers needs to attack 3 blockchains instead of 1, that should be pretty hard, don't you think ?"),
+    new Text("These blockchains are notarizing onto Komodo. ", 'bold'),
+    new Text("They now benefit from the Komodo and Bitcoin level security."),
+    new Text("An attacker would need to attack 3 blockchains instead of just 1, that should be pretty hard, don't you think?"),
     new Text(""),
-    new Text("As a matter of fact, Einsteinium already resist at least one 51% attack since they implements dPoW !")
+    new Text("As a matter of fact, Einsteinium already resisted one (known) 51% attack since they implemented dPoW !")
     ], [
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
@@ -254,10 +253,10 @@ Security.set = function() {
   // #13
   dialog = new Dialog([
     new Text("If you are interested in the dPoW mechanism for securing your blockchain,"),
-    new Text("You can read this detailed article :"),
+    new Text("Please read this detailed article and contact the Komodo Team :"),
     new Link("https://blog.komodoplatform.com/delayed-proof-of-work-explained","https://blog.komodoplatform.com/delayed-proof-of-work-explained-9a74250dbb86"),
     new Text(" "),
-    new Text("Or you can contact the Komodo team on the official Discord !"),
+    new Text("You can contact the Komodo Team on their official Discord !"),
     new Link("https://komodoplatform.com/discord","https://komodoplatform.com/discord"),
     new Text(" "),
     ], [
