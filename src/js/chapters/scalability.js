@@ -145,7 +145,7 @@ Scalability.set = function() {
     ], [
     ], {
       dx: 180, dy: -30,
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
@@ -155,7 +155,7 @@ Scalability.set = function() {
     ], [
     ], {
       dx: 180, dy: -30,
-      lifetime: 1500, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
@@ -245,7 +245,7 @@ Scalability.set = function() {
         });
 
         window.Stage.on('notarization_start', proxy(that.continue, that), null, true);
-        window.Stage.on('notarization_start', function() { window.slowMo(0.2, 500);}, null, true);
+        window.Stage.on('notarization_start', function() { window.slowMo(0.1, 100);}, null, true);
         window.Stage.on('notarization_end', function() { window.slowMo(1, 500);}, null, true);
       }
     });
@@ -256,8 +256,8 @@ Scalability.set = function() {
     new Text('MoMoM/Mom are being exchanged now !'),
     ], [
     ], {
-      dx:420, dy: -100,
-      arrow: {x:-170, y:0}, arrowWidth:20, arrowFrom: 'left',
+      dx:450, dy: -100,
+      arrow: {x:-200, y:0}, arrowWidth:20, arrowFrom: 'left',
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);

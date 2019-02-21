@@ -78,7 +78,8 @@ window.loaded = function(env) {
 		{id:'icon_btc',src:'dist/images/icon/btc.png'},
 		{id:'icon_kmd',src:'dist/images/icon/kmd.png'},
 		{id:'icon_cog',src:'dist/images/icon/cog.png'},
-		{id:'icon_dice',src:'dist/images/icon/dice.png'},
+    {id:'icon_dice',src:'dist/images/icon/dice.png'},
+		{id:'icon_rogue',src:'dist/images/icon/rogue.png'},
 		{id:'icon_asset',src:'dist/images/icon/asset.png'},
 		{id:'icon_faucet',src:'dist/images/icon/faucet.png'},
 		{id:'icon_kmd_ac',src:'dist/images/icon/kmd_ac.png'},
@@ -90,7 +91,8 @@ window.loaded = function(env) {
     {id:'icon_penguin',src:'dist/images/icon/penguin.png'},
     {id:'icon_snail',src:'dist/images/icon/snail.png'},
     {id:'icon_unicorn',src:'dist/images/icon/unicorn.png'},
-		{id:'icon_wolf',src:'dist/images/icon/wolf.png'},
+    {id:'icon_wolf',src:'dist/images/icon/wolf.png'},
+		{id:'sprite_warriors',src:'dist/images/warriors.png'},
 	]);
 
 
@@ -184,11 +186,14 @@ window.initTest = function(env) {
     let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd', privacy: 1});
     let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd', logo: 'icon_wolf'});
 
+    let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#449146', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
+
 
     var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM',color: '#306565',backgroundColor: '#306565',backgroundAlpha: 0.2,chains: [komodo],emitterTPS: 50});
     komodoPlatform.addChain(SC1);
     komodoPlatform.addChain(AC1);
     komodoPlatform.addChain(AC2);
+    komodoPlatform.addChain(ROGUE);
     window.Platforms.push(komodoPlatform);
     komodoPlatform.drawTotalTps();
 
@@ -317,11 +322,11 @@ window.tick = function(e) {
 }
 
 window.onWindowActive = function(e) {
-  window.pause();
+  if(window.Paused == true) window.pause();
 }
 
 window.onWindowPassive = function(e) {
-  window.pause();
+  if(window.Paused == false) window.pause();
 }
 
 window.keyDownHandler = function(e)

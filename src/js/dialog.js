@@ -52,7 +52,6 @@ export class Dialog extends createjs.Container {
 
   open() {
 
-    this.alpha = 1;
     this.mouseEnabled = true;
 
     if(this.htmlElement) {
@@ -130,19 +129,19 @@ export class Dialog extends createjs.Container {
       H = element.offsetHeight;
     }
 
-    // TEXT elements
+    // TEXT & IMAGE elements
     if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
-        let text = this.content[i];
-        W = (text.width > W)? text.width : W;
+        let obj = this.content[i];
+        W = (obj.width > W)? obj.width : W;
       }
       if(this.params.width) W = this.params.width;
       for(let i=0; i<this.content.length; i++) {
-        let text = this.content[i];
-        text.y = H;
-        H += text.height;
-        text.params.width = W; // set all text the same width
-        text.redraw(); // redraw allow us to align text (left, right, center)
+        let obj = this.content[i];
+        obj.y = H;
+        H += obj.height;
+        obj.params.width = W; // set all obj the same width
+        obj.redraw(); // redraw allow us to align obj (left, right, center)
       }
     }
 
@@ -189,8 +188,14 @@ export class Dialog extends createjs.Container {
     // Add TEXT elements
     if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
-        let text = this.content[i];
-        this.addChild(text);
+        let obj = this.content[i];
+
+        if(obj instanceof Image) {
+          if(obj.params.align == 'left') obj.x += obj.width/2;
+          if(obj.params.align == 'center') obj.x += W/2 - obj.width/2;
+          if(obj.params.align == 'right') obj.x += W - obj.width;
+        }
+        this.addChild(obj);
       }
     }
 
@@ -214,11 +219,15 @@ export class Dialog extends createjs.Container {
     mid.graphics.beginFill('red').drawCircle(0,0,3);
     //this.addChild(mid);
 
-    this.x -= W/2;
-    this.y -= H/2;
 
+    // center dialog
+    this.resetXY();
+  }
 
+  resetXY() {
 
+    this.x = this.params.x + this.params.dx - this.width/2;
+    this.y = this.params.y + this.params.dy - this.height/2;
   }
 
   drawArrow(to) {
@@ -466,5 +475,43 @@ export class Dialog extends createjs.Container {
     nullCallback() {
 
       console.error("Button has been clicked but there is no handler");
+    }
+  }
+
+  export class Image extends createjs.Container {
+
+    constructor(bitmap, params = {}) {
+
+      super();
+      var defaults = {
+        x: 0,
+        y: 0,
+        width: null,
+        height: null,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        align: 'left',
+      };
+
+      this.params = extend(defaults,params);
+      this.bitmap = bitmap;
+      this.width = (this.params.width)? this.params.width : bitmap.image.width;
+      this.height = (this.params.height)? this.params.height : bitmap.image.height;
+      this.init();
+    }
+
+    init() {
+      this.drawImage();
+    }
+
+    redraw() {
+      this.removeAllChildren();
+      this.drawImage();
+    }
+
+    drawImage() {
+      this.addChild(this.bitmap);
     }
   }

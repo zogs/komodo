@@ -1,9 +1,10 @@
 import {extend, proxy} from '../utils';
 import {Chapter} from '../chapter';
-import {Dialog, Button, Text, Link} from '../dialog';
+import {Dialog, Button, Text, Link, Image} from '../dialog';
 import {Blockchain} from '../blockchains/blockchain';
 import {Platform} from '../blockchains/platform';
 import {Transaction} from '../blockchains/transaction';
+import {RogueCC} from '../blockchains/contract';
 import createjs from 'createjs';
 
 export const Interoperability = new Chapter({name: 'Interoperability & Independence'});
@@ -92,7 +93,7 @@ Interoperability.set = function() {
   // #4
   dialog = new Dialog([
     new Text("Komodo gives its users and ecosystem developers the choice and doesnt mind extra work.", 'bold'),
-    new Text("CC, the crypto conditions, can be imported to a blockchain like a plug & play module! "),
+    new Text("CC, the Crypto Conditions, can be imported to a blockchain like a plug & play module! "),
     new Text("You can change the logic of a blockchain on core/consensus level and Komodo has many"),
     new Text("CC modules in work. You want to make a casino blockchain with dice? You want to sell"),
     new Text("data on the blockchain and earn from it? Or lets say you want to play 'Rogue'?"),
@@ -178,7 +179,7 @@ Interoperability.set = function() {
     new Button("WANT TO BET AGAIN?", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
     new Button("CONTINUE", function() { Interoperability.goToID('part2'); }, {float: 'right'})
     ], {
-      dx: 200, dy: 50,
+      dx: 100, dy: 50,
       onload: function() {
         window.slowMo(1,1000);
       }
@@ -233,24 +234,115 @@ Interoperability.set = function() {
         platform.emitter.params.tps = 300;
         let KMDCC = new Blockchain({id: 'KMDCC', name: 'KMDCC', color:'#204040', type: 'AC', ccc: ['asset'], premined: 10, notarizeTo: 'kmd', active: true, privacy: null, zRatio: 0.8});
         platform.addAssetChain(KMDCC);
-        //window.Timelines.scrollY(-KMDCC.params.blockHeight*2);
+        window.Timelines.scrollY(-KMDCC.params.blockHeight*2);
       }
     });
   this.addDialog(dialog);
 
-  // temp
+
   dialog = new Dialog([
-    new Text("[TODO] Maybe we could add here an example of multi-contract interactions ?", 'italic'),
-    ], [
-     new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
-    ], {
-      dx: 0, dy: 0,
+      new Text("One last example to show you the power of Crypto Conditions (CC)..."),
+      new Text("Let's talk about ROGUE !", 'bold'),
+      new Image(new createjs.Bitmap(window.Queue.getResult('icon_rogue'))),
+    ],[
+      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
+    ],{
+      dx: 0, dy: -50
     });
   this.addDialog(dialog);
 
+
+  dialog = new Dialog([
+      new Text("ROGUE was a dungeon crawling video game developed around 1980. It was pretty popular back then", 'italic'),
+      new Text("and lead the way for ROGUE-like video games !", 'italic'),
+      new Text(" "),
+      new Text("And now ROGUE is playable on the blockchain with Komodo !", "bold"),
+    ], [
+      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
+    ], {
+      dx: 10, dy: -30,
+      arrow: {x:300, y:150}, arrowFrom: 'bottom', arrowCenter: 300,
+      onload: function(_this) {
+        let platform = window.Platforms.find(e => e.params.id == 'kmd');
+        let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#449146', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
+        platform.addAssetChain(ROGUE);
+        window.Timelines.scrollY(-ROGUE.params.blockHeight*2);
+      }
+    });
+  this.addDialog(dialog);
+
+
+  dialog = new Dialog([
+      new Text("To demonstrate how it work, let's pretend to start a game ! "),
+      new Text(" "),
+    ], [
+      new Button("START A GAME", function() { Interoperability.startRogue(); that.continue(); }, {float: 'center'}),
+    ], {
+      dx: 0, dy: 0,
+      id: 'start_rogue',
+    });
+  this.addDialog(dialog);
+
+  dialog = new Dialog([
+      new Text("The game is created and broadcasted to the blockchain "),
+      new Text("and you can start playing via your game client... "),
+    ], [
+      new Button("CONTINUE", function() { that.continue(); }, {float: 'center'}),
+    ], {
+      dx: 150, dy: -10,
+      arrow: {x:0, y:110}, arrowFrom: 'bottom', arrowCenter: 100,
+    });
+  this.addDialog(dialog);
+
+  dialog = new Dialog([
+      new Text("Then, you valiantly fight numerous trolls and hobgobelins for hours and now you want to quit the game."),
+      new Text(" "),
+      new Text("Your warrior and his equipments will be save on the blockchain using non-fungible token !", "bold"),
+      new Text("And combined with the Crypto Conditions (CC) technology, any gold you have collected in-game is transferred into real ROGUE coins,"),
+      new Text("connecting the gaming world with the real world of cryptocurrencies !"),
+      new Text("(That's pretty amazing if you think about it...)", 'italic'),
+    ], [
+      new Button("QUIT AND SAVE", function() { Interoperability.saveRogue(0, '5'); that.continue(); }, {float: 'center'}),
+    ], {
+      dx: 0, dy: -140,
+    });
+  this.addDialog(dialog);
+
+  dialog = new Dialog([
+      new Text("Your character is now a unique one, written on the blockchain, ready to be"),
+      new Text("use again in single training game or multiplayer tournament !"),
+      new Text(" "),
+      new Text("You can also choose to sell him for the higher bid ! ", "bold"),
+      new Text("Do as you please, he entirely belongs to you..."),
+    ], [
+      new Button("PLAY AGAIN", function() { Interoperability.goToID('start_rogue'); }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
+      new Button("SELL HIM", function() { Interoperability.sellRogue(0, '5'); that.continue() }, {float: 'right'}),
+    ], {
+      dx: 0, dy: -140,
+    });
+  this.addDialog(dialog);
+
+
+  dialog = new Dialog([
+      new Text("Sold !", 'bold'),
+      new Text("Imagine all the possibility its offers !"),
+      new Text("From blockchain-based market places of real games characters, or even supply, "),
+      new Text("equipments, magic swords... to on-chain characters shared across differents compatibles games, etc... "),
+      new Text("Komodo game's ROGUE is the first of its kind, but is a good example of what can be achieve with the power"),
+      new Text("of Komodo Crypto Contitions (CC) technology."),
+    ], [
+      new Button("CONTINUE", function() {  Interoperability.continuousRogue(); that.continue() }, {float: 'right'}),
+    ], {
+      dx: 0, dy: -140,
+    });
+  this.addDialog(dialog);
+
+
   // #13
   dialog = new Dialog([
-    new Text("Do you want to create your own asset chain ?"),
+    new Text("Do you remember that anyone can create a blockchain on the Komodo Platform ?"),
+    new Text("It's easy and and just required some clicking !"),
+    new Text("Would you like to try ?"),
     ], [
      new Button("YES", proxy(this.continue, this), {float: 'center'}),
     ], {
@@ -270,7 +362,7 @@ Interoperability.set = function() {
   dialog = new Dialog([
     new Text("Congratulation ! Your chain is now live in the Komodo universe!", 'bold'),
     new Text(" "),
-    new Text("But don't worry you don not rely on Komodo. You are totally independant!"),
+    new Text("But don't worry, you do not rely on Komodo Platform. You are totally independant!"),
     new Text("Let's say one Komodo dissapears one day (kidnapped by aliens), then your chain will continue to run normally !"),
     new Text("That's a good argument to use KMD, isn't it ?"),
     ], [
@@ -389,4 +481,65 @@ Interoperability.createAC = function() {
   }
 
   this.AssetCreatedCount++;
+}
+
+Interoperability.startRogue = function() {
+
+  let platform = window.Platforms.find(e => e.params.id == 'kmd');
+  let rogue = window.Blockchains.find(e => e.params.id == 'ROGUE');
+  let rogue_cc = rogue.mempool.getContract('rogue');
+
+  rogue_cc.createGame();
+
+}
+
+Interoperability.saveRogue = function(n, level) {
+
+  let platform = window.Platforms.find(e => e.params.id == 'kmd');
+  let rogue = window.Blockchains.find(e => e.params.id == 'ROGUE');
+  let rogue_cc = rogue.mempool.getContract('rogue');
+
+
+  rogue_cc.saveWarrior(n, level);
+
+}
+
+Interoperability.sellRogue = function(n, level) {
+
+  let platform = window.Platforms.find(e => e.params.id == 'kmd');
+  let rogue = window.Blockchains.find(e => e.params.id == 'ROGUE');
+  let rogue_cc = rogue.mempool.getContract('rogue');
+
+  rogue_cc.sellWarrior(n, level);
+
+}
+
+Interoperability.buyRogue = function(n, level) {
+
+  let platform = window.Platforms.find(e => e.params.id == 'kmd');
+  let rogue = window.Blockchains.find(e => e.params.id == 'ROGUE');
+  let rogue_cc = rogue.mempool.getContract('rogue');
+
+  rogue_cc.buyWarrior(n, level);
+
+}
+
+Interoperability.continuousRogue = function() {
+
+  let platform = window.Platforms.find(e => e.params.id == 'kmd');
+  let rogue = window.Blockchains.find(e => e.params.id == 'ROGUE');
+  let rogue_cc = rogue.mempool.getContract('rogue');
+
+  createjs.Tween.get(this).to({}, window.MinuteSeconds*1000*2 + Math.random()*window.MinuteSeconds*1000*2)
+    .call(function() {
+      let n = Math.floor(Math.random()*rogue_cc.warriors.getNumFrames());
+      let l = Math.ceil(Math.random()*10);
+      if(Math.random()<0.5) {
+        Interoperability.buyRogue(n,l)
+      }
+      else {
+        Interoperability.sellRogue(n,l)
+      }
+      Interoperability.continuousRogue();
+    })
 }

@@ -156,19 +156,12 @@ export class Block extends createjs.Container {
 		}
 	}
 
-	finalize() {
-		let pad = 5;
-		this.snapToPixel = true;
-		this.cache(-pad,-pad,this.params.width+pad*2,this.params.height*1.5+pad*2);
-	}
-
 	getCachedImage() {
 
-		let pad = 5;
-		this.cont_block.cache(-5, -5, this.params.width+10, this.params.height+10)
+		let pad = 200;
+		this.cont_block.cache(-pad, -pad, this.params.width+pad, this.params.height+pad)
 		let cached = new createjs.Bitmap(this.cont_block.cacheCanvas)
-		cached.regX = this.params.width/2 + pad;
-		cached.regY = this.params.height/2 + pad;
+		this.cont_block.uncache();
 		return cached;
 	}
 

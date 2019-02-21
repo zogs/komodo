@@ -111,7 +111,6 @@ export class Blockchain extends createjs.Container {
 		});
 		block.x = this.params.blockWidth/2 + this.params.blockPadding/2;
 		block.y = 0; //block.params.height;
-		block.finalize();
 		this.cont_block.addChild(block);
 		this.blocks.push(block);
 		this.genblock = block;
@@ -149,7 +148,6 @@ export class Blockchain extends createjs.Container {
 				transactions.push(new Transaction({ blockchain: this, mempool: this.mempool, valid: true, shape: shape}));
 		}
 		block.addTransactions(transactions);
-		block.finalize();
 
 		this.cont_block.addChild(block);
 		this.blocks.push(block);
@@ -178,7 +176,6 @@ export class Blockchain extends createjs.Container {
 
 		this.drawNotarySecurity(block, transactions);
 
-		block.finalize();
 		this.cont_block.addChild(block);
 		this.blocks.push(block);
 
@@ -217,7 +214,7 @@ export class Blockchain extends createjs.Container {
 		//this.cont_notary.addChild(copy);
 
 		let last = this.blocks[this.blocks.length-1];
-		let trans = new Transaction({blockchain: this, mempool: this.mempool, type: 'notary', shape: 'notary', priority: 1, 'notaryTo': block, valid: true, 'image': copy, 'imageX': 5, 'imageY': 5});
+		let trans = new Transaction({blockchain: this, mempool: this.mempool, type: 'notary', shape: 'notary', priority: 1, 'notaryTo': block, valid: true, 'image': copy, 'imageX': 5, 'imageY': -this.params.blockHeight});
 
 		let coor = this.cont_block.localToLocal(last.x, last.y, blockchain.mempool.cont_transaction);
 		trans.x = coor.x;

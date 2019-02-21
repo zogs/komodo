@@ -1,5 +1,5 @@
 import {extend, proxy} from '../utils';
-import {CContract, Dice} from './contract.js';
+import {CContract, DiceCC, RogueCC} from './contract.js';
 import createjs from 'createjs';
 
 export class Mempool extends createjs.Container {
@@ -172,8 +172,10 @@ export class Mempool extends createjs.Container {
 				let ccc = cccs[i];
 				let cc;
 				if(typeof ccc == 'string') {
-					cc = new CContract({icon: ccc, name: ccc});
-					if(ccc == 'dice') cc = new Dice();
+
+					cc = new CContract({icon: ccc, name: ccc, mempool: this});
+					if(ccc == 'dice') cc = new DiceCC({mempool: this});
+					if(ccc == 'rogue') cc = new RogueCC({mempool: this});
 					cc.name = ccc;
 				}
 				if(typeof ccc == 'object' && ccc instanceof CContract) {
@@ -436,7 +438,7 @@ export class Mempool extends createjs.Container {
 	}
 
 	getContract(name) {
-		return this.ccc.find(c => c.name == name);
+		return this.ccc.find(c => c.params.name == name);
 	}
 
 	getRandomContract() {

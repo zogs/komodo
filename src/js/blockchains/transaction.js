@@ -18,6 +18,7 @@ export class Transaction extends createjs.Container {
       imageY: 0,
       notaryTo: null,
       ccc : null,
+      popup : null
     };
 
     this.params = extend(defaults,params);
@@ -178,6 +179,14 @@ export class Transaction extends createjs.Container {
       this.addChild(this.image);
     }
 
+    if(this.params.popup !== null) {
+      this.params.popup.open();
+      this.params.popup.resetXY();
+      this.params.popup.y -= this.params.popup.height/2 + 40;
+      this.addChild(this.params.popup);
+      this.popup = this.params.popup;
+    }
+
     this.shape = shape;
     this.alpha = this.params.alpha;
 
@@ -185,7 +194,7 @@ export class Transaction extends createjs.Container {
 
   setColor(color, alpha = 1) {
 
-    this.removeAllChildren();
+    this.removeChild(this.shape);
     this.drawTransaction(color);
     this.alpha = alpha;
   }

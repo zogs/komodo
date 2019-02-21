@@ -1,5 +1,6 @@
 import {extend, proxy} from '../utils';
 import {Transaction} from './transaction';
+import {Dialog, Button, Text, Link, Image} from '../dialog';
 import Victor from '../lib/victor';
 import createjs from 'createjs';
 
@@ -11,6 +12,7 @@ export class CContract extends createjs.Container {
     var defaults = {
       name: 'default',
       icon: 'cog',
+      mempool: null
     };
     this.params = extend(defaults,params);
     this.init();
@@ -41,7 +43,7 @@ export class CContract extends createjs.Container {
   }
 }
 
-export class Dice extends CContract {
+export class DiceCC extends CContract {
 
   constructor(params) {
     super();
@@ -51,6 +53,7 @@ export class Dice extends CContract {
     }
     this.params = extend(defaults, params);
     this.init();
+
   }
 
   handleTransaction(trans, mempool) {
@@ -77,3 +80,95 @@ export class Dice extends CContract {
   }
 }
 
+export class RogueCC extends CContract {
+
+  constructor(params) {
+    super();
+    var defaults = {
+      name: 'rogue',
+      icon: 'rogue',
+    }
+    this.params = extend(defaults, params);
+    this.init();
+
+    this.warriors = new createjs.SpriteSheet({
+        images: [window.Queue.getResult('sprite_warriors')],
+        frames: {width:50, height:50},
+    });
+
+  }
+
+  getRandomWarrior() {
+
+    return this.getWarrior(Math.floor(Math.random()* this.warriors.getNumFrames()));
+  }
+
+  getWarrior(n) {
+
+    return new createjs.Bitmap(createjs.SpriteSheetUtils.extractFrame(this.warriors, n));
+  }
+
+  getWarriorWidth() {
+    return this.warriors.getFrameBounds(0).width;
+  }
+
+  getWarriorHeight() {
+    return this.warriors.getFrameBounds(0).height;
+  }
+
+  createGame() {
+
+    // "New game" popup
+    let popup = new Dialog([new Text('New game', 'bold 14px Arial', { textAlign: 'center', paddingTop:5, paddingBottom:5})],[],{ x:0, y:10, radius: 15, borderWidth:1, borderColor: '#AFAFAF', paddings: [10,15,10,15], arrowFrom: 'bottom', arrow: {x: 0, y: 36}});
+    // broacast "start" transaction
+    let trans = new Transaction({'blockchain': this.params.mempool.params.blockchain, 'mempool': this.params.mempool, type:'ccc', ccc: this.params.mempool.getContract('rogue'), popup: popup});
+
+    let platform = window.Platforms.find(p => p.params.id == 'kmd');
+    platform.emitter.emitWithMotion(trans, this.params.mempool.params.blockchain);
+  }
+
+  saveWarrior(n, level) {
+
+    // Character popup
+    let popup = new Dialog([
+        new Text('Saved !', 'bold 14px Arial', { color:"#33AA22", textAlign: 'center', paddingTop:5, paddingBottom:5}),
+        new Image(this.getWarrior(n), {align: 'center', width: this.getWarriorWidth(), height: this.getWarriorHeight()}),
+        new Text('Level '+level, '14px Arial', { textAlign: 'center', paddingTop:5, paddingBottom:5}),
+        ],
+        [],
+        { x:0, y:0, radius: 15, borderWidth:1, borderColor: '#AFAFAF', paddings: [10,15,10,15], arrowFrom: 'bottom', arrow: {x: 0, y: 85}});
+    let trans = new Transaction({'blockchain': this.params.mempool.params.blockchain, 'mempool': this.params.mempool, type:'ccc', ccc: this.params.mempool.getContract('rogue'), popup: popup});
+    let platform = window.Platforms.find(p => p.params.id == 'kmd');
+    platform.emitter.emitWithMotion(trans, this.params.mempool.params.blockchain);
+  }
+
+  buyWarrior(n, level) {
+
+    // Character popup
+    let popup = new Dialog([
+        new Text('Buy !', 'bold 14px Arial', { color:"#33AA22", textAlign: 'center', paddingTop:5, paddingBottom:5}),
+        new Image(this.getWarrior(n), {align: 'center', width: this.getWarriorWidth(), height: this.getWarriorHeight()}),
+        new Text('Level '+level, '14px Arial', { textAlign: 'center', paddingTop:5, paddingBottom:5}),
+        ],
+        [],
+        { x:0, y:0, radius: 15, borderWidth:1, borderColor: '#AFAFAF', paddings: [10,15,10,15], arrowFrom: 'bottom', arrow: {x: 0, y: 85}});
+    let trans = new Transaction({'blockchain': this.params.mempool.params.blockchain, 'mempool': this.params.mempool, type:'ccc', ccc: this.params.mempool.getContract('rogue'), popup: popup});
+    let platform = window.Platforms.find(p => p.params.id == 'kmd');
+    platform.emitter.emitWithMotion(trans, this.params.mempool.params.blockchain);
+  }
+
+  sellWarrior(n, level) {
+
+    // Character popup
+    let popup = new Dialog([
+        new Text('Sold !', 'bold 14px Arial', { color: '#991111', textAlign: 'center', paddingTop:5, paddingBottom:5}),
+        new Image(this.getWarrior(0), {align: 'center', width: this.getWarriorWidth(), height: this.getWarriorHeight()}),
+        new Text('Level 5', '14px Arial', { textAlign: 'center', paddingTop:5, paddingBottom:5}),
+        ],
+        [],
+        { x:0, y:0, radius: 15, borderWidth:1, borderColor: '#AFAFAF', paddings: [10,15,10,15], arrowFrom: 'bottom', arrow: {x: 0, y: 85}});
+    let trans = new Transaction({'blockchain': this.params.mempool.params.blockchain, 'mempool': this.params.mempool, type:'ccc', ccc: this.params.mempool.getContract('rogue'), popup: popup});
+    let platform = window.Platforms.find(p => p.params.id == 'kmd');
+    platform.emitter.emitWithMotion(trans, this.params.mempool.params.blockchain);
+  }
+}
