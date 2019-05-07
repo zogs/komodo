@@ -42,7 +42,7 @@ Security.set = function() {
     new Text('So this is the [in]famous Komodo blockchain.', '20px Arial'),
     ], [
     ], {
-      dy: -50, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
+      y: 350, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
       lifetime: 2000, call: proxy(this.continue, this), onload: function() {
         let komodo = window.Platforms.find(b => b.params.id == 'kmd');
         komodo.hide();
@@ -61,7 +61,7 @@ Security.set = function() {
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
       arrow: {x:0, y:100}, arrowFrom: 'bottom', animate: true,
-      dx: 0, dy: -280
+      y: 120
     });
   this.addDialog(dialog);
 
@@ -74,7 +74,6 @@ Security.set = function() {
     ], [
     ], {
       arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true,
-      dx: 0, dy: 0,
       onload: function(_this) {
 
         let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, 'maxTps': 10});
@@ -140,7 +139,7 @@ Security.set = function() {
     new Text("That was the so called notarization process!", 'bold'),
     ], [
     ], {
-      dx: 100, dy: -70, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
+      x: 850, y: 330, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
       lifetime: 3500, call: proxy(this.continue, this)
     });
   this.addDialog(dialog);
@@ -200,7 +199,7 @@ Security.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
-      dx: 0, dy: 300, arrow: {x:0, y:-90}, arrowFrom: 'top',
+      y: 700, arrow: {x:0, y:-90}, arrowFrom: 'top',
       onload: function(_this) {
           let emc2 = new Blockchain({id: 'emc2', name: 'Einsteinum', color: '#32cbd4', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_einsteinium' })
           let game = new Blockchain({id: 'game', name: 'GameCredits', color: '#8bca2a', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_gamecredits' })
@@ -242,11 +241,11 @@ Security.set = function() {
     new Text("They now benefit from the Komodo and Bitcoin level security."),
     new Text("An attacker would need to attack 3 blockchains instead of just 1, that should be pretty hard, don't you think?"),
     new Text(""),
-    new Text("As a matter of fact, Einsteinium already resisted one (known) 51% attack since they implemented dPoW !")
+    new Text("As a matter of fact, Einsteinium alreay resisted one (known) 51% attack since they implemented dPoW !")
     ], [
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
-      dy: 280,
+      y: 680,
     });
   this.addDialog(dialog);
 
@@ -263,7 +262,6 @@ Security.set = function() {
       new Button("REPLAY CHAPTER", proxy(this.replay, this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
       new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Scalability']), { float: 'right'}),
     ], {
-      dy: 0,
     });
   this.addDialog(dialog);
 

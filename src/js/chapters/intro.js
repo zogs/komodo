@@ -26,31 +26,17 @@ Intro.set = function() {
   let that = this;
   let dialog;
 
-  // show specific button if animated banner
-  if(window.CurrentBanner) {
-    dialog = new Dialog([
-    ], [
-    new Button('CLICK HERE TO START', function() {
-      Intro.startAfterBanner();
-    }, {float: 'right'}),
-    ], {
-        dx: 52, dy: 58,
-       backgroundColor: null,
-    });
-  }
-  // else show traditionnal button
-  else {
-    dialog = new Dialog([
-      new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
-      new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
-    ], [
-    new Button('CLICK HERE TO START', function() {
-        that.startWithoutBanner();
-    }, {float: 'center'}),
-    ], {
-       backgroundColor: '#d6e0e0',
-    });
-  }
+
+  dialog = new Dialog([
+    new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
+    new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
+  ], [
+  new Button('CLICK HERE TO START', function() {
+      that.startWithoutBanner();
+  }, {float: 'center'}),
+  ], {
+     backgroundColor: '#d6e0e0',
+  });
   this.addDialog(dialog);
 
   dialog = new Dialog([
@@ -58,7 +44,7 @@ Intro.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
-      dx: -50, dy: -40,
+      x: 700, y: 360,
       animate: true, backgroundColor: '#FFF',
       onload: function() {
 
@@ -76,7 +62,7 @@ Intro.set = function() {
     ], {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
       lifetime: 2500, call: proxy(this.continue, this),
-      dx: -250, dy: -250
+      x: 500, y: 150
     });
   this.addDialog(dialog);
 
@@ -85,7 +71,7 @@ Intro.set = function() {
     ], [
     ], {
       lifetime: 2500, call: proxy(this.continue, this),
-      dx: 150, dy: -50, backgroundColor: '#FFF',
+      x: 900, y: 350, backgroundColor: '#FFF',
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
   this.addDialog(dialog);
@@ -107,7 +93,7 @@ Intro.set = function() {
 
       }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
     ], {
-      dy: 50
+      y: 450
     });
   this.addDialog(dialog);
 
@@ -119,7 +105,6 @@ Intro.set = function() {
       new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
       new Button('NEXT CHAPTER', proxy(window.Tour.goToChapter,window.Tour,['Security']), {float: 'right'}),
     ], {
-      dy: 0
     });
   this.addDialog(dialog);
 }

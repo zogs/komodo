@@ -57,7 +57,7 @@ Scalability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
-      dx: 0, dy: -50,
+      y: 350,
       onload: function(_this) {
         let komodo = window.Platforms.find(b => b.params.id == 'kmd');
         komodo.fadeIn(500);
@@ -75,7 +75,7 @@ Scalability.set = function() {
     new Text('we know that Bitcoin has a maximum capacity of around 10 transactions per second.'),
     ], [
     ], {
-      dx: -100, dy: -200,
+      x: 650, y: 200,
       arrow: {x:0, y:-80}, arrowFrom: 'top',
       lifetime: 3000, call: proxy(this.continue, this),
     });
@@ -87,7 +87,7 @@ Scalability.set = function() {
     ], [
     ], {
       lifetime: 3000, call: proxy(this.continue, this),
-      dx: 350, dy: -220,
+      x: 1100, y: 180,
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50,
     });
   this.addDialog(dialog);
@@ -99,7 +99,7 @@ Scalability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
-      dx: 180, dy: 20,
+      x: 930, y: 420,
       arrow: {x:0, y:-110}, arrowFrom: 'top'
     });
   this.addDialog(dialog);
@@ -111,7 +111,7 @@ Scalability.set = function() {
     ], [
     new Button('DOUBLE', proxy(this.continue, this), {float: 'center'}),
     ], {
-      x: 1300, dy: 10,
+      x: 1300, y: 410,
       arrow: {x:0, y:-100}, arrowFrom: 'top',
       onload: function(_this) {
 
@@ -127,7 +127,7 @@ Scalability.set = function() {
     ], [
 
     ], {
-      dx: 180, dy: -30,
+      x: 930, y: 370,
       arrow: {x:0, y:-50}, arrowFrom: 'top',
       lifetime: 2000, call: proxy(this.continue, this),
       onload: function(_this) {
@@ -144,7 +144,7 @@ Scalability.set = function() {
     new Text('How are the folks from Komodo gonna handle this?'),
     ], [
     ], {
-      dx: 180, dy: -30,
+      x: 930, y: 370,
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
@@ -154,7 +154,7 @@ Scalability.set = function() {
     new Text('Well, they just pop up another chain!'),
     ], [
     ], {
-      dx: 180, dy: -30,
+      x: 930, y: 370,
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
@@ -164,7 +164,7 @@ Scalability.set = function() {
     new Text('...'),
     ], [
     ], {
-      dx: 0, dy: 1000,
+      y: -1000,
       lifetime: 5000, call: proxy(this.continue, this),
       onload: function() {
         let komodo = window.Platforms.find(e => e.params.id == 'kmd');
@@ -182,7 +182,7 @@ Scalability.set = function() {
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      dx: 180, dy: 130,
+      x: 930, y: 530,
       arrow: {x:0, y:-120}, arrowFrom: 'top',
     });
   this.addDialog(dialog);
@@ -198,7 +198,6 @@ Scalability.set = function() {
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      dx:0, dy: 0,
     });
   this.addDialog(dialog);
 
@@ -211,7 +210,6 @@ Scalability.set = function() {
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      dx:0, dy: 0,
     });
   this.addDialog(dialog);
 
@@ -220,7 +218,6 @@ Scalability.set = function() {
     new Text("Waiting for the next notarization...           ", 'italic 20px Arial', '#AAA'),
     ], [
     ], {
-      dx:0, dy: 0,
       onload: function(_this) {
 
         let komodo = window.Blockchains.find(b => b.params.id == 'kmd');
@@ -256,7 +253,7 @@ Scalability.set = function() {
     new Text('MoMoM/Mom are being exchanged now !'),
     ], [
     ], {
-      dx:450, dy: -100,
+      x:1200, y: 300,
       arrow: {x:-200, y:0}, arrowWidth:20, arrowFrom: 'left',
       lifetime: 3000, call: proxy(this.continue, this),
     });
@@ -270,7 +267,7 @@ Scalability.set = function() {
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      dx:-60, dy: -50,
+      x:690, y: 350,
     });
   this.addDialog(dialog);
 
@@ -284,7 +281,6 @@ Scalability.set = function() {
     ], [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      dx:0, dy: 0,
     });
   this.addDialog(dialog);
 
@@ -299,7 +295,6 @@ Scalability.set = function() {
     new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'center', x: 20, backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
     new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Interoperability & Independence']), {float: 'right'}),
     ], {
-      dx:0, dy: 0,
       id: 'end'
     });
   this.addDialog(dialog)
@@ -314,7 +309,7 @@ Scalability.set = function() {
     new Button("ADD CHAIN", function() { Scalability.addChain(); }, {float: 'center', x: 60, backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2}),
     new Button("STOP", function() { Scalability.goToID('end'); }, {float: 'right'}),
     ], {
-      dx:0, dy: -300,
+     y: 100,
     });
   this.addDialog(dialog);
 

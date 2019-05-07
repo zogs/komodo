@@ -63,7 +63,7 @@ Interoperability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
-      dx: 0, dy: -50,
+      y: 350,
       onload: function(_this) {
         let komodo = window.Platforms.find(b => b.params.id == 'kmd');
         komodo.fadeIn(500);
@@ -86,7 +86,7 @@ Interoperability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
-      dx: 0, dy: -50,
+      y: 350,
     });
   this.addDialog(dialog);
 
@@ -100,7 +100,7 @@ Interoperability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
-      dx: 0, dy: -50,
+      y: 350,
     });
   this.addDialog(dialog);
 
@@ -112,7 +112,7 @@ Interoperability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
-      dx: 0, dy: -50,
+      y: 350,
     });
   this.addDialog(dialog);
 
@@ -124,7 +124,7 @@ Interoperability.set = function() {
     ], [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
-      dx: 0, dy: -50,
+      y: 350,
     });
   this.addDialog(dialog);
 
@@ -135,7 +135,7 @@ Interoperability.set = function() {
     new Text("This is the KMDICE, a Komodo generated Blockchain."),
     ], [
     ], {
-      dx: 0, dy: 70,
+      y: 470,
       arrow: {x:0, y:50}, arrowFrom: 'bottom',
       lifetime: 2000, call: proxy(this.continue, this),
       onload: function() {
@@ -155,7 +155,6 @@ Interoperability.set = function() {
     ], [
     new Button("PLACE A BET", function() { Interoperability.bet(); window.slowMo(0.7, 2000); that.continue(); }, {float: 'right'})
     ], {
-      dx: 0, dy: 0,
     });
   this.addDialog(dialog);
 
@@ -164,7 +163,7 @@ Interoperability.set = function() {
     new Text("Look here !"),
     ], [
     ], {
-      dx: 250, dy: 220,
+      x: 1000, y: 620,
       arrow: {x:30, y:-50}, arrowFrom: 'top',
       lifetime: 4000, call: proxy(this.continue, this),
     });
@@ -179,7 +178,7 @@ Interoperability.set = function() {
     new Button("WANT TO BET AGAIN?", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
     new Button("CONTINUE", function() { Interoperability.goToID('part2'); }, {float: 'right'})
     ], {
-      dx: 100, dy: 50,
+      x: 850, y: 450,
       onload: function() {
         window.slowMo(1,1000);
       }
@@ -194,7 +193,7 @@ Interoperability.set = function() {
     new Button("PLACE A BET", function() { Interoperability.bet(); }, {float: 'left'}),
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
     ], {
-      dx: 0, dy: 50,
+      y: 450,
     });
   this.addDialog(dialog);
 
@@ -208,7 +207,6 @@ Interoperability.set = function() {
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
-      dx: 0, dy: 0,
       id: 'part2',
       onload: function() {
         let kmdice = window.Blockchains.find(b => b.params.id == 'KMDICE');
@@ -227,7 +225,7 @@ Interoperability.set = function() {
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
-      dx: 0, dy: -30,
+      y: 370,
       arrow: {x:-30, y:140}, arrowFrom: 'bottom',
       onload: function() {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
@@ -247,7 +245,7 @@ Interoperability.set = function() {
     ],[
       new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
     ],{
-      dx: 0, dy: -50
+      y: 350
     });
   this.addDialog(dialog);
 
@@ -260,7 +258,7 @@ Interoperability.set = function() {
     ], [
       new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
     ], {
-      dx: 10, dy: -30,
+      x: 760, y: 370,
       arrow: {x:300, y:150}, arrowFrom: 'bottom', arrowCenter: 300,
       onload: function(_this) {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
@@ -278,7 +276,6 @@ Interoperability.set = function() {
     ], [
       new Button("START A GAME", function() { Interoperability.startRogue(); that.continue(); }, {float: 'center'}),
     ], {
-      dx: 0, dy: 0,
       id: 'start_rogue',
     });
   this.addDialog(dialog);
@@ -289,7 +286,7 @@ Interoperability.set = function() {
     ], [
       new Button("CONTINUE", function() { that.continue(); }, {float: 'center'}),
     ], {
-      dx: 150, dy: -10,
+      x: 900, y: 390,
       arrow: {x:0, y:110}, arrowFrom: 'bottom', arrowCenter: 100,
     });
   this.addDialog(dialog);
@@ -304,7 +301,7 @@ Interoperability.set = function() {
     ], [
       new Button("QUIT AND SAVE", function() { Interoperability.saveRogue(0, '5'); that.continue(); }, {float: 'center'}),
     ], {
-      dx: 0, dy: -140,
+      y: 260,
     });
   this.addDialog(dialog);
 
@@ -318,7 +315,7 @@ Interoperability.set = function() {
       new Button("PLAY AGAIN", function() { Interoperability.goToID('start_rogue'); }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
       new Button("SELL HIM", function() { Interoperability.sellRogue(0, '5'); that.continue() }, {float: 'right'}),
     ], {
-      dx: 0, dy: -140,
+      y: 260,
     });
   this.addDialog(dialog);
 
@@ -333,7 +330,7 @@ Interoperability.set = function() {
     ], [
       new Button("CONTINUE", function() {  Interoperability.continuousRogue(); that.continue() }, {float: 'right'}),
     ], {
-      dx: 0, dy: -140,
+      y: 260,
     });
   this.addDialog(dialog);
 
@@ -346,7 +343,7 @@ Interoperability.set = function() {
     ], [
      new Button("YES", proxy(this.continue, this), {float: 'center'}),
     ], {
-      dx: 0, dy: -30,
+      y: 370,
     });
   this.addDialog(dialog);
 
@@ -354,7 +351,7 @@ Interoperability.set = function() {
   dialog = new Dialog('dialog-AC', [
      new Button("CREATE", function() { Interoperability.createAC(); Interoperability.continue(); }, {float: 'center'})
     ], {
-      dx: 0, dy: -100,
+      y: 300,
     });
   this.addDialog(dialog);
 
@@ -368,7 +365,6 @@ Interoperability.set = function() {
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'})
     ], {
-      dx: 0, dy: 0,
     });
   this.addDialog(dialog);
 
@@ -383,7 +379,6 @@ Interoperability.set = function() {
     ], [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'})
     ], {
-      dx: 0, dy: 0,
     });
   this.addDialog(dialog);
 
@@ -397,14 +392,12 @@ Interoperability.set = function() {
     new Link("https://twitter.com/KomodoPlatform","https://twitter.com/KomodoPlatform"),
     new Text("Or search for 'Komodo' on Telegram, Facebook, Youtube, Medium... :)"),
     new Text(" "),
-
-
     ], [
      new Button("CREATE MORE CHAIN", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
      new Button("GO TO CHAPTER", function() { Interoperability.goToID('chapters'); }, { x: 80, float: 'center', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
      new Button("END", proxy(this.stop, this), {float: 'right'}),
     ], {
-      dx: 0, dy: -100,
+      y: 300,
       id: 'part3'
     });
   this.addDialog(dialog);
@@ -414,7 +407,7 @@ Interoperability.set = function() {
      new Button("CREATE", function() { Interoperability.createAC(); }, {float: 'left'}),
      new Button("CLOSE", function() { Interoperability.goToID('part3'); }, {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
     ], {
-      dx: 0, dy: -100,
+      y: 300,
     });
   this.addDialog(dialog);
 
@@ -425,7 +418,6 @@ Interoperability.set = function() {
     new Button("SCALABILITY", proxy(window.Tour.goToChapter,window.Tour,['Scalability']), { float: 'center', x: -40}),
     new Button("INTEROPERABILITY", proxy(this.replay, this), { float: 'right'}),
     ], {
-      dx: 0, dy: 0,
       id: 'chapters'
     });
   this.addDialog(dialog);

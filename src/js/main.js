@@ -33,6 +33,7 @@ window.TimeScale = 1;
 window.ZoomScale = 1;
 window.SlowMotion = false;
 window.CurrentBanner = null;
+window.CanvasContainer = document.getElementById('canvas-container');
 window.ColorAsset = ['#f3de8a', '#eb9486', '#7e7f9a', '#97a7b3'];
 window.MinuteWidth = 120;
 window.MinuteSeconds = 2;
@@ -248,45 +249,9 @@ window.initTour = function() {
     // Third chapter
     window.Tour.addChapter(Interoperability);
 
+    // start the Tour
+    window.Tour.start();
 
-    // if WebGL is supported
-    if(window.StageGL.isWebGL) {
-
-      // Show banner
-      window.CurrentBanner = new Banner({
-        points: BannerKomodoPoints.points,
-        width: BannerKomodoPoints.width,
-        height: BannerKomodoPoints.height,
-        stage: StageGL,
-        subtitle: {
-          text: 'THE DISCOVERY TOUR',
-          x: STAGEWIDTH/2 - 70,
-          y: STAGEHEIGHT/2 + 5,
-        }
-      });
-      window.CurrentBanner.show();
-
-      // When Banner is displayed, show Start Tour button
-      StageGL.on('banner_in_place', function() {
-        setTimeout(function() {
-          window.Cont_tour.alpha = 0;
-          createjs.Tween.get(window.Cont_tour).wait(300).to({alpha: 1}, 750);
-          window.Tour.start();
-        }, 200);
-      }, null, true);
-
-      // When Banner is terminated, destroy it
-      StageGL.on('banner_terminated', function() {
-          window.CurrentBanner.destroy();
-          window.CurrentBanner = null;
-      });
-
-    }
-    // if no WebGL
-    else {
-      // simply start the Tour
-      window.Tour.start();
-    }
 }
 
 window.resetGlobals = function() {
@@ -500,30 +465,21 @@ window.resizeCanvas = function() {
     console.log('Main.js: window.resizeCanvas()');
   }
 
-	var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-	var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+	var containerWidth = window.CanvasContainer.offsetWidth;
+	var containerHeight = window.CanvasContainer.offsetHeight;
 
-	var currentHeight = window.Stage.canvas.height;
-	var currentWidth = window.Stage.canvas.width;
-	if(windowHeight < window.Stage.canvas.height) {
-		currentHeight = windowHeight;
-		currentWidth = currentHeight * window.RATIO;
+  document.getElementById('canvas').style.width = containerWidth+'px';
+  document.getElementById('canvas').style.height = containerHeight+'px';
+  document.getElementById('backcanvas').style.width = containerWidth+'px';
+	document.getElementById('backcanvas').style.height = containerHeight+'px';
+
+  if(window.fullScreen) {
+    document.getElementById('canvas').width = containerWidth;
+    document.getElementById('canvas').height = containerHeight;
+    document.getElementById('backcanvas').width = containerWidth;
+    document.getElementById('backcanvas').height = containerHeight;
   }
-  if(windowWidth < window.Stage.canvas.width) {
-    currentWidth = windowWidth;
-    currentHeight = currentWidth / window.RATIO;
-  }
 
-  window.CurrentWidthRatio = currentWidth / window.Stage.canvas.width;
-  window.CurrentHeightRatio = currentHeight / window.Stage.canvas.height;
-
-  document.getElementById('canvas').style.width = currentWidth+'px';
-  document.getElementById('canvas').style.height = currentHeight+'px';
-  document.getElementById('backcanvas').style.width = currentWidth+'px';
-	document.getElementById('backcanvas').style.height = currentHeight+'px';
-
-	document.getElementById('canvas-container').style.width = currentWidth+'px';
-	document.getElementById('canvas-container').style.height = currentHeight+'px';
 	//scroll to top
 	window.setTimeout(function() { //browsers don't fire if there is not short delay
 		window.scrollTo(0,1);
@@ -532,8 +488,8 @@ window.resizeCanvas = function() {
 	var event = new createjs.Event('canvas_resized');
 	event.originWidth = ORIGINWIDTH;
 	event.originHeight = ORIGINHEIGHT;
-	event.newWidth = currentWidth;
-	event.newHeight = currentHeight;
+	event.newWidth = containerWidth;
+	event.newHeight = containerHeight;
 	window.Stage.dispatchEvent(event);
   window.StageGL.dispatchEvent(event);
 
