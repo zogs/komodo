@@ -10,7 +10,7 @@ export class Dialog extends createjs.Container {
     this.buttons = buttons;
     var defaults = {
       x: window.STAGEWIDTH/2,
-      y: window.STAGEHEIGHT/2,
+      y: window.STAGEHEIGHT/2 - 100,
       dx: 0,
       dy: 0,
       width: null,
@@ -29,7 +29,7 @@ export class Dialog extends createjs.Container {
       arrowWidth: 50,
       arrowCenter: 0,
       animate: false,
-      animateSpeed: 500,
+      animateSpeed: 750,
       id: 0,
     };
 
@@ -43,22 +43,14 @@ export class Dialog extends createjs.Container {
     this.htmlElement = null;
     this.htmlContent = null;
 
-
-
     window.Stage.addEventListener('canvas_resized', proxy(this.onResize, this));
 
-    this.init(params);
+    this.init();
   }
 
   open() {
 
     this.mouseEnabled = true;
-
-    if(this.htmlElement) {
-      this.htmlElement.style.pointerEvents = 'auto';
-      this.htmlElement.style.zIndex = 10;
-      window.resizeCanvas();
-    }
 
     if(this.params.onload) {
       this.params.onload(this);
@@ -82,10 +74,6 @@ export class Dialog extends createjs.Container {
     this.alpha = 0;
     this.mouseEnabled = false;
 
-    if(this.htmlElement) {
-      this.htmlElement.style.pointerEvents = 'none';
-      this.htmlElement.style.zIndex = 1;
-    }
   }
 
   onResize(ev) {
@@ -93,20 +81,11 @@ export class Dialog extends createjs.Container {
     if(this.htmlContent) {
 
       /*
-      I don't understand why this is not working
+      I don't understand
       this.htmlContent._props.matrix.appendTransform(100, 100, 0.5, 0.5, 0, 0, 0, 0, 0);
       this.htmlContent._oldProps.matrix = new createjs.Matrix2D();
       this.htmlContent._handleDrawEnd();
       */
-
-      //Apply new transformation to DOMElement when resizing
-      //(remember that DOMElement coords is based to its parent)
-      let dx = this.x*ev.newWidth/ev.originWidth - this.x;
-      let dy = this.y*ev.newHeight/ev.originHeight - this.y;
-      let dr = ev.newHeight/ev.originHeight;
-      let matrix = new createjs.Matrix2D(dr, 0, 0, dr, dx, dy);
-      this.htmlContent.transformMatrix = matrix;
-
     }
   }
 
@@ -115,22 +94,36 @@ export class Dialog extends createjs.Container {
     let H = 0;
     let W = 0;
 
-    // HTML element
     let content;
     let element;
-    if(typeof this.content == 'string') {
+    // Exterior HTML element
+    if(typeof this.content == 'string' && this.content.indexOf('#') == 0) {
 
-      element = document.getElementById(this.content);
-      element.style.visibility = 'visible';
-      content = new createjs.DOMElement(this.content);
+      let id = this.content.replace('#','');
+      element = document.getElementById(id);
+      content = new createjs.DOMElement(id);
       this.htmlElement = element;
       this.htmlContent = content;
       W = element.offsetWidth;
       H = element.offsetHeight;
     }
-
+    // HTML content
+    else if(typeof this.content == 'string') {
+      let html = this.content;
+      let id = this.content.trim().replace(/(<([^>]+)>)/ig,"").substring(0,5).replace(' ','') + Math.ceil(Math.random()*1000);
+      let element = document.createElement('div');
+      element.classList.add('dialog','autogen');
+      element.id = id;
+      element.innerHTML = html;
+      window.CanvasContainer.appendChild(element);
+      content = new createjs.DOMElement(id);
+      this.htmlElement = element;
+      this.htmlContent = content;
+      W = element.offsetWidth;
+      H = element.offsetHeight;
+    }
     // TEXT & IMAGE elements
-    if(typeof this.content == 'object') {
+    else if(typeof this.content == 'object') {
       for(let i=0; i<this.content.length; i++) {
         let obj = this.content[i];
         W = (obj.width > W)? obj.width : W;
@@ -236,30 +229,30 @@ export class Dialog extends createjs.Container {
     arrow.graphics.beginFill(this.params.backgroundColor).setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor);
     if(this.params.arrowFrom == 'top') {
       arrow.graphics
-            .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
+            .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+0.5)
             .lineTo(to.x + this.width/2, to.y + this.height/2)
-            .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+1)
+            .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, - this.params.paddings[0]+ this.params.borderWidth/2+0.5)
             ;
     }
     if(this.params.arrowFrom == 'left') {
       arrow.graphics
-            .moveTo(-this.params.paddings[3]+ this.params.borderWidth/2+1, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
+            .moveTo(-this.params.paddings[3]+ this.params.borderWidth/2+0.5, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
             .lineTo(to.x + this.width/2, to.y + this.height/2)
-            .lineTo(-this.params.paddings[3]+ this.params.borderWidth/2+1, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
+            .lineTo(-this.params.paddings[3]+ this.params.borderWidth/2+0.5, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
             ;
     }
     if(this.params.arrowFrom == 'right') {
       arrow.graphics
-            .moveTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-1, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
+            .moveTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-0.5, this.height/2 - this.params.arrowWidth/2 + this.params.arrowCenter)
             .lineTo(to.x + this.width/2, to.y + this.height/2)
-            .lineTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-1, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
+            .lineTo(this.width + this.params.paddings[1]- this.params.borderWidth/2-0.5, this.height/2 + this.params.arrowWidth/2 + this.params.arrowCenter)
             ;
     }
     if(this.params.arrowFrom == 'bottom') {
       arrow.graphics
-            .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-1 )
+            .moveTo(this.width/2 - this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-0.5 )
             .lineTo(to.x + this.width/2, to.y + this.height/2)
-            .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-1 )
+            .lineTo(this.width/2 + this.params.arrowWidth/2 + this.params.arrowCenter, this.height + this.params.paddings[2] -  this.params.borderWidth/2-0.5 )
             ;
     }
 

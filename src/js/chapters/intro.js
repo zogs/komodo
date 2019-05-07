@@ -39,9 +39,7 @@ Intro.set = function() {
   });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-    new Text('This is the KOMODO blockchain.'),
-    ], [
+  dialog = new Dialog('This is the KOMODO blockchain.', [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
       x: 700, y: 360,
@@ -56,32 +54,31 @@ Intro.set = function() {
   this.addDialog(dialog);
 
 
-  dialog = new Dialog([
-    new Text("It has a 1 minute block time and the max. blocksize is 4 MB."),
-    ], [
-    ], {
+
+  dialog = new Dialog('It has a 1 minute block time and the max. blocksize is 4 MB.',
+    [],
+    {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
       lifetime: 2500, call: proxy(this.continue, this),
       x: 500, y: 150
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-    new Text('Komodo is public since October 2016!'),
-    ], [
-    ], {
+  dialog = new Dialog('Komodo is public since October 2016!',
+    [],
+    {
       lifetime: 2500, call: proxy(this.continue, this),
       x: 900, y: 350, backgroundColor: '#FFF',
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-    new Text('It began as a Zcash Fork which is a fork of Bitcoin.', 'bold'),
-    new Text('So Komodo inherits all the Bitcoin and Zcash features plus a dozen of own features'),
-    new Text('A custom consensus framework capable of a unique "smartcontract like" experience,'),
-    new Text('and a security protocol which recycles Bitcoin hash power for a KMD backup on BTC!  '),
-    ], [
+  dialog = new Dialog(`
+    <p><strong>It began as a Zcash fork which is a fork of Bitcoin.</strong></p>
+    <p>So Komodo inherits all the Bitcoin and Zcash features plus a dozen of own features</p>
+    <p>A custom consensus framework capable of a unique "smartcontract like" experience,</p>
+    <p>and a security protocol which recycles Bitcoin hash power for a KMD backup on BTC!</p>
+    `, [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
       new Button('Add Z-transaction', function() {
 
@@ -97,11 +94,11 @@ Intro.set = function() {
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-    new Text('But Komodo is much more than the aforementioned things. There is much more to see !', 'bold'),
-    new Text("Let's get back to the more important aspect: SECURITY!"),
-    new Text(' '),
-    ], [
+  dialog = new Dialog(`
+    <p>But Komodo <strong>is much more</strong> than the aforementioned things. There is much more to see !</p>
+    <p>Let's get back to the more important aspect: SECURITY!</p>
+    <p></p>
+    `, [
       new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
       new Button('NEXT CHAPTER', proxy(window.Tour.goToChapter,window.Tour,['Security']), {float: 'right'}),
     ], {

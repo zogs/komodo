@@ -10,9 +10,11 @@ body { margin: 0; padding: 0; width:100%; height:100%; background: $background; 
 canvas#canvas { position: absolute; z-index: 2; display:block; width: 100%; height:100%;}
 canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #FFF; width:100%; height:100%; }
 .footer { display:none; position: absolute; z-index:10; bottom: 0; width: 100%; height:50px; text-align: center; font: 12px Arial; }
-.dialog { position: absolute; z-index: 1; visibility: hidden; font-family: 'Arial'; font-size: 22px; padding: 10px 30px; }
+.dialog { position: absolute; z-index: 10; visibility: hidden; font-family: 'Arial'; font-size: 20px; padding: 0; color:#6b8a8a; pointer-events:none;}
 .dialog > h1 { font-family: 'Roboto'; font-size: 60px; }
 .dialog div.row { width: 100%; margin: 10px 0;}
+.dialog strong { color:#6b8a8a; }
+.dialog p { margin-top:0; margin-bottom:10px; }
 #dialog-AC { padding: 20px 50px 0 50px; }
 #dialog-AC form { margin:0; }
 #dialog-AC label { cursor: pointer; }

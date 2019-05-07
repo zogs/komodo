@@ -473,12 +473,13 @@ window.resizeCanvas = function() {
   document.getElementById('backcanvas').style.width = containerWidth+'px';
 	document.getElementById('backcanvas').style.height = containerHeight+'px';
 
-  if(window.fullScreen) {
-    document.getElementById('canvas').width = containerWidth;
-    document.getElementById('canvas').height = containerHeight;
-    document.getElementById('backcanvas').width = containerWidth;
-    document.getElementById('backcanvas').height = containerHeight;
-  }
+  document.getElementById('canvas').width = containerWidth;
+  document.getElementById('canvas').height = containerHeight;
+  document.getElementById('backcanvas').width = containerWidth;
+  document.getElementById('backcanvas').height = containerHeight;
+
+  window.STAGEHEIGHT = containerHeight;
+  window.STAGEWIDTH = containerWidth;
 
 	//scroll to top
 	window.setTimeout(function() { //browsers don't fire if there is not short delay

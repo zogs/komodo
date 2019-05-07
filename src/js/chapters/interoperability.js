@@ -348,7 +348,7 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #14
-  dialog = new Dialog('dialog-AC', [
+  dialog = new Dialog('#dialog-AC', [
      new Button("CREATE", function() { Interoperability.createAC(); Interoperability.continue(); }, {float: 'center'})
     ], {
       y: 300,
@@ -403,7 +403,7 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #18
-  dialog = new Dialog('dialog-AC', [
+  dialog = new Dialog('#dialog-AC', [
      new Button("CREATE", function() { Interoperability.createAC(); }, {float: 'left'}),
      new Button("CLOSE", function() { Interoperability.goToID('part3'); }, {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
     ], {
