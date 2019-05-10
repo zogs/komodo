@@ -12,12 +12,12 @@ Scalability.init = function() {
 
   window.Timelines.reset();
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
-  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo], emitterTPS: 80,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
+  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be', chains: [komodo], emitterTPS: 80,});
   window.Platforms.push(komodoPlatform);
 
-  let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
-  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10, txWeight:1});
+  let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#eb8c18', blockTime: 10, 'premined': 0, maxTps: 10});
+  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#eb8c18', chains: [bitcoin], emitterTPS: 10, txWeight:1});
   window.Platforms.push(bitcoinPlatform);
 
   //add some transaction to bitcoin
@@ -47,7 +47,6 @@ Scalability.set = function() {
   ], [
   new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
   ], {
-    backgroundColor: '#d6e0e0',
   });
   this.addDialog(dialog);
 
@@ -291,8 +290,8 @@ Scalability.set = function() {
     new Text("Let's go to the next chapter: INTEROPERABILITY & Independence!"),
     new Text(" "),
     ], [
-    new Button("ADD TRANSACTIONS", proxy(this.continue,this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
-    new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'center', x: 20, backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+    new Button("ADD TRANSACTIONS", proxy(this.continue,this), { float: 'left'}),
+    new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'center', x: 20 }),
     new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Interoperability & Independence']), {float: 'right'}),
     ], {
       id: 'end'
@@ -305,8 +304,8 @@ Scalability.set = function() {
     new Text("Yeah, let's have fun !"),
     new Text(" "),
     ], [
-    new Button("ADD TRANSACTION", function() { Scalability.addTps(); }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2}),
-    new Button("ADD CHAIN", function() { Scalability.addChain(); }, {float: 'center', x: 60, backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2}),
+    new Button("ADD TRANSACTION", function() { Scalability.addTps(); }, {float: 'left'}),
+    new Button("ADD CHAIN", function() { Scalability.addChain(); }, {float: 'center', x: 60}),
     new Button("STOP", function() { Scalability.goToID('end'); }, {float: 'right'}),
     ], {
      y: 100,

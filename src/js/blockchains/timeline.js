@@ -15,6 +15,8 @@ export class Timeline extends createjs.Container {
 			paddingTop: 0,
 			paddingBottom: 0,
 			defaultTime: 5,
+			backgroundColor: '#326463',
+			color: '#53f1be',
 		};
 
 		this.params = extend(defaults,params);
@@ -42,6 +44,7 @@ export class Timeline extends createjs.Container {
 		this.drawLines();
 		this.initTimeline();
 		this.initCurrentTime();
+		this.drawBackground();
 
 		this.newMinuteListener = window.Stage.on('newminute', function(event) {
 			if(event.time >=5) {
@@ -49,6 +52,13 @@ export class Timeline extends createjs.Container {
 				this.removeLines();
 			}
 		}, this);
+	}
+
+	drawBackground() {
+
+		let rect = new createjs.Shape();
+		rect.graphics.beginFill(this.params.backgroundColor).setStrokeStyle(0).drawRect(0,0,window.STAGEWIDTH, 40);
+		this.cont_background.addChild(rect);
 	}
 
 	reset() {
@@ -80,21 +90,18 @@ export class Timeline extends createjs.Container {
 	drawLines() {
 
 		let line = new createjs.Shape();
-		line.graphics.setStrokeStyle(1).beginStroke('#DDD')
+		line.graphics.setStrokeStyle(0.5).beginStroke(this.params.color)
 				.moveTo(0, this.params.height - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
-				.closePath();
 		line.cache(-1, -1, 2, this.params.height);
 		this.lineImage = new createjs.Bitmap(line.cacheCanvas);
 
 		let lineBold = new createjs.Shape();
-		lineBold.graphics.setStrokeStyle(1).beginStroke('#AAA')
+		lineBold.graphics.setStrokeStyle(1).beginStroke(this.params.color)
 				.moveTo(0, this.params.height - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
-				.closePath();
 		lineBold.cache(-1, -1, 2, this.params.height);
 		this.lineBoldImage = new createjs.Bitmap(lineBold.cacheCanvas);
-
 
 	}
 
@@ -103,13 +110,14 @@ export class Timeline extends createjs.Container {
 		let line = this.lineImage.clone();
 		if(i%10 == 0) line = this.lineBoldImage.clone();
 		line.x = i*this.params.minuteWidth;
+		line.y = 40;
 		this.cont_lines.addChild(line);
 		this.lines.push(line);
 
-		let color = (i%10 == 0)? '#AAA' : '#DDD';
-		let minute = new createjs.Text(i+' min','13px Arial', color);
+		let font = (i%10 == 0)? 'bold 12px Montserrat' : '12px Montserrat';
+		let minute = new createjs.Text(i+' min', font, this.params.color);
 			minute.x = i*this.params.minuteWidth - minute.getMeasuredWidth() - 2;
-			minute.y = this.params.paddingTop + 5;
+			minute.y = this.params.paddingTop + 15;
 		minute.cache(0, 0, minute.getMeasuredWidth(), minute.getMeasuredHeight());
 		this.cont_lines.addChild(minute);
 		this.lines.push(minute);
@@ -136,6 +144,7 @@ export class Timeline extends createjs.Container {
 			.moveTo(0, this.params.height - this.params.paddingBottom)
 			.lineTo(0, 0 + this.params.paddingTop)
 			.closePath();
+			this.currentBar.y = 40;
 		this.currentBar.cache(-1, -1, 2, this.params.height);
 
 		this.currentBar.x = this.params.defaultTime * this.params.minuteWidth;

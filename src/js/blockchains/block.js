@@ -13,6 +13,7 @@ export class Block extends createjs.Container {
 			rows: 2,
 			image: null,
 			genesis: false,
+			backgroundColor: '#565a66',
 		};
 
 		this.params = extend(defaults,params);
@@ -46,16 +47,17 @@ export class Block extends createjs.Container {
 	drawBlock() {
 
 		let bkg = new createjs.Shape();
+		let pad = 5;
 		bkg.graphics.setStrokeStyle(0)
-				.beginFill(this.params.blockchain.params.color)
-				.drawRect(-5,-5, this.params.width+5, this.params.height+5);
+				.beginFill('#000')
+				.drawRect(0,0, this.params.width+pad, this.params.height+pad);
 		bkg.alpha = 0.2;
 		this.cont_block_bkg.addChild(bkg);
 
 		let rect = new createjs.Shape();
-		rect.graphics.setStrokeStyle(2)
-				.beginStroke(this.params.blockchain.params.color)
-				.beginFill('#FFF')
+		rect.graphics.setStrokeStyle(1)
+				.beginStroke('#FFF')
+				.beginFill(this.params.backgroundColor)
 				.drawRect(0,0, this.params.width, this.params.height);
 		this.cont_block_bkg.addChild(rect);
 
@@ -77,11 +79,6 @@ export class Block extends createjs.Container {
 			title.y = this.params.height/2;
 			this.cont_block_trans.addChild(title);
 		}
-
-		var matrix = new createjs.ColorMatrix().adjustHue(180).adjustSaturation(100);
-		 rect.filters = [
-		     new createjs.ColorMatrixFilter(matrix)
-		 ];
 
 		let name = (this.params.blockheight > 0)? 'BLOCK '+ this.params.blockheight : 'GENESIS';
 		let text = new createjs.Text(name, '12px Arial', '#AAA');

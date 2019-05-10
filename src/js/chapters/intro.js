@@ -3,6 +3,7 @@ import {Chapter} from '../chapter';
 import {Dialog, Button, Text, Link} from '../dialog';
 import {Blockchain} from '../blockchains/blockchain';
 import {Platform} from '../blockchains/platform';
+import {Transaction} from '../blockchains/transaction';
 import createjs from 'createjs';
 
 export const Intro = new Chapter({name: 'Intro'});
@@ -11,8 +12,8 @@ Intro.init = function() {
 
   window.Timelines.reset();
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6 });
-  var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#306565', backgroundColor: null, chains: [komodo], emitterTPS: 10 });
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6});
+  var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be', chains: [komodo], emitterTPS: 10 });
   window.Platforms.push(platform);
 
   platform.hide();
@@ -35,15 +36,14 @@ Intro.set = function() {
       that.startWithoutBanner();
   }, {float: 'center'}),
   ], {
-     backgroundColor: '#d6e0e0',
   });
   this.addDialog(dialog);
 
-  dialog = new Dialog('This is the KOMODO blockchain.', [
+  dialog = new Dialog('This is the <strong>KOMODO</strong> blockchain.', [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
       x: 700, y: 360,
-      animate: true, backgroundColor: '#FFF',
+      animate: true,
       onload: function() {
 
         let kmd = window.Platforms.find(p => p.params.id == 'kmd');
@@ -58,29 +58,29 @@ Intro.set = function() {
   dialog = new Dialog('It has a 1 minute block time and the max. blocksize is 4 MB.',
     [],
     {
-      arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true, backgroundColor: '#FFF',
+      arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true,
       lifetime: 2500, call: proxy(this.continue, this),
       x: 500, y: 150
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog('Komodo is public since October 2016!',
+  dialog = new Dialog('<strong>KOMODO</strong> is public since October 2016!',
     [],
     {
       lifetime: 2500, call: proxy(this.continue, this),
-      x: 900, y: 350, backgroundColor: '#FFF',
+      x: 900, y: 350,
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });
   this.addDialog(dialog);
 
   dialog = new Dialog(`
-    <p><strong>It began as a Zcash fork which is a fork of Bitcoin.</strong></p>
-    <p>So Komodo inherits all the Bitcoin and Zcash features plus a dozen of own features</p>
-    <p>A custom consensus framework capable of a unique "smartcontract like" experience,</p>
+    <p>It began as a <strong>Zcash fork</strong> which is a <strong>fork of Bitcoin</strong>.</p>
+    <p>So <strong>KOMODO</strong> inherits all the <i>Bitcoin</i> and <i>Zcash</i> features plus a dozen of own features</p>
+    <p>A custom consensus framework capable of a unique <i>"smartcontract like"</i> experience,</p>
     <p>and a security protocol which recycles Bitcoin hash power for a KMD backup on BTC!</p>
     `, [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
-      new Button('Add Z-transaction', function() {
+      new Button('ADD Z-TRANSACTION', function() {
 
         let komodo = window.Blockchains.find(b => b.params.id == 'kmd');
         let platform = window.Platforms.find(p => p.params.id == 'kmd');
@@ -88,18 +88,18 @@ Intro.set = function() {
         platform.emitter.emitWithMotion(trans, komodo);
 
 
-      }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+      }, {float: 'left'}),
     ], {
       y: 450
     });
   this.addDialog(dialog);
 
   dialog = new Dialog(`
-    <p>But Komodo <strong>is much more</strong> than the aforementioned things. There is much more to see !</p>
-    <p>Let's get back to the more important aspect: SECURITY!</p>
+    <p>But <strong>KOMODO is much more</strong> than the aforementioned things. There is much more to see !</p>
+    <p>Let's get back to the more important aspect: <strong>SECURITY</strong></p>
     <p></p>
     `, [
-      new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+      new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left'}),
       new Button('NEXT CHAPTER', proxy(window.Tour.goToChapter,window.Tour,['Security']), {float: 'right'}),
     ], {
     });

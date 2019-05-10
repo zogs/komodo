@@ -12,8 +12,8 @@ Security.init = function() {
 
   window.Timelines.reset();
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
-  var platform = new Platform({y: 250, id: 'kmd', name: ' ',color: '#306565',backgroundColor: null,chains: [komodo],emitterTPS: 35,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
+  var platform = new Platform({y: 250, id: 'kmd', name: ' ',color: '#53f1be' ,chains: [komodo],emitterTPS: 35,});
   window.Platforms.push(platform);
 
   platform.hide();
@@ -33,7 +33,6 @@ Security.set = function() {
     ], [
     new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
     ], {
-      backgroundColor: '#d6e0e0',
   });
   this.addDialog(dialog);
 
@@ -55,7 +54,7 @@ Security.set = function() {
 
   // #3
   dialog = new Dialog(`
-    <p>It is a Proof-of-Work blockchain, with an average blocktime of one minute.</p>
+    <p>It is a <i>Proof-of-Work</i> blockchain, with an average blocktime of one minute.</p>
     <p>So every minute or so, a new block is mined by a pool of miners all around the world.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -67,18 +66,19 @@ Security.set = function() {
 
   // #4
   dialog = new Dialog(`
-    <p>In order to increase the security of the network, Komodo backs up its chain periodically to the Bitcoin blockchain.</p>
+    <p>In order to increase the security of the network, <strong>KOMODO</strong> backs up its chain periodically to the <i>Bitcoin</i> blockchain.</p>
     <p>By doing so an attacker would have to first compromise BTC in order to attack the KMD chain!</p>
     <p></p>
     <p>Let's wait for the next notarization to see this in action...</p>
     `, [
     ], {
+      y: 400,
       arrow: {x:0, y:-100}, arrowFrom: 'top', animate: true,
       onload: function(_this) {
 
-        let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, 'maxTps': 10});
+        let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#eb8c18', blockTime: 10, 'premined': 0, 'maxTps': 10});
         window.Blockchains.push(bitcoin);
-        let platform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10, txWeight:1});
+        let platform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#eb8c18', chains: [bitcoin], emitterTPS: 10, txWeight:1});
         platform.start();
         window.Platforms.push(platform);
 
@@ -93,9 +93,9 @@ Security.set = function() {
         let komodo = window.Blockchains.find(b => b.params.id == 'kmd');
         komodo.params.notarizeTo = 'btc';
 
-        let text = new createjs.Text('', '20px Arial', '#6b8a8a');
-        text.x = 500;
-        text.y = 75;
+        let text = new createjs.Text('', '14px Montserrat', '#FFF');
+        text.x = 400;
+        text.y = 58;
         _this.addChild(text);
 
         //wait for notarization
@@ -144,11 +144,11 @@ Security.set = function() {
 
   // #7
   dialog = new Dialog(`
-    <p>By notarizing the KMD chain into Bitcoin, Komodo takes avantage of the Bitcoin hashrate and security.</p>
-    <p>As soon as the notarization is confirmed it equals an immutable record of Komodo transactions</p>
+    <p><strong>By notarizing</strong> the KMD chain into <i>Bitcoin</i>, <strong>KOMODO</strong> takes avantage of the <i>Bitcoin</i> hashrate and security.</p>
+    <p>As soon as the notarization is confirmed it equals an immutable record of KOMODO transactions</p>
     <p>written onto the Bitcoin blockchain,</p>
     <p> </p>
-    <p>Therefore, it becomes impossible to reorg (51% attack) the Komodo blockchain beyond this "checkpoint" !</p>
+    <p>Therefore, it becomes impossible to reorg (51% attack) the Komodo blockchain beyond this <i>"checkpoint"</i> !</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -158,9 +158,9 @@ Security.set = function() {
 
   // #8
   dialog = new Dialog(`
-    <p>This security mechanism is called Delayed Proof-of-Work (dPOW).</p>
+    <p>This security mechanism is called <strong>Delayed Proof-of-Work (dPOW)</strong>.</p>
     <p>In simple worlds: This technology is a solution for 51% attacks. If you want to attack</p>
-    <p>Komodo you have to first attack Bitcoin</p>
+    <p><strong>KOMODO</strong> you have to first attack Bitcoin</p>
     <p>And good luck with that.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -171,15 +171,16 @@ Security.set = function() {
 
   // #9
   dialog = new Dialog(`
-    Wait, that's not all !
+    <strong>Wait, that's not all !</strong>
     `, [], {
-      lifetime: 1000, call: proxy(this.continue, this),
+      paddings: [50,100,50,100],
+      lifetime: 2000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
   // #10
   dialog = new Dialog(`
-    <p>Did you know that Komodo can provide Bitcoin level security to other independant blockchains ?</p>
+    <p>Did you know that <strong>KOMODO</strong> can provide <i>Bitcoin level security</i> to other independant blockchains ?</p>
     <p></p>
     <p>Let's look on some examples.</p>
     `, [
@@ -191,21 +192,21 @@ Security.set = function() {
 
   // #11
   dialog = new Dialog(`
-    <p>These external blockchains for example have chosen Komodo to secure their network:</p>
+    <p>These external blockchains for example have chosen <strong>KOMODO</strong> to secure their network:</p>
     <p></p>
     <p><strong>GameCredits</strong> and <strong>Einsteinum</strong> just to name 2 of many others.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
-      y: 700, arrow: {x:0, y:-90}, arrowFrom: 'top',
+      x: 350, y: 220, arrow: {x:-250, y:100}, arrowFrom: 'bottom', arrowCenter: - 250,
       onload: function(_this) {
-          let emc2 = new Blockchain({id: 'emc2', name: 'Einsteinum', color: '#32cbd4', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_einsteinium' })
-          let game = new Blockchain({id: 'game', name: 'GameCredits', color: '#8bca2a', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_gamecredits' })
+          let emc2 = new Blockchain({id: 'emc2', name: 'Einsteinum', color: '#00c1f4', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_einsteinium' })
+          let game = new Blockchain({id: 'game', name: 'GameCredits', color: '#89b52c', premined: 8, notarizeTo: 'kmd', notaryLabelSize: "big", logo: 'icon_gamecredits' })
           window.Blockchains.push(emc2);
           window.Blockchains.push(game);
 
-          var einsPlatform = new Platform({y: 400, name: ' ', color: '#32cbd4', backgroundColor: null, chains: [emc2], emitterTPS: 40,});
-          var gamePlatform = new Platform({y: 550,name: ' ',color: '#8bca2a',backgroundColor: null,chains: [game], emitterTPS: 40});
+          var einsPlatform = new Platform({y: 400, name: ' ', color: '#00c1f4', chains: [emc2], emitterTPS: 40,});
+          var gamePlatform = new Platform({y: 550,name: ' ',color: '#89b52c', chains: [game], emitterTPS: 40});
           window.Platforms.push(einsPlatform);
           window.Platforms.push(gamePlatform);
 
@@ -235,29 +236,30 @@ Security.set = function() {
 
   // #12
   dialog = new Dialog(`
-    <p>These blockchains are notarizing onto Komodo.</p>
-    <p>They now benefit from the Komodo and Bitcoin level security.</p>
+    <p>These blockchains are notarizing onto <strong>KOMODO</strong>.</p>
+    <p>They now benefit from the <strong>KOMODO</strong> and <strong>Bitcoin</strong> level security.</p>
     <p>An attacker would need to attack 3 blockchains instead of just 1, that should be pretty hard, don't you think?</p>
     <p></p>
-    <p>As a matter of fact, Einsteinium alreay resisted one (known) 51% attack since they implemented dPoW </p>
+    <p>As a matter of fact, <strong>Einsteinium</strong> alreay resisted one (known) 51% attack since they implemented dPoW </p>
     `, [
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
-      y: 680,
+      y: 220
     });
   this.addDialog(dialog);
 
   // #13
   dialog = new Dialog(`
-    <p>If you are interested in the dPoW mechanism for securing your blockchain,</p>
+    <p>If you are interested in the <strong>dPOW mechanism</strong> for securing your blockchain,</p>
     <p>Please read this detailed article and contact the Komodo Team :</p>
-    <p>https://blog.komodoplatform.com/delayed-proof-of-work-explained","https://blog.komodoplatform.com/delayed-proof-of-work-explained-9a74250dbb86</p>
+    <p><a href="https://blog.komodoplatform.com/delayed-proof-of-work-explained" target="_blank">https://blog.komodoplatform.com/delayed-proof-of-work-explained-9a74250dbb86</a></p>
     <p></p>
-    <p>You can contact the Komodo Team on their official Discord !</p>
+    <p>You can contact the <strong>KOMODO</strong> Team on their official Discord !</p>
     <p><a href="https://komodoplatform.com/discord" target="_blank">https://komodoplatform.com/discord</a></p>
     <p></p>
+    <p>Next chapter: <strong>SCALABILITY</strong>
     `, [
-      new Button("REPLAY CHAPTER", proxy(this.replay, this), { float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+      new Button("REPLAY CHAPTER", proxy(this.replay, this), { float: 'left'}),
       new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Scalability']), { float: 'right'}),
     ], {
     });

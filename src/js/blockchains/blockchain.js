@@ -285,7 +285,7 @@ export class Blockchain extends createjs.Container {
 			mask.graphics.beginFill('red').drawRect(x1 + 80, y1, -x2, y2 - blockchain.params.height/2 + 4);
 			link.mask = mask;
 			blockchain.cont_notary_link.addChild(link);
-			let tw = createjs.Tween.get(link, {timeScale: window.TimeScale}).wait(300).to({alpha: 0.2}, 1000);
+			let tw = createjs.Tween.get(link, {timeScale: window.TimeScale}).wait(300).to({alpha: 1}, 1000);
 			window.Tweens.add(tw);
 
 			//return early if no label
@@ -352,7 +352,7 @@ export class Blockchain extends createjs.Container {
 		let thick = 4;
 		this._linkMempool.graphics
 				.clear()
-				.setStrokeStyle(thick).beginStroke(this.params.color+'AA')
+				.setStrokeStyle(thick).beginStroke(this.params.color)
 				.moveTo(block.x, 0)
 				.lineTo(this.mempool.x, 0)
 				.closePath()
@@ -366,7 +366,7 @@ export class Blockchain extends createjs.Container {
 		let thick = 8;
 		let border = 2;
 		link.graphics
-				.setStrokeStyle(border).beginStroke(color).beginFill(color+'55')
+				.setStrokeStyle(border).beginStroke(color).beginFill(color)
 				.moveTo(0, 0)
 				.lineTo(block2.x - block1.x , 0)
 				.lineTo(block2.x - block1.x, thick)

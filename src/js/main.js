@@ -7,15 +7,12 @@ import {Intro} from './chapters/intro';
 import {Security} from './chapters/security';
 import {Scalability} from './chapters/scalability';
 import {Interoperability} from './chapters/interoperability';
-import {Banner} from './banner';
-import BannerKomodoPoints from '../assets/json/banners/komodo.json.gz';
 import {TweensManager} from './tweens';
 import Victor from './lib/victor';
 import createjs from 'createjs';
 
 // define usefull const
 window.Stage;
-window.StageGL;
 window.Queue;
 window.Blockchains = [];
 window.Platforms = [];
@@ -60,10 +57,6 @@ window.loaded = function(env) {
 	window.Stage = new createjs.Stage('canvas');
 	window.Stage.enableMouseOver(10);
 	window.Stage.snapToPixelEnabled = true;
-
-  window.StageGL = new createjs.StageGL('backcanvas', {autoPurge: -1});
-  window.StageGL.setClearColor("#FFF");
-  window.StageGL.update();
 
 	window.Queue = new createjs.LoadQueue();
 	window.Queue.addEventListener('complete',function() { assetsLoaded(env) });
@@ -206,21 +199,6 @@ window.initTest = function(env) {
 
     komodoPlatform.activateAutoScalingChain();
 
-    /*
-
-    window.CurrentBanner = new Banner({
-      points: BannerKomodoPoints.points,
-      width: BannerKomodoPoints.width,
-      height: BannerKomodoPoints.height,
-      stage: StageGL,
-      subtitle: {
-        text: 'THE DISCOVERY TOUR',
-        x: STAGEWIDTH/2 - 60,
-        y: STAGEHEIGHT/2 + 10,
-      }
-    });
-    window.CurrentBanner.show();
-    */
 }
 
 window.initTour = function() {
@@ -492,6 +470,5 @@ window.resizeCanvas = function() {
 	event.newWidth = containerWidth;
 	event.newHeight = containerHeight;
 	window.Stage.dispatchEvent(event);
-  window.StageGL.dispatchEvent(event);
 
 }

@@ -13,15 +13,15 @@ Interoperability.init = function() {
 
   window.Timelines.reset();
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
-  let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#b97183', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
-  let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#1ca064', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
-  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM', color: '#306565',backgroundColor: '#306565', chains: [komodo, AC1, AC2], emitterTPS: 50,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
+  let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#fd3397', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
+  let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#917efb', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
+  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be',backgroundColor: '#306565', chains: [komodo, AC1, AC2], emitterTPS: 50,});
   window.Platforms.push(komodoPlatform);
 
-  let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
+  let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#eb8c18', blockTime: 10, 'premined': 0, maxTps: 10});
   window.Blockchains.push(bitcoin);
-  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: 'Bitcoin', color: '#d38d10', backgroundColor: null, chains: [bitcoin], emitterTPS: 10});
+  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: 'Bitcoin', color: '#eb8c18', backgroundColor: null, chains: [bitcoin], emitterTPS: 10});
   window.Platforms.push(bitcoinPlatform);
 
   //add some transaction to bitcoin
@@ -52,7 +52,6 @@ Interoperability.set = function() {
   ], [
   new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
   ], {
-    backgroundColor: '#d6e0e0',
   });
   this.addDialog(dialog);
 
@@ -140,7 +139,7 @@ Interoperability.set = function() {
       lifetime: 2000, call: proxy(this.continue, this),
       onload: function() {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
-        let KMDICE = new Blockchain({id: 'KMDICE', name: 'KMDICE', color:'#198201', type: 'AC', ccc: ['dice'], premined: 0, notarizeTo: 'kmd', active: false});
+        let KMDICE = new Blockchain({id: 'KMDICE', name: 'KMDICE', color:'#05afea', type: 'AC', ccc: ['dice'], premined: 0, notarizeTo: 'kmd', active: false});
         platform.addAssetChain(KMDICE);
       }
     });
@@ -175,7 +174,7 @@ Interoperability.set = function() {
     new Text("Did you see the gambling transaction going back to the Komodo blockchain via cluster technology?"),
     new Text("This is part of the multichain sync protocol from jl777 and his team!"),
     ], [
-    new Button("WANT TO BET AGAIN?", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+    new Button("WANT TO BET AGAIN?", proxy(this.continue, this), {float: 'left'}),
     new Button("CONTINUE", function() { Interoperability.goToID('part2'); }, {float: 'right'})
     ], {
       x: 850, y: 450,
@@ -191,7 +190,7 @@ Interoperability.set = function() {
     new Text("(Spoiler: you will most likely win :)", '16px arial'),
     ], [
     new Button("PLACE A BET", function() { Interoperability.bet(); }, {float: 'left'}),
-    new Button("CONTINUE", proxy(this.continue, this), {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
+    new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
       y: 450,
     });
@@ -230,7 +229,7 @@ Interoperability.set = function() {
       onload: function() {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
         platform.emitter.params.tps = 300;
-        let KMDCC = new Blockchain({id: 'KMDCC', name: 'KMDCC', color:'#204040', type: 'AC', ccc: ['asset'], premined: 10, notarizeTo: 'kmd', active: true, privacy: null, zRatio: 0.8});
+        let KMDCC = new Blockchain({id: 'KMDCC', name: 'KMDCC', color:'#fd3397', type: 'AC', ccc: ['asset'], premined: 10, notarizeTo: 'kmd', active: true, privacy: null, zRatio: 0.8});
         platform.addAssetChain(KMDCC);
         window.Timelines.scrollY(-KMDCC.params.blockHeight*2);
       }
@@ -262,7 +261,7 @@ Interoperability.set = function() {
       arrow: {x:300, y:150}, arrowFrom: 'bottom', arrowCenter: 300,
       onload: function(_this) {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
-        let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#449146', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
+        let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#917efb', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
         platform.addAssetChain(ROGUE);
         window.Timelines.scrollY(-ROGUE.params.blockHeight*2);
       }
@@ -312,7 +311,7 @@ Interoperability.set = function() {
       new Text("You can also choose to sell him for the higher bid ! ", "bold"),
       new Text("Do as you please, he entirely belongs to you..."),
     ], [
-      new Button("PLAY AGAIN", function() { Interoperability.goToID('start_rogue'); }, {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
+      new Button("PLAY AGAIN", function() { Interoperability.goToID('start_rogue'); }, {float: 'left'}),
       new Button("SELL HIM", function() { Interoperability.sellRogue(0, '5'); that.continue() }, {float: 'right'}),
     ], {
       y: 260,
@@ -393,8 +392,8 @@ Interoperability.set = function() {
     new Text("Or search for 'Komodo' on Telegram, Facebook, Youtube, Medium... :)"),
     new Text(" "),
     ], [
-     new Button("CREATE MORE CHAIN", proxy(this.continue, this), {float: 'left', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2  }),
-     new Button("GO TO CHAPTER", function() { Interoperability.goToID('chapters'); }, { x: 80, float: 'center', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 }),
+     new Button("CREATE MORE CHAIN", proxy(this.continue, this), {float: 'left'}),
+     new Button("GO TO CHAPTER", function() { Interoperability.goToID('chapters'); }, { x: 80, float: 'center'}),
      new Button("END", proxy(this.stop, this), {float: 'right'}),
     ], {
       y: 300,
@@ -405,7 +404,7 @@ Interoperability.set = function() {
   // #18
   dialog = new Dialog('#dialog-AC', [
      new Button("CREATE", function() { Interoperability.createAC(); }, {float: 'left'}),
-     new Button("CLOSE", function() { Interoperability.goToID('part3'); }, {float: 'right', backgroundColor: '#b5c7c7', color: 'white', borderColor: '#b5c7c7', borderWidth: 2 })
+     new Button("CLOSE", function() { Interoperability.goToID('part3'); }, {float: 'right'})
     ], {
       y: 300,
     });

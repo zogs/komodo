@@ -13,7 +13,8 @@ export class Mempool extends createjs.Container {
 			cols: 6,
 			rows: 2,
 			padding: 10,
-			radius: 10,
+			radius: 0,
+			backgroundColor: '#565a66',
 		};
 
 		this.params = extend(defaults,params);
@@ -87,8 +88,8 @@ export class Mempool extends createjs.Container {
 		if(coef > 1) coef = 1;
 
 		// gauge
-		if(coef > 0.9) this.gaugeColor.style = "red";
-		else this.gaugeColor.style = "#AAA";
+		//if(coef > 0.9) this.gaugeColor.style = "#ad1e1e"; //red
+		//else this.gaugeColor.style = "#474b54";
 		let tw = createjs.Tween.get(this.gauge, {override: true, timeScale: window.TimeScale}).to({scaleX: coef}, 500);
 		window.Tweens.add(tw);
 
@@ -99,6 +100,7 @@ export class Mempool extends createjs.Container {
 			let t = createjs.Tween.get(this.warning, { timeScale: window.TimeScale}).to({alpha: 0.2}, 500).to({alpha: 0}, 500).set({saturated: false}, this);
 			window.Tweens.add(t);
 		}
+
 	}
 
 	updateTps() {
@@ -120,31 +122,6 @@ export class Mempool extends createjs.Container {
 
 	drawMempool() {
 
-		// box
-		let pad = this.params.padding;
-		let rad = this.params.radius;
-		let rect = new createjs.Shape();
-		rect.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('#FFF').drawRoundRect(-pad, 0, this.params.width + 2*pad, this.params.height, rad,rad,rad,rad);
-		this.cont_block.addChild(rect);
-
-		// gauge
-		let gauge = new createjs.Shape();
-		this.gaugeColor = gauge.graphics.beginFill('#AAA').command;
-		gauge.graphics.drawRect(0, 0, this.params.width + 3*pad, this.params.height);
-		gauge.x = -pad;
-		gauge.scaleX = 0;
-		gauge.alpha = 0.1;
-		gauge.mask = rect;
-		this.gauge = gauge;
-		this.cont_block.addChild(gauge);
-
-		// warning
-		let warn = new createjs.Shape();
-		warn.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('red').drawRoundRect(-pad, 0, this.params.width + 2*pad, this.params.height, rad,rad,rad,rad);
-		warn.alpha = 0;
-		this.cont_block.addChild(warn);
-		this.warning = warn;
-
 		let asset = window.Queue.getResult('icon_kmd_ac');
 		if(this.params.blockchain.params.id == 'btc') asset = window.Queue.getResult('icon_btc');
 		if(this.params.blockchain.params.id == 'kmd') asset = window.Queue.getResult('icon_kmd');
@@ -153,17 +130,14 @@ export class Mempool extends createjs.Container {
 		if(this.params.blockchain.params.logo !== null) asset = window.Queue.getResult(this.params.blockchain.params.logo);
 
 		//logo
-		let bg = new createjs.Shape();
 		let logo = new createjs.Bitmap(asset);
 		logo.regX = logo.image.width/2;
 		logo.regY = logo.image.height/2;
-		logo.x = this.params.width + logo.image.width /2 + 6;
-		logo.y = this.params.height/2;
-		bg.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('#FFF').drawCircle(0, 0, 20);
-		bg.x = logo.x;
-		bg.y = logo.y;
-		this.cont_block.addChild(bg);
+		logo.x = this.params.width + logo.image.width /2;
+		logo.y = this.params.height/2 - 2;
 		this.cont_block.addChild(logo);
+
+		this.params.width += logo.image.width;
 
 		// ccc icons
 		let cccs = this.params.blockchain.params.ccc;
@@ -185,21 +159,49 @@ export class Mempool extends createjs.Container {
 				let h = cc.icon.image.height/2;
 				cc.x = logo.x + w*2 + 5 + (w*2+5)*i;
 				cc.y = logo.y
-				let bkg = new createjs.Shape();
-				bkg.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('#FFF').drawCircle(0, 0, 20);
-				bkg.x = cc.x;
-				bkg.y = cc.y;
-				this.cont_block.addChild(bkg);
 				this.cont_block.addChild(cc);
 				this.ccc.push(cc);
 			}
 		}
+
+		this.params.width += cccs.length * (logo.image.width+5);
+
+
+		// box
+		let pad = this.params.padding;
+		let rad = this.params.radius;
+		let rect = new createjs.Shape();
+		rect.graphics.setStrokeStyle(1).beginStroke('#FFF').beginFill(this.params.backgroundColor).drawRoundRect(-pad, 0, this.params.width + 3*pad, this.params.height, rad,rad,rad,rad);
+		this.cont_block.addChildAt(rect,0);
+
+		// gauge
+		let gauge = new createjs.Shape();
+		this.gaugeColor = gauge.graphics.beginFill('#474b54').command;
+		gauge.graphics.drawRect(10, 1, this.params.width + 3*pad-2, this.params.height-2);
+		gauge.x = -pad;
+		gauge.scaleX = 0;
+		gauge.mask = rect;
+		this.gauge = gauge;
+		this.cont_block.addChildAt(gauge,1);
+
+		// ruband
+		let ruband = new createjs.Shape();
+		ruband.graphics.beginFill(this.params.blockchain.params.color).drawRect(0,0,10,this.params.height);
+		ruband.x = -10;
+		this.cont_block.addChildAt(ruband,2);
+
+		// warning
+		let warn = new createjs.Shape();
+		warn.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('red').drawRoundRect(-pad, 0, this.params.width + 3*pad, this.params.height, rad,rad,rad,rad);
+		warn.alpha = 0;
+		this.cont_block.addChildAt(warn,3);
+		this.warning = warn;
+
 		// TPS
-		let tps = new createjs.Text('0 tx/s', '12px Arial', "#666");
-		tps.x = logo.x + 30;
-		if(this.ccc.length > 0) tps.x = this.ccc[this.ccc.length-1].x + 30;
+		let tps = new createjs.Text('0 tx/s', 'bold 14px Montserrat', "#FFF");
+		tps.x = rect.x + this.params.width + 3*pad;
 		tps.y = this.params.height/2 - tps.getMeasuredHeight()/2;
-		tps.alpha = 0.5;
+		tps.alpha = 0.8;
 		this.tps_text = tps;
 		this.cont_block.addChild(tps);
 
@@ -306,7 +308,7 @@ export class Mempool extends createjs.Container {
 				y = spanY * l;
 
 				let pos = new createjs.Shape();
-				pos.graphics.setStrokeStyle(1).beginStroke('#DDD').drawCircle(0,0,3);
+				pos.graphics.setStrokeStyle(0).beginFill('#80838c').drawCircle(0,0,3);
 				pos.x = x;
 				pos.y = y;
 				pos.position = i;
@@ -409,7 +411,7 @@ export class Mempool extends createjs.Container {
 		band2.scaleY = 1;
 		band2.alpha = 1;
 		stream.band2 = band2;
-		let MoMoM = new createjs.Text('MoM', '14px Roboto', color);
+		let MoMoM = new createjs.Text('MoM', '14px Montserrat', color);
 		MoMoM.regX = MoMoM.getMeasuredWidth()/2;
 		MoMoM.regY = MoMoM.getMeasuredHeight()/2;
 		MoMoM.x = 25;

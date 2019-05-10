@@ -10,7 +10,7 @@ export class Dialog extends createjs.Container {
     this.buttons = buttons;
     var defaults = {
       x: window.STAGEWIDTH/2,
-      y: window.STAGEHEIGHT/2 - 100,
+      y: window.STAGEHEIGHT/2 - 50,
       dx: 0,
       dy: 0,
       width: null,
@@ -21,8 +21,8 @@ export class Dialog extends createjs.Container {
       onload: null,
       radius: 0,
       paddings: [15,20,15,20],
-      backgroundColor: '#FFF',
-      borderColor: 'grey',
+      backgroundColor: '#1b1e23',
+      borderColor: '#2b6863',
       borderWidth: 1,
       arrowTo: null,
       arrowFrom: 'top',
@@ -270,10 +270,10 @@ export class Dialog extends createjs.Container {
       super();
       var defaults = {
         text: text,
-        font: 'normal 20px Arial',
+        font: 'normal 14px Montserrat',
         width: null,
         height: null,
-        color: '#6b8a8a',
+        color: '#FFF',
         paddingTop: 5,
         paddingBottom: 5,
         paddingLeft: 10,
@@ -387,13 +387,13 @@ export class Dialog extends createjs.Container {
       var defaults = {
         width: null,
         height: null,
-        font: '22px Roboto',
-        radius: 2,
+        font: '18px Montserrat',
+        radius: 0,
         paddings: [12, 30, 12, 30],
         color: 'white',
-        backgroundColor: "#316565",
+        backgroundColor: "#2d313c",
         borderWidth: 1,
-        borderColor: '#316565',
+        borderColor: '#56f3c0',
         float: 'center',
         x: 0,
         y: 0,
@@ -420,6 +420,7 @@ export class Dialog extends createjs.Container {
       text.textAlign = 'center';
       text.regX = 0;
       text.regY = h/2;
+      text.y = 2;
 
       let bg = new createjs.Shape();
       bg.graphics.setStrokeStyle(this.params.borderWidth).beginStroke(this.params.borderColor).beginFill(this.params.backgroundColor).drawRoundRectComplex(0-pad[3], 0-pad[0], w + pad[1]*2, h + pad[2]*2 , this.params.radius, this.params.radius, this.params.radius, this.params.radius);

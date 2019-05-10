@@ -40,7 +40,7 @@ export class Chapter extends createjs.Container {
   goToID(id) {
 
     if(this.current !== null) {
-      this.current.close();
+      this.dialogs.map(d => d.close());
     }
     let dialog = this.dialogs.find(d => d.params.id == id);
     dialog.open();
@@ -49,7 +49,7 @@ export class Chapter extends createjs.Container {
 
   continue() {
 
-    this.current.close();
+    this.dialogs.map(d => d.close());
 
     let idx = this.dialogs.indexOf(this.current);
     if(idx+1 > this.dialogs.length-1) {
@@ -67,7 +67,7 @@ export class Chapter extends createjs.Container {
 
   stop() {
 
-    this.current.close();
+    this.dialogs.map(d => d.close());
 
     this.destroy();
   }
