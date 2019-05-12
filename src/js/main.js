@@ -175,25 +175,24 @@ window.initTest = function(env) {
     });
     window.Cont_timeline.addChild(window.Timelines);
 
-    let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#306565', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
-    let SC1 = new Blockchain({id: 'SC1', name: 'Scaling Chain', color:'#569b9b', type: 'SC', premined: 6, notarizeTo: 'kmd'});
-    let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd', privacy: 1});
-    let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd', logo: 'icon_wolf'});
+    let komodo = new Blockchain({id: 'kmd', name: 'KMD Chain', color:'#53f1be', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big", notarizeInterval:10});
+    let SC1 = new Blockchain({id: 'SC1', name: 'Scaling Chain', color:'#54ad4d', type: 'SC', premined: 6, notarizeTo: 'kmd'});
+    //let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#198201', type: 'AC', ccc: ['dice','reward','asset'], premined: 6, notarizeTo: 'kmd', privacy: 1});
+    //let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#d49100', type: 'AC', ccc: ['oracle','faucet','cog'], premined: 6, notarizeTo: 'kmd', logo: 'icon_wolf'});
+    //let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#449146', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
 
-    let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#449146', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
 
-
-    var komodoPlatform = new Platform({y: 250, id: 'kmd', name: 'KOMODO PLATFORM',color: '#306565',backgroundColor: '#306565',backgroundAlpha: 0.2,chains: [komodo],emitterTPS: 50});
+    var komodoPlatform = new Platform({y: 260, id: 'kmd', name: ' ',color: '#53f1be', borderColor: '#53f1be', chains: [komodo], emitterTPS: 50});
     komodoPlatform.addChain(SC1);
-    komodoPlatform.addChain(AC1);
-    komodoPlatform.addChain(AC2);
-    komodoPlatform.addChain(ROGUE);
+    //komodoPlatform.addChain(AC1);
+    //komodoPlatform.addChain(AC2);
+    //komodoPlatform.addChain(ROGUE);
     window.Platforms.push(komodoPlatform);
     komodoPlatform.drawTotalTps();
 
 
-    let bitcoin = new Blockchain({id: 'btc', name: 'BTC Chain', color: '#d38d10', blockTime: 10, 'premined': 0, maxTps: 10});
-    var bitcoinPlatform = new Platform({y: 100, id:'bitcoin', name: 'BITCOIN',color: '#d38d10',backgroundColor: null,chains: [bitcoin],height: 120, emitterTPS: 8, txWeight: 1});
+    let bitcoin = new Blockchain({id: 'btc', name: 'BTC Chain', color: '#eb8c18', blockTime: 10, 'premined': 0, maxTps: 10});
+    var bitcoinPlatform = new Platform({y: 110, id:'bitcoin', name: ' ',color: '#eb8c18', chains: [bitcoin],height: 120, emitterTPS: 8, txWeight: 1});
     window.Platforms.push(bitcoinPlatform);
 
 
@@ -219,11 +218,11 @@ window.initTour = function() {
     // init Tour
     window.Tour = new Tour();
     // Intro chapter
-    window.Tour.addChapter(Intro);
+    //window.Tour.addChapter(Intro);
     // First chapter : SECURITY
-    window.Tour.addChapter(Security);
+    //window.Tour.addChapter(Security);
     // Second chapter : SCALABILITY
-    window.Tour.addChapter(Scalability);
+    //window.Tour.addChapter(Scalability);
     // Third chapter
     window.Tour.addChapter(Interoperability);
 

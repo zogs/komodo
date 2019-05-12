@@ -32,9 +32,11 @@ export class Timeline extends createjs.Container {
 		this.cont_blockchains = new createjs.Container();
 		this.cont_sliding = new createjs.Container();
 		this.cont_foreground = new createjs.Container();
+		this.cont_timesbar = new createjs.Container();
 
 		this.cont_sliding.addChild(this.cont_lines, this.cont_blockchains);
-		this.addChild(this.cont_background, this.cont_sliding, this.cont_foreground);
+
+		this.addChild(this.cont_background, this.cont_sliding, this.cont_foreground, this.cont_timesbar);
 
 		this.init(params);
 	}
@@ -44,7 +46,6 @@ export class Timeline extends createjs.Container {
 		this.drawLines();
 		this.initTimeline();
 		this.initCurrentTime();
-		this.drawBackground();
 
 		this.newMinuteListener = window.Stage.on('newminute', function(event) {
 			if(event.time >=5) {
@@ -52,13 +53,6 @@ export class Timeline extends createjs.Container {
 				this.removeLines();
 			}
 		}, this);
-	}
-
-	drawBackground() {
-
-		let rect = new createjs.Shape();
-		rect.graphics.beginFill(this.params.backgroundColor).setStrokeStyle(0).drawRect(0,0,window.STAGEWIDTH, 40);
-		this.cont_background.addChild(rect);
 	}
 
 	reset() {
@@ -81,7 +75,7 @@ export class Timeline extends createjs.Container {
 
 	initTimeline() {
 
-		let nb_columns = this.params.width / this.params.minuteWidth + 1;
+		let nb_columns = this.params.width / this.params.minuteWidth + 2;
 		for(let i=1,ln=nb_columns; i<ln; i++) {
 			this.addLine(i);
 		}
@@ -114,12 +108,17 @@ export class Timeline extends createjs.Container {
 		this.cont_lines.addChild(line);
 		this.lines.push(line);
 
+		let bg = new createjs.Shape();
+		bg.graphics.beginFill(this.params.backgroundColor).setStrokeStyle(0).drawRect(0,0,this.params.minuteWidth, 40);
+		bg.x = (i-1)*this.params.minuteWidth;
+		this.cont_timesbar.addChild(bg);
+
 		let font = (i%10 == 0)? 'bold 12px Montserrat' : '12px Montserrat';
 		let minute = new createjs.Text(i+' min', font, this.params.color);
 			minute.x = i*this.params.minuteWidth - minute.getMeasuredWidth() - 2;
 			minute.y = this.params.paddingTop + 15;
 		minute.cache(0, 0, minute.getMeasuredWidth(), minute.getMeasuredHeight());
-		this.cont_lines.addChild(minute);
+		this.cont_timesbar.addChild(minute);
 		this.lines.push(minute);
 
 		this.totalTime = i;
@@ -162,6 +161,10 @@ export class Timeline extends createjs.Container {
 							.call(proxy(this.incrementTime, this));
 		window.Tweens.add(tw);
 		this.slideTween = tw;
+
+		let tw2 = createjs.Tween.get(this.cont_timesbar, { timeScale: window.TimeScale }).to({x: this.cont_timesbar.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds)
+		window.Tweens.add(tw2);
+
 		window.Emitters.map(e => e.start());
 		window.Platforms.map(p => p.start());
 
@@ -197,6 +200,9 @@ export class Timeline extends createjs.Container {
 							.call(proxy(this.incrementTime, this));
 		window.Tweens.add(tw);
 		this.slideTween = tw;
+
+		let tw2 = createjs.Tween.get(this.cont_timesbar, { timeScale: window.TimeScale }).to({x: this.cont_timesbar.x - this.params.minuteWidth}, 1000 * this.params.minuteSeconds)
+		window.Tweens.add(tw2);
 
 	}
 

@@ -15,6 +15,8 @@ export class Platform extends createjs.Container {
       color: null,
       backgroundColor: 'rgba(255,255,255,0.1)',
       backgroundAlpha: 1,
+      borderColor: 'rgba(0,0,0,0)',
+      borderWidth: 0,
       emitterTPS: 1,
       txWeight: 20,
       chains : []
@@ -176,20 +178,20 @@ export class Platform extends createjs.Container {
 
   drawTotalTps() {
 
-    let total = new createjs.Text('TOTAL','bold 16px Montserrat', '#FFF');
-    total.x = window.STAGEWIDTH - 240;
-    total.y = this.y - 10;
-    this.cont_tpstext.addChild(total);
-
     let txs = new createjs.Text('tx/s', "bold 30px Montserrat", '#FFF');
-    txs.x = window.STAGEWIDTH - 240;
-    txs.y = this.y + 7;
+    txs.x = 1350;
+    txs.y = this.y - 3;
     this.cont_tpstext.addChild(txs);
+
+    let total = new createjs.Text('TOTAL','bold 16px Montserrat', '#FFF');
+    total.x = txs.x;
+    total.y = this.y - 20;
+    this.cont_tpstext.addChild(total);
 
 
     this.totalTpsTx = new createjs.Text('100', "bold 60px Montserrat", '#FFF');
-    this.totalTpsTx.x = window.STAGEWIDTH - 250;
-    this.totalTpsTx.y = this.y - 20;
+    this.totalTpsTx.x = txs.x - 10;
+    this.totalTpsTx.y = this.y - 30;
     this.totalTpsTx.textAlign = 'right';
     this.cont_tpstext.addChild(this.totalTpsTx);
 
@@ -209,10 +211,15 @@ export class Platform extends createjs.Container {
   drawBackground() {
 
     this.cont_background.removeAllChildren();
+    let pad = 10;
     let height = (this.params.height)? this.params.height : this.params.chainHeight * this.chains.length;
+    height += pad*2;
     let bkg = new createjs.Shape();
-    bkg.graphics.beginLinearGradientFill([this.params.backgroundColor,"rgba(255,255,255,0)"], [0, 1], 0, 0, window.STAGEWIDTH-100, 0).drawRect(-5, 0, window.STAGEWIDTH + 10, height);
-    bkg.y = this.y - this.params.chainHeight/2;
+    bkg.graphics.beginStroke(this.params.borderColor)
+                .setStrokeStyle(this.params.borderWidth)
+                .beginLinearGradientFill([this.params.backgroundColor,"rgba(255,255,255,0)"], [0, 1], 0, 0, window.STAGEWIDTH-100, 0)
+                .drawRect(-5, 0, window.STAGEWIDTH + 10, height);
+    bkg.y = this.y - this.params.chainHeight/2 - pad;
     this.cont_background.addChild(bkg);
   }
 

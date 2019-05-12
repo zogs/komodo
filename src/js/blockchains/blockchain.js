@@ -221,6 +221,7 @@ export class Blockchain extends createjs.Container {
 		trans.y = coor.y;
 		trans.shape.alpha = 0;
 		trans.image.alpha = 1;
+		trans.image.x -= this.params.blockWidth/2;
 		blockchain.mempool.cont_transaction.addChild(trans);
 
 		let tw = createjs.Tween.get(trans, {timeScale: window.TimeScale}).to({x: trans.x + this.params.blockWidth/2, y: trans.y - this.params.blockHeight/2, alpha: 0.5}, 800)
@@ -229,7 +230,7 @@ export class Blockchain extends createjs.Container {
 				trans.setPosition(trans.x, trans.y);
 				blockchain.mempool.addTransaction(trans);
 				blockchain.mempool.reorderTransactions();
-				createjs.Tween.get(trans.image).to({ rotation: -1280, scale: 0, alpha: 0}, 200);
+				createjs.Tween.get(trans.image).to({ alpha: 0}, 200);
 				createjs.Tween.get(trans.shape).to({ alpha: 1}, 200);
 
 				let ev = new createjs.Event('notarization_end');

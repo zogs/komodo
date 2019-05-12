@@ -66,7 +66,7 @@ Security.set = function() {
 
   // #4
   dialog = new Dialog(`
-    <p>In order to increase the security of the network, <strong>KOMODO</strong> backs up its chain periodically to the <i>Bitcoin</i> blockchain.</p>
+    <p>In order to increase the security of the network, <strong>KOMODO</strong> backs up its chain periodically to the <strong class="btc">Bitcoin</strong> blockchain.</p>
     <p>By doing so an attacker would have to first compromise BTC in order to attack the KMD chain!</p>
     <p></p>
     <p>Let's wait for the next notarization to see this in action...</p>
@@ -144,9 +144,9 @@ Security.set = function() {
 
   // #7
   dialog = new Dialog(`
-    <p><strong>By notarizing</strong> the KMD chain into <i>Bitcoin</i>, <strong>KOMODO</strong> takes avantage of the <i>Bitcoin</i> hashrate and security.</p>
+    <p><strong>By notarizing</strong> the KMD chain into <strong class="btc">Bitcoin</strong>, <strong>KOMODO</strong> takes avantage of the <strong class="btc">Bitcoin</strong> hashrate and security.</p>
     <p>As soon as the notarization is confirmed it equals an immutable record of KOMODO transactions</p>
-    <p>written onto the Bitcoin blockchain,</p>
+    <p>written onto the <strong class="btc">Bitcoin</strong> blockchain,</p>
     <p> </p>
     <p>Therefore, it becomes impossible to reorg (51% attack) the Komodo blockchain beyond this <i>"checkpoint"</i> !</p>
     `, [
@@ -160,7 +160,7 @@ Security.set = function() {
   dialog = new Dialog(`
     <p>This security mechanism is called <strong>Delayed Proof-of-Work (dPOW)</strong>.</p>
     <p>In simple worlds: This technology is a solution for 51% attacks. If you want to attack</p>
-    <p><strong>KOMODO</strong> you have to first attack Bitcoin</p>
+    <p><strong>KOMODO</strong> you have to first attack <strong class="btc">Bitcoin</strong></p>
     <p>And good luck with that.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
@@ -180,7 +180,7 @@ Security.set = function() {
 
   // #10
   dialog = new Dialog(`
-    <p>Did you know that <strong>KOMODO</strong> can provide <i>Bitcoin level security</i> to other independant blockchains ?</p>
+    <p>Did you know that <strong>KOMODO</strong> can provide <strong class="btc">Bitcoin</strong> level security</strong> to other independant blockchains ?</p>
     <p></p>
     <p>Let's look on some examples.</p>
     `, [
@@ -237,7 +237,7 @@ Security.set = function() {
   // #12
   dialog = new Dialog(`
     <p>These blockchains are notarizing onto <strong>KOMODO</strong>.</p>
-    <p>They now benefit from the <strong>KOMODO</strong> and <strong>Bitcoin</strong> level security.</p>
+    <p>They now benefit from the <strong>KOMODO</strong> and <strong class="btc">Bitcoin</strong> level security.</p>
     <p>An attacker would need to attack 3 blockchains instead of just 1, that should be pretty hard, don't you think?</p>
     <p></p>
     <p>As a matter of fact, <strong>Einsteinium</strong> alreay resisted one (known) 51% attack since they implemented dPoW </p>

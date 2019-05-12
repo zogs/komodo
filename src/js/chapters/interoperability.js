@@ -16,12 +16,12 @@ Interoperability.init = function() {
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
   let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#fd3397', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
   let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#917efb', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
-  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be',backgroundColor: '#306565', chains: [komodo, AC1, AC2], emitterTPS: 50,});
+  var komodoPlatform = new Platform({y: 260, id: 'kmd', name: ' ', color: '#53f1be', borderColor: '#53f1be', chains: [komodo, AC1, AC2], emitterTPS: 50,});
   window.Platforms.push(komodoPlatform);
 
   let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#eb8c18', blockTime: 10, 'premined': 0, maxTps: 10});
   window.Blockchains.push(bitcoin);
-  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: 'Bitcoin', color: '#eb8c18', backgroundColor: null, chains: [bitcoin], emitterTPS: 10});
+  let bitcoinPlatform = new Platform({ y: 110, id: 'btc', name: ' ', color: '#eb8c18', chains: [bitcoin], emitterTPS: 10});
   window.Platforms.push(bitcoinPlatform);
 
   //add some transaction to bitcoin
@@ -56,10 +56,10 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #2
-  dialog = new Dialog([
-    new Text('With Komodo platform anyone can create his own blockchain instantly and (for) free!'),
-    new Text('Those BTC and ETH compatible blockchains are called Assetchains!', 'bold'),
-    ], [
+  dialog = new Dialog(`
+    <p>With <strong>KOMODO</strong> platform anyone can create his own blockchain instantly and (for) free!</p>
+    <p>Those BTC and ETH compatible blockchains are called Assetchains!</p>
+    `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
       y: 350,
@@ -76,13 +76,13 @@ Interoperability.set = function() {
 
 
   // #3
-  dialog = new Dialog([
-    new Text('Assetchains are precisely configurable and offer wide range of configuration options:'),
-    new Text('total supply, premine, block rewards, hashing algorithm, PoS, PoW, etc.  ', 'italic'),
-    new Text('You can create a Proof-of-Work chain or a 100% Proof-of-Stake chain'),
-    new Text('and actually you could even go with a 50%POW & 50%POS mechanism.'),
-    new Text('With Komodo it is even possible to easily integrate Custom Consensus (CC) rules!'),
-    ], [
+  dialog = new Dialog(`
+    <p>Assetchains are precisely configurable and offer wide range of configuration options:</p>
+    <p>total supply, premine, block rewards, hashing algorithm, PoS, PoW, etc.</p>
+    <p>You can create a Proof-of-Work chain or a 100% Proof-of-Stake chain</p>
+    <p>and actually you could even go with a 50%POW & 50%POS mechanism.</p>
+    <p>With Komodo it is even possible to easily integrate Custom Consensus (CC) rules!</p>
+    `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
       y: 350,
@@ -90,13 +90,13 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #4
-  dialog = new Dialog([
-    new Text("Komodo gives its users and ecosystem developers the choice and doesnt mind extra work.", 'bold'),
-    new Text("CC, the Crypto Conditions, can be imported to a blockchain like a plug & play module! "),
-    new Text("You can change the logic of a blockchain on core/consensus level and Komodo has many"),
-    new Text("CC modules in work. You want to make a casino blockchain with dice? You want to sell"),
-    new Text("data on the blockchain and earn from it? Or lets say you want to play 'Rogue'?"),
-    ], [
+  dialog = new Dialog(`
+    <p>Komodo gives its users and ecosystem developers the choice and doesnt mind extra work.</p>
+    <p>CC, the Crypto Conditions, can be imported to a blockchain like a plug & play module!</p>
+    <p>You can change the logic of a blockchain on core/consensus level and Komodo has many</p>
+    <p>CC modules in work. You want to make a casino blockchain with dice? You want to sell</p>
+    <p>data on the blockchain and earn from it? Or lets say you want to play 'Rogue'?</p>
+    `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
       y: 350,
@@ -104,11 +104,11 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #5
-  dialog = new Dialog([
-    new Text("This Crypto Conditions technology (CC) is similar to a smart contract, but its much more,"),
-    new Text("its like when you get your own ETH platform - not just one smartcontract!", 'bold'),
-    new Text("And this is not enough. Komodo has made all their technologies fully interoperable!"),
-    ], [
+  dialog = new Dialog(`
+    <p>This Crypto Conditions technology (CC) is similar to a smart contract, but its much more,</p>
+    <p>its like when you get your own ETH platform - not just one smartcontract!</p>
+    <p>And this is not enough. Komodo has made all their technologies fully interoperable!</p>
+    `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
       y: 350,
@@ -116,11 +116,11 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #6
-  dialog = new Dialog([
-    new Text("Any new Blockchain that was built with Komodo (i heard soon its possible with some clicks!),"),
-    new Text("can be built with the Crypto Conditions. Many chains exist already with such custom function. "),
-    new Text("Let me show you an example: "),
-    ], [
+  dialog = new Dialog(`
+    <p>Any new Blockchain that was built with Komodo (i heard soon its possible with some clicks!),</p>
+    <p>can be built with the Crypto Conditions. Many chains exist already with such custom function. </p>
+    <p>Let me show you an example: </p>
+    `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'})
     ], {
       y: 350,
@@ -130,9 +130,9 @@ Interoperability.set = function() {
 
 
   // #7
-  dialog = new Dialog([
-    new Text("This is the KMDICE, a Komodo generated Blockchain."),
-    ], [
+  dialog = new Dialog(`
+    <p>This is the KMDICE, a Komodo generated Blockchain.</p>
+    `, [
     ], {
       y: 470,
       arrow: {x:0, y:50}, arrowFrom: 'bottom',
@@ -146,21 +146,21 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #8
-  dialog = new Dialog([
-    new Text("This chain has a new CC plugin ('smart contract') that lets you roll the dice."),
-    new Text("The KMDICE chain has new commands because of the CC plugin (CC_DICE) and so you"),
-    new Text("can create transaction which are like a bet - if you win you get rewarded automagic !", 'bold'),
-    new Text("Want to give it a try (gamble responsibly!)?"),
-    ], [
+  dialog = new Dialog(`
+    <p>This chain has a new CC plugin ('smart contract') that lets you roll the dice.</p>
+    <p>The KMDICE chain has new commands because of the CC plugin (CC_DICE) and so you</p>
+    <p>can create transaction which are like a bet - if you win you get rewarded automagic !</p>
+    <p>Want to give it a try (gamble responsibly!)?</p>
+    `, [
     new Button("PLACE A BET", function() { Interoperability.bet(); window.slowMo(0.7, 2000); that.continue(); }, {float: 'right'})
     ], {
     });
   this.addDialog(dialog);
 
   // #9
-  dialog = new Dialog([
-    new Text("Look here !"),
-    ], [
+  dialog = new Dialog(`
+    <p>Look here !</p>
+    `, [
     ], {
       x: 1000, y: 620,
       arrow: {x:30, y:-50}, arrowFrom: 'top',
@@ -169,11 +169,11 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #10
-  dialog = new Dialog([
-    new Text("WIN!" , 'bold'),
-    new Text("Did you see the gambling transaction going back to the Komodo blockchain via cluster technology?"),
-    new Text("This is part of the multichain sync protocol from jl777 and his team!"),
-    ], [
+  dialog = new Dialog(`
+    <p><strong>WIN!</strong></p>
+    <p>Did you see the gambling transaction going back to the Komodo blockchain via cluster technology?</p>
+    <p>This is part of the multichain sync protocol from jl777 and his team!</p>
+    `, [
     new Button("WANT TO BET AGAIN?", proxy(this.continue, this), {float: 'left'}),
     new Button("CONTINUE", function() { Interoperability.goToID('part2'); }, {float: 'right'})
     ], {
@@ -185,10 +185,10 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #11
-  dialog = new Dialog([
-    new Text("Ok let's gamble "),
-    new Text("(Spoiler: you will most likely win :)", '16px arial'),
-    ], [
+  dialog = new Dialog(`
+    <p>Ok let's gamble </p>
+    <p><small>(Spoiler: you will most likely win :)</small></p>
+    `, [
     new Button("PLACE A BET", function() { Interoperability.bet(); }, {float: 'left'}),
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
@@ -197,13 +197,13 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #12
-  dialog = new Dialog([
-    new Text("Unlike many other 'smart' platform Komodo technology is free and there is no gas! "),
-    new Text('The concept and architecture of the Komodoplatform aligns with their vision'),
-    new Text("Independently connect all chains in a free and open world", 'bold'),
-    new Text(" "),
-    new Text("CC technology and Komodoplatform make your chain compatible with the everything!"),
-    ], [
+  dialog = new Dialog(`
+    <p>Unlike many other 'smart' platform Komodo technology is free and there is no gas! </p>
+    <p>The concept and architecture of the Komodoplatform aligns with their vision</p>
+    <p>Independently connect all chains in a free and open world"</p>
+    <p> </p>
+    <p>CC technology and Komodoplatform make your chain compatible with the everything!</p>
+    `, [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
       id: 'part2',
@@ -214,14 +214,14 @@ Interoperability.set = function() {
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-    new Text("For example, Komodo has outsourced shielded zTransactions"),
-    new Text("to their own assetchain: KMDCC"),
-    new Text("Their system maintains a 1:1 ratio with the main KMD chain thanks to their MoMoM tech"),
-    new Text("every coin in KMDCC equals exactly 1 KMD coin in the KMD mainnet !", 'bold'),
-    new Text("Pretty amazing, right ?"),
-    new Text(""),
-    ], [
+  dialog = new Dialog(`
+    <p>For example, Komodo has outsourced shielded zTransactions</p>
+    <p>to their own assetchain: KMDCC</p>
+    <p>Their system maintains a 1:1 ratio with the main KMD chain thanks to their MoMoM tech</p>
+    <p>every coin in KMDCC equals exactly 1 KMD coin in the KMD mainnet !</p>
+    <p>Pretty amazing, right ?</p>
+    <p></p>
+    `, [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
       y: 370,
@@ -237,11 +237,11 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
 
-  dialog = new Dialog([
-      new Text("One last example to show you the power of Crypto Conditions (CC)..."),
-      new Text("Let's talk about ROGUE !", 'bold'),
-      new Image(new createjs.Bitmap(window.Queue.getResult('icon_rogue'))),
-    ],[
+  dialog = new Dialog(`
+      <p>One last example to show you the power of Crypto Conditions (CC)...</p>
+      <p>Let's talk about ROGUE !</p>
+      <p><img src="dist/images/icon/rogue.png"></p>
+    `,[
       new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
     ],{
       y: 350
@@ -249,12 +249,12 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
 
-  dialog = new Dialog([
-      new Text("ROGUE was a dungeon crawling video game developed around 1980. It was pretty popular back then", 'italic'),
-      new Text("and lead the way for ROGUE-like video games !", 'italic'),
-      new Text(" "),
-      new Text("And now ROGUE is playable on the blockchain with Komodo !", "bold"),
-    ], [
+  dialog = new Dialog(`
+      <p>ROGUE was a dungeon crawling video game developed around 1980. It was pretty popular back then</p>
+      <p>and lead the way for ROGUE-like video games !</p>
+      <p> </p>
+      <p>And now ROGUE is playable on the blockchain with Komodo !</p>
+    `, [
       new Button("CONTINUE", proxy(this.continue, this), {float: 'center'}),
     ], {
       x: 760, y: 370,
@@ -269,20 +269,20 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
 
-  dialog = new Dialog([
-      new Text("To demonstrate how it work, let's pretend to start a game ! "),
-      new Text(" "),
-    ], [
+  dialog = new Dialog(`
+      <p>To demonstrate how it work, let's pretend to start a game ! </p>
+      <p> </p>
+    `, [
       new Button("START A GAME", function() { Interoperability.startRogue(); that.continue(); }, {float: 'center'}),
     ], {
       id: 'start_rogue',
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-      new Text("The game is created and broadcasted to the blockchain "),
-      new Text("and you can start playing via your game client... "),
-    ], [
+  dialog = new Dialog(`
+      <p>The game is created and broadcasted to the blockchain </p>
+      <p>and you can start playing via your game client... </p>
+    `, [
       new Button("CONTINUE", function() { that.continue(); }, {float: 'center'}),
     ], {
       x: 900, y: 390,
@@ -290,27 +290,27 @@ Interoperability.set = function() {
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-      new Text("Then, you valiantly fight numerous trolls and hobgobelins for hours and now you want to quit the game."),
-      new Text(" "),
-      new Text("Your warrior and his equipments will be save on the blockchain using non-fungible token !", "bold"),
-      new Text("And combined with the Crypto Conditions (CC) technology, any gold you have collected in-game is transferred into real ROGUE coins,"),
-      new Text("connecting the gaming world with the real world of cryptocurrencies !"),
-      new Text("(That's pretty amazing if you think about it...)", 'italic'),
-    ], [
+  dialog = new Dialog(`
+      <p>Then, you valiantly fight numerous trolls and hobgobelins for hours and now you want to quit the game.</p>
+      <p> </p>
+      <p>Your warrior and his equipments will be save on the blockchain using non-fungible token !</p>
+      <p>And combined with the Crypto Conditions (CC) technology, any gold you have collected in-game is transferred into real ROGUE coins,</p>
+      <p>connecting the gaming world with the real world of cryptocurrencies !</p>
+      <p>(That's pretty amazing if you think about it...)</p>
+    `, [
       new Button("QUIT AND SAVE", function() { Interoperability.saveRogue(0, '5'); that.continue(); }, {float: 'center'}),
     ], {
       y: 260,
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-      new Text("Your character is now a unique one, written on the blockchain, ready to be"),
-      new Text("use again in single training game or multiplayer tournament !"),
-      new Text(" "),
-      new Text("You can also choose to sell him for the higher bid ! ", "bold"),
-      new Text("Do as you please, he entirely belongs to you..."),
-    ], [
+  dialog = new Dialog(`
+      <p>Your character is now a unique one, written on the blockchain, ready to be</p>
+      <p>use again in single training game or multiplayer tournament !</p>
+      <p> </p>
+      <p>You can also choose to sell him for the higher bid !</p>
+      <p>Do as you please, he entirely belongs to you...</p>
+    `, [
       new Button("PLAY AGAIN", function() { Interoperability.goToID('start_rogue'); }, {float: 'left'}),
       new Button("SELL HIM", function() { Interoperability.sellRogue(0, '5'); that.continue() }, {float: 'right'}),
     ], {
@@ -319,14 +319,14 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
 
-  dialog = new Dialog([
-      new Text("Sold !", 'bold'),
-      new Text("Imagine all the possibility its offers !"),
-      new Text("From blockchain-based market places of real games characters, or even supply, "),
-      new Text("equipments, magic swords... to on-chain characters shared across differents compatibles games, etc... "),
-      new Text("Komodo game's ROGUE is the first of its kind, but is a good example of what can be achieve with the power"),
-      new Text("of Komodo Crypto Contitions (CC) technology."),
-    ], [
+  dialog = new Dialog(`
+      <p><strong>Sold !</strong></p>
+      <p>Imagine all the possibility its offers !</p>
+      <p>From blockchain-based market places of real games characters, or even supply, </p>
+      <p>equipments, magic swords... to on-chain characters shared across differents compatibles games, etc... </p>
+      <p>Komodo game's ROGUE is the first of its kind, but is a good example of what can be achieve with the power</p>
+      <p>of Komodo Crypto Contitions (CC) technology.</p>
+    `, [
       new Button("CONTINUE", function() {  Interoperability.continuousRogue(); that.continue() }, {float: 'right'}),
     ], {
       y: 260,
@@ -335,11 +335,11 @@ Interoperability.set = function() {
 
 
   // #13
-  dialog = new Dialog([
-    new Text("Do you remember that anyone can create a blockchain on the Komodo Platform ?"),
-    new Text("It's easy and and just required some clicking !"),
-    new Text("Would you like to try ?"),
-    ], [
+  dialog = new Dialog(`
+    <p>Do you remember that anyone can create a blockchain on the Komodo Platform ?</p>
+    <p>It's easy and and just required some clicking !</p>
+    <p>Would you like to try ?</p>
+    `, [
      new Button("YES", proxy(this.continue, this), {float: 'center'}),
     ], {
       y: 370,
@@ -355,43 +355,43 @@ Interoperability.set = function() {
   this.addDialog(dialog);
 
   // #15
-  dialog = new Dialog([
-    new Text("Congratulation ! Your chain is now live in the Komodo universe!", 'bold'),
-    new Text(" "),
-    new Text("But don't worry, you do not rely on Komodo Platform. You are totally independant!"),
-    new Text("Let's say one Komodo dissapears one day (kidnapped by aliens), then your chain will continue to run normally !"),
-    new Text("That's a good argument to use KMD, isn't it ?"),
-    ], [
+  dialog = new Dialog(`
+    <p><strong>Congratulation !</strong> Your chain is now live in the Komodo universe!</p>
+    <p> </p>
+    <p>But don't worry, you do not rely on Komodo Platform. You are totally independant!</p>
+    <p>Let's say one Komodo dissapears one day (kidnapped by aliens), then your chain will continue to run normally !</p>
+    <p>That's a good argument to use KMD, isn't it ?</p>
+    `, [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'})
     ], {
     });
   this.addDialog(dialog);
 
   // #16
-  dialog = new Dialog([
-    new Text("There's another very good point for using Komodo platform :"),
-    new Text(" "),
-    new Text("Your coin is instantly tradable !", 'bold'),
-    new Text("No need to wait for costy and slow Exchange listings. Your coin will already be tradable on the next gen. decentralized exchange"),
-    new Text("based on an invention called 'SPV Atomic Swaps' that was developed by KMD : BarterDEX"),
-    new Text("BarterDEX, is Komodos 3rd generation DEX and natively mobile ready - on Smartphone! "),
-    ], [
+  dialog = new Dialog(`
+    <p>There's another very good point for using Komodo platform :</p>
+    <p> </p>
+    <p>Your coin is instantly tradable !</p>
+    <p>No need to wait for costy and slow Exchange listings. Your coin will already be tradable on the next gen. decentralized exchange</p>
+    <p>based on an invention called 'SPV Atomic Swaps' that was developed by KMD : BarterDEX</p>
+    <p>BarterDEX, is Komodos 3rd generation DEX and natively mobile ready - on Smartphone! </p>
+    `, [
      new Button("CONTINUE", proxy(this.continue, this), {float: 'center'})
     ], {
     });
   this.addDialog(dialog);
 
   // #17
-  dialog = new Dialog([
-    new Text("There is much more to say about Komodo but i'll stop here for now :)"),
-    new Text(" "),
-    new Text("If you are curious for more information, please come join our Discord !"),
-    new Link("https://komodoplatform.com/discord","https://komodoplatform.com/discord"),
-    new Text("And pls follow us on Twitter"),
-    new Link("https://twitter.com/KomodoPlatform","https://twitter.com/KomodoPlatform"),
-    new Text("Or search for 'Komodo' on Telegram, Facebook, Youtube, Medium... :)"),
-    new Text(" "),
-    ], [
+  dialog = new Dialog(`
+    <p>There is much more to say about Komodo but i'll stop here for now :)</p>
+    <p> </p>
+    <p>If you are curious for more information, please come join our Discord !</p>
+    <p><a href="https://komodoplatform.com/discord">https://komodoplatform.com/discord</a></p>
+    <p>And please follow us on Twitter</p>
+    <p><a href="https://twitter.com/KomodoPlatform">https://twitter.com/KomodoPlatform</a></p>
+    <p>Or search for 'Komodo' on Telegram, Facebook, Youtube, Medium... :)</p>
+    <p> </p>
+    `, [
      new Button("CREATE MORE CHAIN", proxy(this.continue, this), {float: 'left'}),
      new Button("GO TO CHAPTER", function() { Interoperability.goToID('chapters'); }, { x: 80, float: 'center'}),
      new Button("END", proxy(this.stop, this), {float: 'right'}),
@@ -410,9 +410,9 @@ Interoperability.set = function() {
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog([
-      new Text("You can replay a chapter if you want.")
-    ],[
+  dialog = new Dialog(`
+      <p>You can replay a chapter if you want.</p>
+    `,[
     new Button("SECURITY", proxy(window.Tour.goToChapter,window.Tour,['Security']), { float: 'left'}),
     new Button("SCALABILITY", proxy(window.Tour.goToChapter,window.Tour,['Scalability']), { float: 'center', x: -40}),
     new Button("INTEROPERABILITY", proxy(this.replay, this), { float: 'right'}),

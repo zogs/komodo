@@ -74,10 +74,10 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog(`
-    <p>It began as a <strong>Zcash fork</strong> which is a <strong>fork of Bitcoin</strong>.</p>
-    <p>So <strong>KOMODO</strong> inherits all the <i>Bitcoin</i> and <i>Zcash</i> features plus a dozen of own features</p>
+    <p>It began as a <strong class="zcash">Zcash</strong> which is a fork of <strong class="btc">Bitcoin</strong>.</p>
+    <p>So <strong>KOMODO</strong> inherits all the <strong class="btc">Bitcoin</strong> and <strong class="zcash">Zcash</strong> features plus a dozen of own features</p>
     <p>A custom consensus framework capable of a unique <i>"smartcontract like"</i> experience,</p>
-    <p>and a security protocol which recycles Bitcoin hash power for a KMD backup on BTC!</p>
+    <p>and a security protocol which recycles <strong class="btc">Bitcoin</strong> hash power for a KMD backup on BTC!</p>
     `, [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
       new Button('ADD Z-TRANSACTION', function() {

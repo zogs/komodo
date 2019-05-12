@@ -14,6 +14,8 @@ canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #
 .dialog > h1 { font-family: 'Montserrat', 'Arial', sans-serif; font-size: 60px; }
 .dialog div.row { width: 100%; margin: 10px 0;}
 .dialog strong { color:#50f3be; }
+.dialog strong.btc { color:#eb8c18; }
+.dialog strong.zcash { color:#c8781a; }
 .dialog p { margin-top:0; margin-bottom:10px; }
 .dialog a:link { color:#50f3be; }
 .dialog a:hover { color:#326463; }

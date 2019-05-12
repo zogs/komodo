@@ -97,7 +97,7 @@ export class Mempool extends createjs.Container {
 		//if mempool satured
 		if(this.saturated == false && this.transactions.length > (this.params.cols * this.params.rows)) {
 			this.saturated = true;
-			let t = createjs.Tween.get(this.warning, { timeScale: window.TimeScale}).to({alpha: 0.2}, 500).to({alpha: 0}, 500).set({saturated: false}, this);
+			let t = createjs.Tween.get(this.warning, { timeScale: window.TimeScale}).to({alpha: 0.3}, 500).to({alpha: 0}, 500).set({saturated: false}, this);
 			window.Tweens.add(t);
 		}
 
@@ -192,8 +192,9 @@ export class Mempool extends createjs.Container {
 
 		// warning
 		let warn = new createjs.Shape();
-		warn.graphics.setStrokeStyle(1).beginStroke('grey').beginFill('red').drawRoundRect(-pad, 0, this.params.width + 3*pad, this.params.height, rad,rad,rad,rad);
+		warn.graphics.setStrokeStyle(0).beginFill('red').drawRoundRect(-pad, 0, this.params.width + 3*pad, this.params.height, rad,rad,rad,rad);
 		warn.alpha = 0;
+		warn.mask = rect;
 		this.cont_block.addChildAt(warn,3);
 		this.warning = warn;
 

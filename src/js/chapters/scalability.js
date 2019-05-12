@@ -13,11 +13,11 @@ Scalability.init = function() {
   window.Timelines.reset();
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
-  var komodoPlatform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be', chains: [komodo], emitterTPS: 80,});
+  var komodoPlatform = new Platform({y: 260, id: 'kmd', name: ' ', color: '#53f1be', borderColor: '#53f1be', chains: [komodo], emitterTPS: 80,});
   window.Platforms.push(komodoPlatform);
 
   let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#eb8c18', blockTime: 10, 'premined': 0, maxTps: 10});
-  let bitcoinPlatform = new Platform({ y: 100, id: 'btc', name: ' ', color: '#eb8c18', chains: [bitcoin], emitterTPS: 10, txWeight:1});
+  let bitcoinPlatform = new Platform({ y: 110, id: 'btc', name: ' ', color: '#eb8c18', chains: [bitcoin], emitterTPS: 10, txWeight:1});
   window.Platforms.push(bitcoinPlatform);
 
   //add some transaction to bitcoin
@@ -51,9 +51,8 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #2
-  dialog = new Dialog([
-    new Text('Ok. Lets check out how Komodo handles scaling...'),
-    ], [
+  dialog = new Dialog('<p>Ok. Lets check out how <strong>KOMODO</strong> handles scaling...</p>',
+    [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
       y: 350,
@@ -69,10 +68,10 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #3
-  dialog = new Dialog([
-    new Text('First, lets look at Bitcoin,'),
-    new Text('we know that Bitcoin has a maximum capacity of around 10 transactions per second.'),
-    ], [
+  dialog = new Dialog(`
+    <p>First, lets look at <strong class="btc">Bitcoin</strong>.</p>
+    <p>We know that Bitcoin has a maximum capacity of around 10 transactions per second.</p>
+    `, [
     ], {
       x: 650, y: 200,
       arrow: {x:0, y:-80}, arrowFrom: 'top',
@@ -81,21 +80,19 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #4
-  dialog = new Dialog([
-    new Text('More realistically its somewhere around 8tx/s...'),
-    ], [
-    ], {
+  dialog = new Dialog('<p>More realistically its somewhere around 8tx/s...</p>',
+    [], {
       lifetime: 3000, call: proxy(this.continue, this),
-      x: 1100, y: 180,
+      x: 1130, y: 170,
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50,
     });
   this.addDialog(dialog);
 
   // #5
-  dialog = new Dialog([
-    new Text('The Komodo blockchain can natively handle about 200 tx/s !'),
-    new Text("Let's test this and inspect their claim!", '20px Arial'),
-    ], [
+  dialog = new Dialog(`
+    <p>The <strong>KOMODO</strong> blockchain can natively handle about 200 tx/s !</p>
+    <p>Let's test this and inspect their claim!</p>
+    `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
       x: 930, y: 420,
@@ -104,10 +101,10 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #6
-  dialog = new Dialog([
-    new Text('Right now, we are sending around 100tx/s...'),
-    new Text("Let's double that - let's spam them!", '20px Arial'),
-    ], [
+  dialog = new Dialog(`
+    <p>Right now, we are sending around 100tx/s...</p>
+    <p><strong>Let's double that</strong>- let's spam them!</p>
+    `, [
     new Button('DOUBLE', proxy(this.continue, this), {float: 'center'}),
     ], {
       x: 1300, y: 410,
@@ -121,14 +118,11 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
     // #7
-  dialog = new Dialog([
-    new Text('See how rapidly we filled the mempool?'),
-    ], [
-
-    ], {
+  dialog = new Dialog('<p>See how rapidly we filled the mempool?</p>',
+    [], {
       x: 930, y: 370,
       arrow: {x:0, y:-50}, arrowFrom: 'top',
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
       onload: function(_this) {
 
         let komodo = window.Platforms.find(e => e.params.id == 'kmd');
@@ -139,20 +133,16 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #8
-  dialog = new Dialog([
-    new Text('How are the folks from Komodo gonna handle this?'),
-    ], [
-    ], {
+  dialog = new Dialog(`<p>How are the folks from <strong>KOMODO</strong> gonna handle this ?</p>`,
+    [], {
       x: 930, y: 370,
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
   // #9
-  dialog = new Dialog([
-    new Text('Well, they just pop up another chain!'),
-    ], [
-    ], {
+  dialog = new Dialog('<p>Well, they just pop up another chain!</p>',
+    [], {
       x: 930, y: 370,
       lifetime: 3000, call: proxy(this.continue, this),
     });
@@ -173,40 +163,40 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #11
-  dialog = new Dialog([
-    new Text('Can you see it? Now the transaction flow is split between two chains! '),
-    new Text('But how is this even possible ?'),
-    new Text('There is no magic, but let me explain you magic behind it.'),
-    new Text(' '),
-    ], [
+  dialog = new Dialog(`
+    <p>Can you see it? Now the transaction flow is split between two chains! </p>
+    <p>But how is this even possible ?</p>
+    <p>There is no magic, but let me explain you magic behind it.</p>
+    <p> </p>
+    `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
-      x: 930, y: 530,
+      x: 930, y: 500,
       arrow: {x:0, y:-120}, arrowFrom: 'top',
     });
   this.addDialog(dialog);
 
   // #12
-  dialog = new Dialog([
-    new Text('The Komodo ecosystem can spin up a scaling chain at any time which is able to', 'bold'),
-    new Text('validate and confirm transactions from the main chain (or other sidechains).', 'bold'),
-    new Text('This is possible through a technology that Komodo has invented/developed: the'),
-    new Text('Merkleroot of Merkleroots of Merkleroots (a.k.a MoMoM).'),
-    new Text('combined with a special consensus mechanism : the KMD Burn Protocol.'),
-    new Text("What what does this mean and how does it work?"),
-    ], [
+  dialog = new Dialog(`
+    <p>The <strong>KOMODO</strong> ecosystem can spin up a scaling chain at any time which is able to</p>
+    <p>validate and confirm transactions from the main chain (or other sidechains).</p>
+    <p>This is possible through a technology that <strong>KOMODO</strong> has invented/developed: the</p>
+    <p><i>Merkleroot of Merkleroots of Merkleroots</i> (a.k.a MoMoM).</p>
+    <p>combined with a special consensus mechanism : the KMD <i>Burn Protocol</i>.</p>
+    <p>What what does this mean and how does it work ?</p>
+    `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
     });
   this.addDialog(dialog);
 
   // #13
-  dialog = new Dialog([
-    new Text('During the notarization process, the side chains send to KMD mainchain a summary of all transactions (MoM) that occured since'),
-    new Text('the last notarization. Simultaneously, the KMD main chain shares a summary to all the sidechains'),
-    new Text('which contains a summary of all previous transactions gathered from the last notarization (MoMoM).'),
-    new Text("Sounds genius & exciting? Let's see that in action!")
-    ], [
+  dialog = new Dialog(`
+    <p>During the notarization process, the side chains send to KMD mainchain a summary of all transactions (MoM) that occured since</p>
+    <p>the last notarization. Simultaneously, the KMD main chain shares a summary to all the sidechains</p>
+    <p>which contains a summary of all previous transactions gathered from the last notarization (MoMoM).</p>
+    <p>Sounds genius & exciting? Let's see that in action!</p>
+    `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
     });
@@ -214,16 +204,17 @@ Scalability.set = function() {
 
   //
   dialog = new Dialog([
-    new Text("Waiting for the next notarization...           ", 'italic 20px Arial', '#AAA'),
+    new Text("Waiting for the next notarization...           ",),
     ], [
     ], {
+      paddings: [50,100,50,100],
       onload: function(_this) {
 
         let komodo = window.Blockchains.find(b => b.params.id == 'kmd');
 
         let line = _this.content[0];
-        let text = new createjs.Text('', 'italic 20px Arial', '#6b8a8a');
-        text.x = line.x + line.getBounds().x + 320;
+        let text = new createjs.Text('', '14px Arial', '#6b8a8a');
+        text.x = line.x + line.getBounds().x + 250;
         text.y = line.y + 5;
         _this.addChild(text);
 
@@ -248,10 +239,8 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #14
-  dialog = new Dialog([
-    new Text('MoMoM/Mom are being exchanged now !'),
-    ], [
-    ], {
+  dialog = new Dialog('<p>MoMoM/Mom are being exchanged now !</p>',
+    [], {
       x:1200, y: 300,
       arrow: {x:-200, y:0}, arrowWidth:20, arrowFrom: 'left',
       lifetime: 3000, call: proxy(this.continue, this),
@@ -259,11 +248,11 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #15bis
-  dialog = new Dialog([
-    new Text('Now, each chain has a records of what appended on other chains!'),
-    new Text('That way, it can validate transactions from any other chain, and with the'),
-    new Text('Burn protocol, this "cluster of blockchains" can maintain a constant level of coin across the whole ecosystem!', 'bold'),
-    ], [
+  dialog = new Dialog(`
+    <p>Now, each chain has a records of what appended on other chains!</p>
+    <p>That way, it can validate transactions from any other chain, and with the</p>
+    <p>Burn protocol, this "cluster of blockchains" can maintain a constant level of coin across the whole ecosystem!</p>
+    `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
       x:690, y: 350,
@@ -271,13 +260,13 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #15
-  dialog = new Dialog([
-    new Text("There is no theorical limit to how many chains KMD or you can spin up."),
-    new Text("Actually, during May 2018 Komodo has successfully conducted a stress test"),
-    new Text("where KMD successfully processed ~20000 transactions per second!", 'bold'),
-    new Text("And this year, Komodo is preparing for a 1 million TX/s stresstest."),
-    new Text(" "),
-    ], [
+  dialog = new Dialog(`
+    <p>There is no theorical limit to how many chains KMD or you can spin up.</p>
+    <p>Actually, during May 2018 Komodo has successfully conducted a stress test</p>
+    <p>where KMD successfully processed <strong>~20000 transactions per second!</strong></p>
+    <p>And this year, Komodo is preparing for a 1 million TX/s stresstest.</p>
+    <p> </p>
+    `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
     });
@@ -285,11 +274,11 @@ Scalability.set = function() {
 
 
   // #16
-  dialog = new Dialog([
-    new Text("Now after covering the scalability tech of KMD,                      "),
-    new Text("Let's go to the next chapter: INTEROPERABILITY & Independence!"),
-    new Text(" "),
-    ], [
+  dialog = new Dialog(`
+    <p>Now after covering the scalability tech of KMD,</p>
+    <p>Let's go to the next chapter: <strong>INTEROPERABILITY</strong></p>
+    <p> </p>
+    `, [
     new Button("ADD TRANSACTIONS", proxy(this.continue,this), { float: 'left'}),
     new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'center', x: 20 }),
     new Button("NEXT CHAPTER", proxy(window.Tour.goToChapter,window.Tour,['Interoperability & Independence']), {float: 'right'}),
@@ -300,10 +289,10 @@ Scalability.set = function() {
 
 
   // #17
-  dialog = new Dialog([
-    new Text("Yeah, let's have fun !"),
-    new Text(" "),
-    ], [
+  dialog = new Dialog(`
+    <p>Yeah, let's have fun ! </p>
+    <p> </p>
+    `, [
     new Button("ADD TRANSACTION", function() { Scalability.addTps(); }, {float: 'left'}),
     new Button("ADD CHAIN", function() { Scalability.addChain(); }, {float: 'center', x: 60}),
     new Button("STOP", function() { Scalability.goToID('end'); }, {float: 'right'}),
