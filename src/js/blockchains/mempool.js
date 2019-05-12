@@ -49,7 +49,7 @@ export class Mempool extends createjs.Container {
 
 	start() {
 
-		this.tickMoMoM = window.Stage.on('tick', this.updateMoMoM, this);
+		//this.tickMoMoM = window.Stage.on('tick', this.updateMoMoM, this);
 
 	}
 
@@ -325,19 +325,19 @@ export class Mempool extends createjs.Container {
 
 	drawMoMoMTo(mempool) {
 
-			let width = 45
+			let width = 30
 			let height = 50;
 
 			//upstream
-			let upstream = this.getArrowBand(width, height, this.params.blockchain.params.color, 'up');
+			let upstream = this.createMoMoMLink(width, height, this.params.blockchain.params.color, 'up');
 			upstream.x = 36;
 			upstream.y = 25;
 			this.momom_up = upstream;
 			this.cont_momom.addChild(upstream);
 
 			//downstream
-			let downstream = this.getArrowBand(width, height, mempool.params.blockchain.params.color, 'down');
-			downstream.x = -15 + this.params.width;
+			let downstream = this.createMoMoMLink(width, height, mempool.params.blockchain.params.color, 'down');
+			downstream.x = upstream.x + 130;
 			downstream.y = -25 - height;
 			downstream.rotation = 180;
 			this.momom_down = downstream;
@@ -345,25 +345,6 @@ export class Mempool extends createjs.Container {
 
 			//moving
 			this.momom_move = 0;
-	}
-
-	updateMoMoM() {
-
-		if(this.params.blockchain.params.visible === false) return;
-
-		let speed = 0.3;
-
-		if(this.momom_up) {
-			this.momom_up.band1.y -= speed;
-			this.momom_up.band2.y -= speed;
-			this.momom_down.band1.y -= speed;
-			this.momom_down.band2.y -= speed;
-
-			if(this.momom_up.band1.y < -this.momom_up.band1.image.height - 50) this.momom_up.band1.y = 22;
-			if(this.momom_up.band2.y < -this.momom_up.band1.image.height - 50) this.momom_up.band2.y = 22;
-			if(this.momom_down.band1.y < -this.momom_up.band1.image.height - 50) this.momom_down.band1.y = 22;
-			if(this.momom_down.band2.y < -this.momom_up.band1.image.height - 50) this.momom_down.band2.y = 22;
-		}
 	}
 
 	sendMoMoM() {
@@ -387,35 +368,26 @@ export class Mempool extends createjs.Container {
 		this.momom_down.alpha = 1;
 	}
 
-	getArrowBand(width, height, color, direction) {
+	createMoMoMLink(width, height, color, direction) {
 
 		let stream = new createjs.Container();
 		stream.regX = width/2;
 		stream.regY = height/2;
 		let bkg = new createjs.Shape();
-		bkg.graphics.beginFill(color).drawRect(0,0, width, height);
+		bkg.graphics.beginLinearGradientFill([color,"rgba(255,255,255,0)"], [1, 0], 0, 0, 0, 30).drawRect(0,0, width, height);
 		bkg.x = 0;
 		bkg.y = - height;
 		bkg.alpha = 0.4;
 		stream.addChild(bkg);
-		let band1 = new createjs.Bitmap(window.Queue.getResult('arrowband'));
-		band1.x = -37;
-		band1.y = -height;
-		band1.scaleX = 3;
-		band1.scaleY = 1;
-		band1.alpha = 1;
-		stream.band1 = band1;
-		let band2 = new createjs.Bitmap(window.Queue.getResult('arrowband'));
-		band2.x = -37;
-		band2.y = band1.image.height - height;
-		band2.scaleX = 3;
-		band2.scaleY = 1;
-		band2.alpha = 1;
-		stream.band2 = band2;
-		let MoMoM = new createjs.Text('MoM', '14px Montserrat', color);
+		let mask = new createjs.Shape();
+		mask.graphics.beginFill('red').drawRect(-width, 0, width*3, height);
+		mask.x = 0;
+		mask.y = - height;
+		//stream.addChild(mask);
+		let MoMoM = new createjs.Text('MoM', 'bold 14px Montserrat', '#FFF');
 		MoMoM.regX = MoMoM.getMeasuredWidth()/2;
 		MoMoM.regY = MoMoM.getMeasuredHeight()/2;
-		MoMoM.x = 25;
+		MoMoM.x = 15;
 		MoMoM.y = 10;
 		MoMoM.alpha = 0.4;
 		if(direction == 'down') {
@@ -423,17 +395,8 @@ export class Mempool extends createjs.Container {
 			MoMoM.x = 30;
 			MoMoM.rotation = 180;
 		}
-		stream.momom = MoMoM;
-		let mask = new createjs.Shape();
-		mask.graphics.beginFill("red").drawRect(0, 0, width, height);
-		mask.x = 0;
-		mask.y = - height;
-		mask.alpha = 0;
-		band1.mask = mask;
-		band2.mask = mask;
 		MoMoM.mask = mask;
-		stream.addChild(band1);
-		stream.addChild(band2);
+		stream.momom = MoMoM;
 		stream.addChild(MoMoM);
 
 

@@ -276,7 +276,7 @@ export class Blockchain extends createjs.Container {
 
 			//draw link
 			let link = new createjs.Shape();
-			link.graphics.setStrokeStyle(10).beginStroke(blockchain.params.color)
+			link.graphics.setStrokeStyle(5).beginStroke(blockchain.params.color)
 				.moveTo(x1, y1)
 				.lineTo(x2, y2)
 				.closePath();
