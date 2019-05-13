@@ -27,11 +27,13 @@ Security.set = function() {
   var that = this;
 
   // #1
-  let dialog = new Dialog([
-    new Text('SECURITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
-    new Text('RECYCLING BITCOIN', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
-    ], [
-    new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
+  let dialog = new Dialog(`
+    <div class="chapter">
+      <h1>SECURITY</h1>
+      <h2>RECYCLING BITCOIN</h2>
+    </div>
+    `, [
+    new Button('START CHAPTER', proxy(this.continue, this), {float: 'center', borderWidth:3}),
     ], {
   });
   this.addDialog(dialog);

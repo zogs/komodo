@@ -1,9 +1,5 @@
 $background: #DFEFEE;
 
-@font-face {
-    font-family: 'Roboto';
-    src: url('../assets/font/RobotoCondensed/RobotoCondensed-Bold.ttf'); /* IE */
-}
 body { margin: 0; padding: 0; width:100%; height:100%; background: $background; }
 .header { display:none; position: absolute; top:0; z-index:10; width: 100%; text-align: right; font: 12px Arial;}
 #canvas-container { position: relative; width:100%; height:100%; margin: 0 auto; }
@@ -11,7 +7,8 @@ canvas#canvas { position: absolute; z-index: 2; display:block; width: 100%; heig
 canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #2d313c; width:100%; height:100%; }
 .footer { display:none; position: absolute; z-index:10; bottom: 0; width: 100%; height:50px; text-align: center; font: 12px Arial; }
 .dialog { position: absolute; z-index: 10; visibility: hidden; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 14px; padding: 0; color:#FFF; pointer-events:none;}
-.dialog > h1 { font-family: 'Montserrat', 'Arial', sans-serif; font-size: 60px; }
+.dialog h1 { width:100%; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 44px; color: #52efbc; text-transform:uppercase; text-align:center; }
+.dialog h2 { width:100%; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 22px; color: #FFF; text-transform:uppercase; text-align:center; }
 .dialog div.row { width: 100%; margin: 10px 0;}
 .dialog strong { color:#50f3be; }
 .dialog strong.btc { color:#eb8c18; }
@@ -21,9 +18,10 @@ canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #
 .dialog a:hover { color:#326463; }
 .dialog a:active { color:#326463; }
 .dialog a:visited { color:#50f3be; }
+.dialog div.chapter { padding: 0 20px;}
 #dialog-AC { padding: 20px 50px 0 50px; }
 #dialog-AC form { margin:0; }
-#dialog-AC label { cursor: pointer; }
+#dialog-AC label { cursor: pointer; width: 120px; text-align: right; }
 #dialog-AC label.label { cursor: default; display: inline-block; padding-right: 20px;}
 #dialog-AC label img { margin-bottom: -5px; }
 #dialog-AC input[type=text],

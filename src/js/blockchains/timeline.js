@@ -22,7 +22,6 @@ export class Timeline extends createjs.Container {
 		this.params = extend(defaults,params);
 		this.currentBar = null;
 		this.time = this.params.defaultTime;
-		this.lines = [];
 		this.totalTime = 0;
 		this.timeInterval = null;
 		this.runing = false;
@@ -63,7 +62,6 @@ export class Timeline extends createjs.Container {
 		this.cont_blockchains.y = 0;
 		this.removeCurrentBar();
 		this.cont_lines.removeAllChildren();
-		this.lines = [];
 		this.time = this.params.defaultTime;
 		window.Blockchains = [];
 	  window.Platforms = [];
@@ -106,7 +104,6 @@ export class Timeline extends createjs.Container {
 		line.x = i*this.params.minuteWidth;
 		line.y = 40;
 		this.cont_lines.addChild(line);
-		this.lines.push(line);
 
 		let bg = new createjs.Shape();
 		bg.graphics.beginFill(this.params.backgroundColor).setStrokeStyle(0).drawRect(0,0,this.params.minuteWidth, 40);
@@ -119,19 +116,27 @@ export class Timeline extends createjs.Container {
 			minute.y = this.params.paddingTop + 15;
 		minute.cache(0, 0, minute.getMeasuredWidth(), minute.getMeasuredHeight());
 		this.cont_timesbar.addChild(minute);
-		this.lines.push(minute);
 
 		this.totalTime = i;
 	}
 
 	removeLines() {
 
-		for(let i=0,ln=this.lines.length-3; i<=ln; i++) {
-			let line = this.lines[i];
+		let ln = this.cont_lines.length-1;
+		for(let i=0; i<=ln; i++) {
+			let line = this.cont_lines[i];
 			let pos = line.localToGlobal(0,0);
 			if(pos.x < 100) {
 				this.removeChild(line);
 				this.lines.splice(i, 1);
+			}
+		}
+		ln = this.cont_timesbar.length-1;
+		for(let i=0; i<=ln; i++) {
+			let obj = this.cont_timesbar[i];
+			let pos = obj.localToGlobal(0,0);
+			if(pos.x < 100) {
+				this.removeChild(obj);
 			}
 		}
 	}
@@ -143,7 +148,6 @@ export class Timeline extends createjs.Container {
 			.moveTo(0, this.params.height - this.params.paddingBottom)
 			.lineTo(0, 0 + this.params.paddingTop)
 			.closePath();
-			this.currentBar.y = 40;
 		this.currentBar.cache(-1, -1, 2, this.params.height);
 
 		this.currentBar.x = this.params.defaultTime * this.params.minuteWidth;

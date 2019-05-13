@@ -218,11 +218,11 @@ window.initTour = function() {
     // init Tour
     window.Tour = new Tour();
     // Intro chapter
-    //window.Tour.addChapter(Intro);
+    window.Tour.addChapter(Intro);
     // First chapter : SECURITY
-    //window.Tour.addChapter(Security);
+    window.Tour.addChapter(Security);
     // Second chapter : SCALABILITY
-    //window.Tour.addChapter(Scalability);
+    window.Tour.addChapter(Scalability);
     // Third chapter
     window.Tour.addChapter(Interoperability);
 

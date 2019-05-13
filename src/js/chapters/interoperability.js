@@ -46,11 +46,13 @@ Interoperability.set = function() {
   var that = this;
 
   // #1
-  let dialog = new Dialog([
-  new Text('INTEROPERABILITY', '60px Roboto', {color: '#316565'}),
-  new Text(' CONNECTING ALL THE CHAINS ', '20px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
-  ], [
-  new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
+  let dialog = new Dialog(`
+    <div class="chapter">
+      <h1>INTEROPERABILITY</h1>
+      <h2>CONNECTING ALL THE CHAINS</h2>
+    </div>
+  `, [
+  new Button('START CHAPTER', proxy(this.continue, this), {float: 'center', borderWidth:3}),
   ], {
   });
   this.addDialog(dialog);
@@ -229,7 +231,7 @@ Interoperability.set = function() {
       onload: function() {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
         platform.emitter.params.tps = 300;
-        let KMDCC = new Blockchain({id: 'KMDCC', name: 'KMDCC', color:'#fd3397', type: 'AC', ccc: ['asset'], premined: 10, notarizeTo: 'kmd', active: true, privacy: null, zRatio: 0.8});
+        let KMDCC = new Blockchain({id: 'KMDCC', name: 'KMDCC', color:'#a9a627', type: 'AC', ccc: ['asset'], premined: 10, notarizeTo: 'kmd', active: true, privacy: null, zRatio: 0.8});
         platform.addAssetChain(KMDCC);
         window.Timelines.scrollY(-KMDCC.params.blockHeight*2);
       }
@@ -261,7 +263,7 @@ Interoperability.set = function() {
       arrow: {x:300, y:150}, arrowFrom: 'bottom', arrowCenter: 300,
       onload: function(_this) {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
-        let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#917efb', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
+        let ROGUE = new Blockchain({id: 'ROGUE', name: 'ROGUE chain', color:'#adadad', type: 'AC', ccc: ['rogue'], premined: 6, notarizeTo: 'kmd'});
         platform.addAssetChain(ROGUE);
         window.Timelines.scrollY(-ROGUE.params.blockHeight*2);
       }

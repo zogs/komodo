@@ -23,7 +23,7 @@ export class Dialog extends createjs.Container {
       paddings: [15,20,15,20],
       backgroundColor: '#1b1e23',
       borderColor: '#2b6863',
-      borderWidth: 1,
+      borderWidth: 2,
       arrowTo: null,
       arrowFrom: 'top',
       arrowWidth: 50,

@@ -264,7 +264,7 @@ export class Platform extends createjs.Container {
 
     if(bloc == undefined) return;
 
-    let chain = new Blockchain({id: 'SC'+n, name: "Scaling Chain "+n, color:'#569b9b', type: 'SC', notarizeTo: 'kmd'});
+    let chain = new Blockchain({id: 'SC'+n, name: "Scaling Chain "+n, color:'#53f1be', type: 'SC', notarizeTo: 'kmd'});
     chain.x = prev.x + bloc.x + chain.params.blockWidth/2 + chain.params.blockPadding/2 - (chain.params.premined) * (chain.params.blockWidth + chain.params.blockPadding);
 
     chain = this.addChain(chain);

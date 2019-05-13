@@ -41,11 +41,13 @@ Scalability.set = function() {
   var that = this;
 
   // #1
-  let dialog = new Dialog([
-  new Text('SCALABILITY', '60px Roboto', {color: '#316565', textAlign: 'center'}),
-  new Text('ONE CHAIN IS NOT ENOUGH', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
-  ], [
-  new Button('START CHAPTER', proxy(this.continue, this), {float: 'center'}),
+  let dialog = new Dialog(`
+    <div class="chapter">
+      <h1>SCALABILITY</h1>
+      <h2>ONE CHAIN IS NOT ENOUGH</h2>
+    </div>
+  `, [
+  new Button('START CHAPTER', proxy(this.continue, this), {float: 'center', borderWidth:3}),
   ], {
   });
   this.addDialog(dialog);
@@ -241,7 +243,7 @@ Scalability.set = function() {
   // #14
   dialog = new Dialog('<p>MoMoM/Mom are being exchanged now !</p>',
     [], {
-      x:1200, y: 300,
+      x:1250, y: 300,
       arrow: {x:-200, y:0}, arrowWidth:20, arrowFrom: 'left',
       lifetime: 3000, call: proxy(this.continue, this),
     });

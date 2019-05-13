@@ -28,13 +28,15 @@ Intro.set = function() {
   let dialog;
 
 
-  dialog = new Dialog([
-    new Text('KOMODO', '90px Roboto', {color: '#316565', textAlign: 'center'}),
-    new Text('THE DISCOVERY TOUR', '18px Arial', {paddingTop: 20, paddingBottom: 20, textAlign: 'center'}),
-  ], [
+  dialog = new Dialog(`
+    <div class="chapter">
+      <h1>KOMODO</h1>
+      <h2>The discovery tour</h2>
+    </div>
+  `, [
   new Button('CLICK HERE TO START', function() {
       that.startWithoutBanner();
-  }, {float: 'center'}),
+  }, {float: 'center', borderWidth:3}),
   ], {
   });
   this.addDialog(dialog);
