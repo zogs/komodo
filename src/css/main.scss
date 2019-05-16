@@ -9,7 +9,7 @@ canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #
 .dialog { position: absolute; z-index: 10; visibility: hidden; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 14px; padding: 0; color:#FFF; pointer-events:none;}
 .dialog h1 { width:100%; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 44px; color: #52efbc; text-transform:uppercase; text-align:center; }
 .dialog h2 { width:100%; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 22px; color: #FFF; text-transform:uppercase; text-align:center; }
-.dialog div.row { width: 100%; margin: 10px 0;}
+.dialog div.row { width: 100%; margin: 10px 0; }
 .dialog strong { color:#50f3be; }
 .dialog strong.btc { color:#eb8c18; }
 .dialog strong.zcash { color:#c8781a; }
@@ -20,15 +20,16 @@ canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #
 .dialog a:visited { color:#50f3be; }
 .dialog div.chapter { padding: 0 20px;}
 #dialog-AC { padding: 20px 50px 0 50px; }
-#dialog-AC form { margin:0; }
+#dialog-AC form { margin:0 0 20px 0; }
+#dialog-AC form .row { height:35px; }
 #dialog-AC label { cursor: pointer; width: 120px; text-align: right; }
-#dialog-AC label.label { cursor: default; display: inline-block; padding-right: 20px;}
+#dialog-AC label.label { cursor: default; display: inline-block; padding-right: 20px; vertical-align: top; padding-top:7px;}
 #dialog-AC label img { margin-bottom: -5px; }
 #dialog-AC input[type=text],
-#dialog-AC select { font-size: 16px; width: 170px; padding: 5px 10px; border:1px solid grey;}
+#dialog-AC select { font-size: 16px; width: 220px; padding: 5px 10px; border:1px solid grey; background:#868686;}
 #dialog-AC input[type=checkbox],
 #dialog-AC input[type=radio] { display: none; }
-#dialog-AC label.choice { display: inline-block; width: 50px; text-align: center;}
+#dialog-AC label.choice { display: inline-block; width: 50px; text-align: center; margin-top:-5px;}
 #dialog-AC label.choice input { display: none; }
-#dialog-AC label.choice img {}
-#dialog-AC label.choice input:checked ~ img { width: 40px; }
+#dialog-AC label.choice img { padding:5px; border-radius:20px; background:transparent;}
+#dialog-AC label.choice input:checked ~ img { background:#4d4d4d;  }

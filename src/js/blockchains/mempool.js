@@ -374,7 +374,7 @@ export class Mempool extends createjs.Container {
 		stream.regX = width/2;
 		stream.regY = height/2;
 		let bkg = new createjs.Shape();
-		bkg.graphics.beginLinearGradientFill([color,"rgba(255,255,255,0)"], [1, 0], 0, 0, 0, 30).drawRect(0,0, width, height);
+		bkg.graphics.beginLinearGradientFill(["rgba(255,255,255,0)",color], [1, 0], 0, 0, 0, 60).drawRect(0,0, width, height);
 		bkg.x = 0;
 		bkg.y = - height;
 		bkg.alpha = 0.4;

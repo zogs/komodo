@@ -51,6 +51,7 @@ export class Dialog extends createjs.Container {
   open() {
 
     this.mouseEnabled = true;
+    if(this.htmlElement) this.htmlElement.style.pointerEvents = 'initial';
 
     if(this.params.onload) {
       this.params.onload(this);
@@ -73,6 +74,7 @@ export class Dialog extends createjs.Container {
 
     this.alpha = 0;
     this.mouseEnabled = false;
+    if(this.htmlElement) this.htmlElement.style.pointerEvents = 'none';
 
   }
 
