@@ -56,7 +56,7 @@ export class Timeline extends createjs.Container {
 		logo.scale = 0.25;
 		logo.x = window.STAGEWIDTH - 270;
 		logo.y = -30;
-		this.cont_background.addChild(logo);
+		this.cont_foreground.addChild(logo);
 	}
 
 	reset() {
