@@ -62,13 +62,13 @@ window.loaded = function(env) {
 	window.Queue.addEventListener('complete',function() { assetsLoaded(env) });
 	window.Queue.loadManifest([
 		{id:'KMDdiscoverytour',src:'dist/images/KMD_Discovery_Tour_Logo.svg', type: createjs.LoadQueue.IMAGE},
+		{id:'btc_security',src:'dist/images/BTC_security.png'},
+		{id:'kmd_security',src:'dist/images/KMD_security.png'},
     {id:'bitcoinlogo',src:'dist/images/Bitcoin-icon.png'},
 		{id:'komodologo',src:'dist/images/Komodo-icon.png'},
 		{id:'komodoASlogo',src:'dist/images/Komodo-icon.png'},
 		{id:'kmddPOWed',src:'dist/images/KMDdPOW.png'},
 		{id:'btcdPOWed',src:'dist/images/BTCdPOW.png'},
-		{id:'btc_security',src:'dist/images/BTC_security.png'},
-		{id:'kmd_security',src:'dist/images/KMD_security.png'},
 		{id:'arrowband',src:'dist/images/arrowband.png'},
 		{id:'icon_btc',src:'dist/images/icon/btc.png'},
 		{id:'icon_kmd',src:'dist/images/icon/kmd.png'},

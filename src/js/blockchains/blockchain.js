@@ -304,13 +304,14 @@ export class Blockchain extends createjs.Container {
 			if(blockchain.params.id == 'kmd') {
 				icon = new createjs.Bitmap(window.Queue.getResult('kmd_security'));
 			}
-			scale = 0.6;
-			icon.x = coor2.x;
-			icon.y = coor2.y - block.params.height;
+			scale = 1;
 			icon.regX = icon.image.width/2;
 			icon.regY = icon.image.height/2;
+			icon.x = coor2.x + icon.image.width/2 + 20;
+			icon.y = coor2.y - block.params.height;
 			if(t.params.blockchain.params.notaryLabelSize == "big") {
-				scale = 1;
+				scale = 1.1;
+				icon.x = coor2.x + icon.image.width/2 - 30;
 				icon.y = coor2.y - block.params.height - 25;
 			}
 
