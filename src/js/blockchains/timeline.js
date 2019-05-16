@@ -89,14 +89,14 @@ export class Timeline extends createjs.Container {
 	drawLines() {
 
 		let line = new createjs.Shape();
-		line.graphics.setStrokeStyle(0.5).beginStroke(this.params.color)
+		line.graphics.setStrokeStyle(0.5).beginStroke('#AAA')
 				.moveTo(0, this.params.height - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
 		line.cache(-1, -1, 2, this.params.height);
 		this.lineImage = new createjs.Bitmap(line.cacheCanvas);
 
 		let lineBold = new createjs.Shape();
-		lineBold.graphics.setStrokeStyle(1).beginStroke(this.params.color)
+		lineBold.graphics.setStrokeStyle(0.5).beginStroke(this.params.color)
 				.moveTo(0, this.params.height - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
 		lineBold.cache(-1, -1, 2, this.params.height);
