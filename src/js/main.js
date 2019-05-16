@@ -61,7 +61,8 @@ window.loaded = function(env) {
 	window.Queue = new createjs.LoadQueue();
 	window.Queue.addEventListener('complete',function() { assetsLoaded(env) });
 	window.Queue.loadManifest([
-		{id:'bitcoinlogo',src:'dist/images/Bitcoin-icon.png'},
+		{id:'KMDdiscoverytour',src:'dist/images/KMD_Discovery_Tour_Logo.svg', type: createjs.LoadQueue.IMAGE},
+    {id:'bitcoinlogo',src:'dist/images/Bitcoin-icon.png'},
 		{id:'komodologo',src:'dist/images/Komodo-icon.png'},
 		{id:'komodoASlogo',src:'dist/images/Komodo-icon.png'},
 		{id:'kmddPOWed',src:'dist/images/KMDdPOW.png'},

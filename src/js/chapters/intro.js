@@ -10,15 +10,12 @@ export const Intro = new Chapter({name: 'Intro'});
 
 Intro.init = function() {
 
-  window.Timelines.reset();
-
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6});
   var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be', chains: [komodo], emitterTPS: 10 });
   window.Platforms.push(platform);
 
   platform.hide();
   window.Timelines.hide();
-  window.Timelines.start();
 
 }
 
@@ -35,7 +32,9 @@ Intro.set = function() {
     </div>
   `, [
   new Button('CLICK HERE TO START', function() {
-      that.startWithoutBanner();
+        window.Timelines.start();
+        window.Timelines.fadeIn(1000);
+        that.continue();
   }, {float: 'center', borderWidth:3}),
   ], {
   });
@@ -106,19 +105,4 @@ Intro.set = function() {
     ], {
     });
   this.addDialog(dialog);
-}
-
-
-Intro.startAfterBanner = function() {
-
-  window.CurrentBanner.hide();
-  createjs.Tween.get(Intro.dialogs[0]).to({alpha: 0}, 500);
-  setTimeout(function() { window.Timelines.fadeIn(1000); }, 1000);
-  setTimeout(function() { Intro.continue(); }, 1500);
-}
-
-Intro.startWithoutBanner = function() {
-
-  window.Timelines.fadeIn(1000);
-  Intro.continue();
 }

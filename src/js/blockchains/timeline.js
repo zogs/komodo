@@ -47,11 +47,16 @@ export class Timeline extends createjs.Container {
 		this.initCurrentTime();
 
 		this.newMinuteListener = window.Stage.on('newminute', function(event) {
-			if(event.time >=5) {
 				this.addLine(this.totalTime+1);
 				this.removeLines();
-			}
+
 		}, this);
+
+		let logo = new createjs.Bitmap(window.Queue.getResult('KMDdiscoverytour'));
+		logo.scale = 0.25;
+		logo.x = window.STAGEWIDTH - 270;
+		logo.y = -30;
+		this.cont_background.addChild(logo);
 	}
 
 	reset() {
@@ -59,10 +64,12 @@ export class Timeline extends createjs.Container {
 		this.clear();
 		window.Stage.off('newminute', this.newMinuteListener);
 		this.cont_sliding.x = 0;
+		this.cont_timesbar.x = 0;
 		this.cont_blockchains.y = 0;
 		this.removeCurrentBar();
 		this.cont_lines.removeAllChildren();
 		this.time = this.params.defaultTime;
+		this.totalTime = 0;
 		window.Blockchains = [];
 	  window.Platforms = [];
 	  window.Emitters = [];
@@ -179,6 +186,7 @@ export class Timeline extends createjs.Container {
 		createjs.Tween.removeTweens(this.cont_sliding);
 		createjs.Tween.removeTweens(this.cont_background);
 		createjs.Tween.removeTweens(this.cont_foreground);
+		createjs.Tween.removeTweens(this.cont_timesbar);
 		createjs.Tween.removeTweens(this.currentBar);
 		window.Emitters.map(e => e.stop());
 		window.Platforms.map(p => p.stop());
@@ -190,6 +198,7 @@ export class Timeline extends createjs.Container {
 		this.cont_background.removeAllChildren();
 		this.cont_blockchains.removeAllChildren();
 		this.cont_foreground.removeAllChildren();
+		this.cont_timesbar.removeAllChildren();
 		return this;
 	}
 
