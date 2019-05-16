@@ -293,14 +293,6 @@ window.keyDownHandler = function(e)
    }
 }
 
-window.showBanner = function() {
-  if(window.CurrentBanner) window.CurrentBanner.show();
-}
-
-window.hideBanner = function() {
-  if(window.CurrentBanner) window.CurrentBanner.hide();
-}
-
 window.addAssetChain = function() {
 
 	let platform = window.Platforms.find(p => p.params.id == 'kmd');

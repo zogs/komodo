@@ -55,7 +55,7 @@ export class Mempool extends createjs.Container {
 
 	stop() {
 
-		window.Stage.off('tick', this.tickMoMoM);
+		//window.Stage.off('tick', this.tickMoMoM);
 
 	}
 

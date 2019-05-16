@@ -23,6 +23,7 @@ export class Platform extends createjs.Container {
     }
     this.params = extend(defaults,params);
     this.chains = this.params.chains;
+    this.started = false;
     this.cont_background = new createjs.Container();
     this.cont_blockchain = new createjs.Container();
     this.cont_foreground = new createjs.Container();
@@ -150,12 +151,19 @@ export class Platform extends createjs.Container {
   }
 
   start() {
-    this.emitter.start();
-    this.chains.map(c => c.start());
+    if(!this.started) {
+      this.emitter.start();
+      this.chains.map(c => c.start());
+      this.started = true;
+    }
   }
 
   stop() {
-    this.chains.map(c => c.stop());
+    if(this.started) {
+      this.emitter.stop();
+      this.chains.map(c => c.stop());
+      this.started = false;
+    }
   }
 
   activateAutoScalingChain() {
