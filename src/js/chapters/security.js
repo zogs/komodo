@@ -175,7 +175,7 @@ Security.set = function() {
   dialog = new Dialog(`
     <strong>Wait, that's not all !</strong>
     `, [], {
-      paddings: [50,100,50,100],
+      paddings: [25,50,25,50],
       lifetime: 2000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);

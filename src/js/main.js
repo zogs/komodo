@@ -11,6 +11,12 @@ import {TweensManager} from './tweens';
 import Victor from './lib/victor';
 import createjs from 'createjs';
 
+// define default const
+window.DefaultMinuteWidth = 120;
+window.DefaultMinuteSeconds = 2;
+window.DefaultWidth = 1500;
+window.DefaultHeight = 600;
+
 // define usefull const
 window.Stage;
 window.Queue;
@@ -32,8 +38,8 @@ window.SlowMotion = false;
 window.CurrentBanner = null;
 window.CanvasContainer = document.getElementById('canvas-container');
 window.ColorAsset = ['#f3de8a', '#eb9486', '#7e7f9a', '#97a7b3'];
-window.MinuteWidth = 120;
-window.MinuteSeconds = 2;
+window.MinuteWidth = window.DefaultMinuteWidth;
+window.MinuteSeconds = window.DefaultMinuteSeconds;
 window.Env = null;
 window.debug = false;
 window.Tour = null;
@@ -41,7 +47,7 @@ window.STAGEWIDTH;
 window.STAGEHEIGHT;
 window.ORIGINWIDTH;
 window.ORIGINHEIGHT;
-window.RATIO;
+window.RATIO = 1;
 window.Cont_main;
 window.Cont_background;
 window.Cont_timeline;
@@ -61,7 +67,7 @@ window.loaded = function(env) {
 	window.Queue = new createjs.LoadQueue();
 	window.Queue.addEventListener('complete',function() { assetsLoaded(env) });
 	window.Queue.loadManifest([
-		{id:'KMDdiscoverytour',src:'dist/images/KMD_Discovery_Tour_Logo.svg', type: createjs.LoadQueue.IMAGE},
+		{id:'KMDdiscoverytour',src:'dist/images/KMD_Discovery_Tour_Logo.png', type: createjs.LoadQueue.IMAGE},
 		{id:'btc_security',src:'dist/images/BTC_security.png'},
 		{id:'kmd_security',src:'dist/images/KMD_security.png'},
     {id:'bitcoinlogo',src:'dist/images/Bitcoin-icon.png'},
@@ -128,7 +134,7 @@ window.assetsLoaded = function(env) {
   window.Cont_main.addChild(window.Cont_currenttime);
 
   window.Cont_tour = new createjs.Container();
-  window.Stage.addChild(window.Cont_tour);
+  window.Cont_main.addChild(window.Cont_tour);
 
 	//init onEnterFrame
 	//createjs.Ticker.timingMode = createjs.Ticker.TIMEOUT;
@@ -144,13 +150,10 @@ window.assetsLoaded = function(env) {
 	window.onkeyup = keyUpHandler;
 	window.onkeydown = keyDownHandler;
 
-	//resize event
-	window.onresize = browserResize;
-	window.resizeCanvas();
-
   //window event
   window.addEventListener('blur', window.onWindowPassive);
   window.addEventListener('focus', window.onWindowActive);
+  window.resizeCanvas();
 
   //mouse event
   document.querySelector('canvas#canvas').addEventListener('mouseover', ()=>{ window.MouseActive = true });
@@ -160,6 +163,11 @@ window.assetsLoaded = function(env) {
   //init stage
   if(env == 'test') window.initTest();
   else window.initTour();
+
+	//resize event
+	window.onresize = browserResize;
+	window.resizeCanvas();
+
 }
 
 
@@ -431,25 +439,35 @@ window.browserResizeEnded = function() {
 
 window.resizeCanvas = function() {
 
-  if(window.debug) {
-    console.log('Main.js: window.resizeCanvas()');
-  }
 
 	var containerWidth = window.CanvasContainer.offsetWidth;
 	var containerHeight = window.CanvasContainer.offsetHeight;
 
-  document.getElementById('canvas').style.width = containerWidth+'px';
-  document.getElementById('canvas').style.height = containerHeight+'px';
-  document.getElementById('backcanvas').style.width = containerWidth+'px';
-	document.getElementById('backcanvas').style.height = containerHeight+'px';
+  var contentWidth = window.DefaultWidth;
+  var contentHeight = window.DefaultHeight;
 
-  document.getElementById('canvas').width = containerWidth;
-  document.getElementById('canvas').height = containerHeight;
-  document.getElementById('backcanvas').width = containerWidth;
-  document.getElementById('backcanvas').height = containerHeight;
+  window.Stage.canvas.width = containerWidth;
+  window.Stage.canvas.height = containerHeight;
 
-  window.STAGEHEIGHT = containerHeight;
+  var ratio = contentWidth / contentHeight;
+  var windowRatio = containerWidth / containerHeight;
+  var scale = containerWidth/contentWidth;
+  if(windowRatio > ratio) {
+    scale = containerHeight/contentHeight;
+  }
+
+  window.Cont_main.scale = scale;
+
+  //document.getElementById('canvas').style.width = containerWidth+'px';
+  //document.getElementById('canvas').style.height = containerWidth*ratio+'px';
+
+  //document.getElementById('canvas').width = containerWidth;
+  //document.getElementById('canvas').height = containerWidth*ratio;
+
   window.STAGEWIDTH = containerWidth;
+  window.STAGEHEIGHT = containerHeight;
+  window.SCALE = scale;
+  window.RATIO = (scale <=1)? scale : 1;
 
 	//scroll to top
 	window.setTimeout(function() { //browsers don't fire if there is not short delay
@@ -463,4 +481,6 @@ window.resizeCanvas = function() {
 	event.newHeight = containerHeight;
 	window.Stage.dispatchEvent(event);
 
+  console.log('window.resizeCanvas', scale);
 }
+

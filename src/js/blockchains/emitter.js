@@ -130,7 +130,7 @@ export class Emitter extends createjs.Container {
 
     let pos = this.localToLocal(0,this.height/2, blockchain.mempool);
     let x = pos.x;
-    let y = blockchain.mempool.y + ( 25 - Math.random()*50);
+    let y = blockchain.params.blockHeight/2 + ( 25 - Math.random()*50);
     trans.setPosition(x,y);
 
     if(trans.params.type === 'ccc') {

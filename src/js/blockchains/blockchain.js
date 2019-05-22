@@ -50,10 +50,9 @@ export class Blockchain extends createjs.Container {
 
 		this.tickChildren = false;
 
-		this.init(params);
 	}
 
-	init(params) {
+	init() {
 
 		this.initMempool();
 
@@ -186,7 +185,6 @@ export class Blockchain extends createjs.Container {
 		let tw = createjs.Tween.get(block, {timeScale: window.TimeScale}).to({alpha:1, scaleX:1, scaleY:1}, 500);
 		window.Tweens.add(tw);
 
-		this.linkMempool();
 		this.mempool.mined(block);
 
 
@@ -327,38 +325,30 @@ export class Blockchain extends createjs.Container {
 	initMempool() {
 
 		let mempool = new Mempool({blockchain: this});
+		let link = this.linkMempool();
 
-		mempool.x = window.Timelines.params.defaultTime * ( this.params.blockWidth + this.params.blockPadding) + mempool.params.width/2 + 20;
-		mempool.y = 0;
+		mempool.x = window.Timelines.currentBar.x + mempool.params.width/2 + 10;
+		mempool.y = this.y + this.platform.params.y;
+		window.Timelines.cont_mempool.addChild(mempool);
 
-		this.cont_mempool.addChild(mempool);
+		link.x = mempool.x;
+		link.y = mempool.y;
+		window.Timelines.cont_links.addChild(link);
+
 		this.mempool = mempool;
-		window.Mempools.push(this.mempool);
-
-		this.on("tick", proxy(this.linkMempool, this));
+		window.Mempools.push(mempool);
 
 	}
 
 	linkMempool() {
 
-		let block = this.blocks[this.blocks.length - 1];
+		let linkMempool = new createjs.Shape();
+		linkMempool.graphics.clear().setStrokeStyle(4).beginStroke(this.params.color)
+			.moveTo(0,0)
+			.lineTo(-window.DefaultWidth,0)
+			.closePath();
 
-		if(this._linkMempool == undefined) {
-			this._linkMempool = new createjs.Shape();
-			this.cont_links.addChild(this._linkMempool);
-		}
-
-		let coor = this.globalToLocal(window.Timelines.currentBar.x, 0);
-		this.mempool.x = coor.x + this.mempool.params.width/2 + 10;
-
-		let thick = 4;
-		this._linkMempool.graphics
-				.clear()
-				.setStrokeStyle(thick).beginStroke(this.params.color)
-				.moveTo(block.x, 0)
-				.lineTo(this.mempool.x, 0)
-				.closePath()
-				;
+		return linkMempool;
 
 	}
 

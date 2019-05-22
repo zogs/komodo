@@ -3,8 +3,7 @@ $background: #DFEFEE;
 body { margin: 0; padding: 0; width:100%; height:100%; background: $background; }
 .header { display:none; position: absolute; top:0; z-index:10; width: 100%; text-align: right; font: 12px Arial;}
 #canvas-container { position: relative; width:100%; height:100%; margin: 0 auto; }
-canvas#canvas { position: absolute; z-index: 2; display:block; width: 100%; height:100%;}
-canvas#backcanvas { position: absolute; z-index: 1; display:block; background: #2d313c; width:100%; height:100%; }
+canvas#canvas { position: absolute; z-index: 2; display:block; width: 100%; height:100%; background: #2d313c;}
 .footer { display:none; position: absolute; z-index:10; bottom: 0; width: 100%; height:50px; text-align: center; font: 12px Arial; }
 .dialog { position: absolute; z-index: 10; visibility: hidden; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 14px; padding: 0; color:#FFF; pointer-events:none;}
 .dialog h1 { width:100%; font-family: 'Montserrat', 'Arial', sans-serif; font-size: 44px; color: #52efbc; text-transform:uppercase; text-align:center; }

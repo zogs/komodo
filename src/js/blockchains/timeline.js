@@ -32,10 +32,15 @@ export class Timeline extends createjs.Container {
 		this.cont_sliding = new createjs.Container();
 		this.cont_foreground = new createjs.Container();
 		this.cont_timesbar = new createjs.Container();
+		this.cont_mempool = new createjs.Container();
+		this.cont_links = new createjs.Container();
 
 		this.cont_sliding.addChild(this.cont_lines, this.cont_blockchains);
 
-		this.addChild(this.cont_background, this.cont_sliding, this.cont_foreground, this.cont_timesbar);
+		this.addChild(this.cont_background, this.cont_links, this.cont_sliding, this.cont_mempool, this.cont_foreground, this.cont_timesbar);
+
+
+
 
 		this.init(params);
 	}
@@ -53,10 +58,12 @@ export class Timeline extends createjs.Container {
 		}, this);
 
 		let logo = new createjs.Bitmap(window.Queue.getResult('KMDdiscoverytour'));
-		logo.scale = 0.25;
-		logo.x = window.STAGEWIDTH - 270;
-		logo.y = -30;
+		logo.regX = logo.image.width;
+		logo.regY = 0;
+		logo.x = window.DefaultWidth;
+		logo.y = -20;
 		this.cont_foreground.addChild(logo);
+
 	}
 
 	reset() {
@@ -68,6 +75,8 @@ export class Timeline extends createjs.Container {
 		this.cont_blockchains.y = 0;
 		this.removeCurrentBar();
 		this.cont_lines.removeAllChildren();
+		this.cont_links.removeAllChildren();
+		this.cont_mempool.removeAllChildren();
 		this.time = this.params.defaultTime;
 		this.totalTime = 0;
 		window.Blockchains = [];
@@ -80,7 +89,7 @@ export class Timeline extends createjs.Container {
 
 	initTimeline() {
 
-		let nb_columns = this.params.width / this.params.minuteWidth + 2;
+		let nb_columns = window.DefaultWidth / (window.DefaultMinuteWidth)  + 2;
 		for(let i=1,ln=nb_columns; i<ln; i++) {
 			this.addLine(i);
 		}
@@ -90,16 +99,16 @@ export class Timeline extends createjs.Container {
 
 		let line = new createjs.Shape();
 		line.graphics.setStrokeStyle(0.5).beginStroke('#AAA')
-				.moveTo(0, this.params.height - this.params.paddingBottom)
+				.moveTo(0, this.params.height*10 - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
-		line.cache(-1, -1, 2, this.params.height);
+		line.cache(-1, -1, 2, this.params.height*10);
 		this.lineImage = new createjs.Bitmap(line.cacheCanvas);
 
 		let lineBold = new createjs.Shape();
 		lineBold.graphics.setStrokeStyle(0.5).beginStroke(this.params.color)
-				.moveTo(0, this.params.height - this.params.paddingBottom)
+				.moveTo(0, this.params.height*10 - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
-		lineBold.cache(-1, -1, 2, this.params.height);
+		lineBold.cache(-1, -1, 2, this.params.height*10);
 		this.lineBoldImage = new createjs.Bitmap(lineBold.cacheCanvas);
 
 	}
@@ -152,10 +161,10 @@ export class Timeline extends createjs.Container {
 
 		this.currentBar = new createjs.Shape();
 		this.currentBar.graphics.setStrokeStyle(1).beginStroke('#ff6c6c')
-			.moveTo(0, this.params.height - this.params.paddingBottom)
+			.moveTo(0, this.params.height*10 - this.params.paddingBottom)
 			.lineTo(0, 0 + this.params.paddingTop)
 			.closePath();
-		this.currentBar.cache(-1, -1, 2, this.params.height);
+		this.currentBar.cache(-1, -1, 2, this.params.height*10);
 
 		this.currentBar.x = this.params.defaultTime * this.params.minuteWidth;
 		window.Cont_currenttime.addChild(this.currentBar);
@@ -223,11 +232,14 @@ export class Timeline extends createjs.Container {
 
 		let time = 777;
 		createjs.Tween.get(this.cont_blockchains).to({y: this.cont_blockchains.y + y}, time).call(proxy(this.scrollEnd, this));
+		createjs.Tween.get(this.cont_mempool).to({y: this.cont_mempool.y + y}, time);
+		createjs.Tween.get(this.cont_links).to({y: this.cont_links.y + y}, time);
 
 		window.Platforms.map(p => {
 			createjs.Tween.get(p.cont_background).to({y: p.cont_background.y + y}, time);
 			createjs.Tween.get(p.cont_text).to({y: p.cont_background.y + y}, time);
-		})
+		});
+
 	}
 
 	scrollEnd() {

@@ -9,8 +9,8 @@ export class Dialog extends createjs.Container {
     this.content = content;
     this.buttons = buttons;
     var defaults = {
-      x: window.STAGEWIDTH/2,
-      y: window.STAGEHEIGHT/2 - 50,
+      x: window.DefaultWidth/2,
+      y: window.DefaultHeight/2 - 50,
       dx: 0,
       dy: 0,
       width: null,

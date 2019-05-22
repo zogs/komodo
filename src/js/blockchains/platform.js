@@ -35,7 +35,6 @@ export class Platform extends createjs.Container {
     this.cont_blockchain.y = this.params.y;
     this.cont_foreground.y = this.params.y;
     this.cont_tpstext.y = this.params.y;
-    this.cont_emitter.y = this.params.y;
     this.cont_text.y = this.params.y;
 
     window.Timelines.cont_background.addChild(this.cont_background);
@@ -58,8 +57,8 @@ export class Platform extends createjs.Container {
   initEmitter() {
 
     this.emitter = new Emitter({name: this.params.name, color: this.params.color, height: this.params.height, blockchains: this.params.chains, tps: this.params.emitterTPS, txWeight: this.params.txWeight});
-    this.emitter.x = window.STAGEWIDTH;
-    this.emitter.y = this.y;
+    this.emitter.x = window.DefaultWidth;
+    this.emitter.y = 0;
     this.emitter.platform = this;
     this.emitter.setChains(this.chains);
     this.cont_emitter.addChild(this.emitter);
@@ -128,9 +127,12 @@ export class Platform extends createjs.Container {
   drawChain(chain, y) {
 
       chain.y = y;
+      chain.platform = this;
+      chain.init();
       if(chain.params.type == 'SC' || chain.params.type == 'AC') chain.drawMoMoMMagic();
       this.cont_blockchain.addChild(chain);
       window.Blockchains.push(chain);
+
 
       let name = new createjs.Text(chain.params.name.toUpperCase(), 'bold 14px Montserrat', '#FFF');
       name.y = chain.y - chain.params.height/2 + 5;
@@ -225,8 +227,8 @@ export class Platform extends createjs.Container {
     let bkg = new createjs.Shape();
     bkg.graphics.beginStroke(this.params.borderColor)
                 .setStrokeStyle(this.params.borderWidth)
-                .beginLinearGradientFill([this.params.backgroundColor,"rgba(255,255,255,0)"], [0, 1], 0, 0, window.STAGEWIDTH-100, 0)
-                .drawRect(-5, 0, window.STAGEWIDTH + 10, height);
+                .beginLinearGradientFill([this.params.backgroundColor,"rgba(255,255,255,0)"], [0, 1], 0, 0, window.DefaultWidth-100, 0)
+                .drawRect(-5, 0, window.DefaultWidth + 10, height);
     bkg.y = this.y - this.params.chainHeight/2 - pad;
     this.cont_background.addChild(bkg);
   }
@@ -247,7 +249,7 @@ export class Platform extends createjs.Container {
   drawEmitter() {
     this.emitter.setChains(this.chains);
     this.emitter.redraw();
-    this.emitter.y = this.y;
+    this.emitter.y = 0;
   }
 
   addChain(chain) {

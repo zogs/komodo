@@ -122,7 +122,7 @@ Scalability.set = function() {
     // #7
   dialog = new Dialog('<p>See how rapidly we filled the mempool?</p>',
     [], {
-      x: 930, y: 370,
+      x: 930, y: 350,
       arrow: {x:0, y:-50}, arrowFrom: 'top',
       lifetime: 3000, call: proxy(this.continue, this),
       onload: function(_this) {
@@ -159,7 +159,7 @@ Scalability.set = function() {
       lifetime: 5000, call: proxy(this.continue, this),
       onload: function() {
         let komodo = window.Platforms.find(e => e.params.id == 'kmd');
-        let chain = komodo.addScalingChain(false);
+        let chain = komodo.addScalingChain();
       }
     });
   this.addDialog(dialog);
@@ -209,7 +209,8 @@ Scalability.set = function() {
     new Text("Waiting for the next notarization...           ",),
     ], [
     ], {
-      paddings: [50,100,50,100],
+      x:750, y:350,
+      paddings: [25,50,25,50],
       onload: function(_this) {
 
         let komodo = window.Blockchains.find(b => b.params.id == 'kmd');
@@ -234,7 +235,7 @@ Scalability.set = function() {
         });
 
         window.Stage.on('notarization_start', proxy(that.continue, that), null, true);
-        window.Stage.on('notarization_start', function() { window.slowMo(0.1, 100);}, null, true);
+        window.Stage.on('notarization_start', function() { window.slowMo(0.4, 100);}, null, true);
         window.Stage.on('notarization_end', function() { window.slowMo(1, 500);}, null, true);
       }
     });
@@ -243,8 +244,8 @@ Scalability.set = function() {
   // #14
   dialog = new Dialog('<p>MoMoM/Mom are being exchanged now !</p>',
     [], {
-      x:1250, y: 300,
-      arrow: {x:-200, y:0}, arrowWidth:20, arrowFrom: 'left',
+      x:940, y: 225,
+      arrow: {x:0, y:60}, arrowWidth:50, arrowFrom: 'bottom',
       lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
@@ -271,6 +272,10 @@ Scalability.set = function() {
     `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
+      onload: function() {
+        let komodo = window.Platforms.find(e => e.params.id == 'kmd');
+        let chain = komodo.addScalingChain();
+      }
     });
   this.addDialog(dialog);
 
