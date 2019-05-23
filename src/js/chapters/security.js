@@ -43,7 +43,7 @@ Security.set = function() {
     [],
     {
       y: 350, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
-      lifetime: 3000, call: proxy(this.continue, this),
+      lifetime: 2500, call: proxy(this.continue, this),
       onload: function() {
         let komodo = window.Platforms.find(b => b.params.id == 'kmd');
         komodo.hide();

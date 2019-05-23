@@ -275,6 +275,7 @@ Scalability.set = function() {
       onload: function() {
         let komodo = window.Platforms.find(e => e.params.id == 'kmd');
         let chain = komodo.addScalingChain();
+        Scalability.addTps();
       }
     });
   this.addDialog(dialog);
