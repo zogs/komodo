@@ -43,7 +43,7 @@ Security.set = function() {
     [],
     {
       y: 350, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
       onload: function() {
         let komodo = window.Platforms.find(b => b.params.id == 'kmd');
         komodo.hide();
@@ -140,7 +140,7 @@ Security.set = function() {
     `, [
     ], {
       x: 850, y: 330, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
-      lifetime: 3500, call: proxy(this.continue, this)
+      lifetime: 4000, call: proxy(this.continue, this)
     });
   this.addDialog(dialog);
 
@@ -176,7 +176,7 @@ Security.set = function() {
     <strong>Wait, that's not all !</strong>
     `, [], {
       paddings: [25,50,25,50],
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 

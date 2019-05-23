@@ -138,7 +138,7 @@ Interoperability.set = function() {
     ], {
       y: 470,
       arrow: {x:0, y:50}, arrowFrom: 'bottom',
-      lifetime: 2000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
       onload: function() {
         let platform = window.Platforms.find(e => e.params.id == 'kmd');
         let KMDICE = new Blockchain({id: 'KMDICE', name: 'KMDICE', color:'#05afea', type: 'AC', ccc: ['dice'], premined: 0, notarizeTo: 'kmd', active: false});

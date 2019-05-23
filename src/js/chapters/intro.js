@@ -60,7 +60,7 @@ Intro.set = function() {
     [],
     {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true,
-      lifetime: 2500, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
       x: 500, y: 150
     });
   this.addDialog(dialog);
@@ -68,7 +68,7 @@ Intro.set = function() {
   dialog = new Dialog('<strong>KOMODO</strong> is public since October 2016!',
     [],
     {
-      lifetime: 2500, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
       x: 900, y: 350,
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50, animate: true,
     });

@@ -77,7 +77,7 @@ Scalability.set = function() {
     ], {
       x: 650, y: 200,
       arrow: {x:0, y:-80}, arrowFrom: 'top',
-      lifetime: 3000, call: proxy(this.continue, this),
+      lifetime: 5000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
@@ -138,7 +138,7 @@ Scalability.set = function() {
   dialog = new Dialog(`<p>How are the folks from <strong>KOMODO</strong> gonna handle this ?</p>`,
     [], {
       x: 930, y: 370,
-      lifetime: 3000, call: proxy(this.continue, this),
+      lifetime: 4000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
@@ -146,7 +146,7 @@ Scalability.set = function() {
   dialog = new Dialog('<p>Well, they just pop up another chain!</p>',
     [], {
       x: 930, y: 370,
-      lifetime: 3000, call: proxy(this.continue, this),
+      lifetime: 4000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
