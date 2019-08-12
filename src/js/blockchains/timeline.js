@@ -15,8 +15,8 @@ export class Timeline extends createjs.Container {
 			paddingTop: 0,
 			paddingBottom: 0,
 			defaultTime: 5,
-			backgroundColor: '#326463',
-			color: '#53f1be',
+			backgroundColor: '#2b6680',
+			color: '#41ead4',
 		};
 
 		this.params = extend(defaults,params);
@@ -105,7 +105,7 @@ export class Timeline extends createjs.Container {
 		this.lineImage = new createjs.Bitmap(line.cacheCanvas);
 
 		let lineBold = new createjs.Shape();
-		lineBold.graphics.setStrokeStyle(0.5).beginStroke(this.params.color)
+		lineBold.graphics.setStrokeStyle(1).beginStroke(this.params.color)
 				.moveTo(0, this.params.height*10 - this.params.paddingBottom)
 				.lineTo(0, this.params.paddingTop)
 		lineBold.cache(-1, -1, 2, this.params.height*10);
@@ -126,7 +126,7 @@ export class Timeline extends createjs.Container {
 		bg.x = (i-1)*this.params.minuteWidth;
 		this.cont_timesbar.addChild(bg);
 
-		let font = (i%10 == 0)? 'bold 12px Montserrat' : '12px Montserrat';
+		let font = (i%10 == 0)? 'bold 11px Arial' : '11px Arial';
 		let minute = new createjs.Text(i+' min', font, this.params.color);
 			minute.x = i*this.params.minuteWidth - minute.getMeasuredWidth() - 2;
 			minute.y = this.params.paddingTop + 15;

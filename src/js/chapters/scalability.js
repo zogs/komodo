@@ -12,8 +12,8 @@ Scalability.init = function() {
 
   window.Timelines.reset();
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
-  var komodoPlatform = new Platform({y: 260, id: 'kmd', name: ' ', color: '#53f1be', borderColor: '#53f1be', chains: [komodo], emitterTPS: 80,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#41ead4', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
+  var komodoPlatform = new Platform({y: 260, id: 'kmd', name: ' ', color: '#41ead4', borderColor: '#41ead4', chains: [komodo], emitterTPS: 80,});
   window.Platforms.push(komodoPlatform);
 
   let bitcoin = new Blockchain({id: 'btc', name: 'Bitcoin', color: '#eb8c18', blockTime: 10, 'premined': 0, maxTps: 10});
@@ -44,7 +44,7 @@ Scalability.set = function() {
   let dialog = new Dialog(`
     <div class="chapter">
       <h1>SCALABILITY</h1>
-      <h2>ONE CHAIN IS NOT ENOUGH</h2>
+      <h2>Blockchains Clusters</h2>
     </div>
   `, [
   new Button('START CHAPTER', proxy(this.continue, this), {float: 'center', borderWidth:3}),
@@ -53,7 +53,7 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #2
-  dialog = new Dialog('<p>Ok. Lets check out how <strong>KOMODO</strong> handles scaling...</p>',
+  dialog = new Dialog("<p>Now let's see how <strong>KOMODO</strong> handles scaling.</p>",
     [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'})
     ], {
@@ -71,20 +71,20 @@ Scalability.set = function() {
 
   // #3
   dialog = new Dialog(`
-    <p>First, lets look at <strong class="btc">Bitcoin</strong>.</p>
+    <p>First, let's look at <strong class="btc">Bitcoin</strong>.</p>
     <p>We know that Bitcoin has a maximum capacity of around 10 transactions per second.</p>
     `, [
     ], {
       x: 650, y: 200,
       arrow: {x:0, y:-80}, arrowFrom: 'top',
-      lifetime: 5000, call: proxy(this.continue, this),
+      lifetime: 3000, call: proxy(this.continue, this),
     });
   this.addDialog(dialog);
 
   // #4
-  dialog = new Dialog('<p>More realistically its somewhere around 8tx/s...</p>',
+  dialog = new Dialog("<p>More realistically it's somewhere around 8tx/s...</p>",
     [], {
-      lifetime: 3000, call: proxy(this.continue, this),
+      lifetime: 4000, call: proxy(this.continue, this),
       x: 1130, y: 170,
       arrow: {x:-50, y:-50}, arrowFrom: 'top', arrowCenter: -50,
     });
@@ -92,8 +92,8 @@ Scalability.set = function() {
 
   // #5
   dialog = new Dialog(`
-    <p>The <strong>KOMODO</strong> blockchain can natively handle about 200 tx/s !</p>
-    <p>Let's test this and inspect their claim!</p>
+    <p>The <strong>KOMODO</strong> blockchain can natively handle about <b>200 tx/s</b>!</p>
+    <p>Let's test this and inspect this claim.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'center'}),
     ], {
@@ -105,7 +105,7 @@ Scalability.set = function() {
   // #6
   dialog = new Dialog(`
     <p>Right now, we are sending around 100tx/s...</p>
-    <p><strong>Let's double that</strong>- let's spam them!</p>
+    <p><strong>Let's double it!</p>
     `, [
     new Button('DOUBLE', proxy(this.continue, this), {float: 'center'}),
     ], {
@@ -135,7 +135,7 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #8
-  dialog = new Dialog(`<p>How are the folks from <strong>KOMODO</strong> gonna handle this ?</p>`,
+  dialog = new Dialog(`<p>How does <strong>KOMODO</strong>'s tech handle this situation?</p>`,
     [], {
       x: 930, y: 370,
       lifetime: 4000, call: proxy(this.continue, this),
@@ -143,7 +143,7 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #9
-  dialog = new Dialog('<p>Well, they just pop up another chain!</p>',
+  dialog = new Dialog('<p>By supporting the creation of a second blockchain!</p>',
     [], {
       x: 930, y: 370,
       lifetime: 4000, call: proxy(this.continue, this),
@@ -166,9 +166,9 @@ Scalability.set = function() {
 
   // #11
   dialog = new Dialog(`
-    <p>Can you see it? Now the transaction flow is split between two chains! </p>
+    <p>Now the transaction flow is split between two chains! </p>
     <p>But how is this even possible ?</p>
-    <p>There is no magic, but let me explain you magic behind it.</p>
+    <p>Let's learn more about now this scaling solution works.</p>
     <p> </p>
     `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
@@ -180,12 +180,11 @@ Scalability.set = function() {
 
   // #12
   dialog = new Dialog(`
-    <p>The <strong>KOMODO</strong> ecosystem can spin up a scaling chain at any time which is able to</p>
-    <p>validate and confirm transactions from the main chain (or other sidechains).</p>
-    <p>This is possible through a technology that <strong>KOMODO</strong> has invented/developed: the</p>
-    <p><i>Merkleroot of Merkleroots of Merkleroots</i> (a.k.a MoMoM).</p>
-    <p>combined with a special consensus mechanism : the KMD <i>Burn Protocol</i>.</p>
-    <p>What what does this mean and how does it work ?</p>
+    <p>The <strong>KOMODO</strong> ecosystem allows all third-party projects to create a scaling chain at any time.</p>
+    <p>Scaling chains validate transactions for the main chain, boosting performance on demand.</p>
+    <p>This is made possible through a technology that <strong>KOMODO</strong> developed called <strong>Platform</strong></p>
+    <p><strong>Synchronizations</strong>.</p>
+    <p>What what does this mean and how does it work?</p>
     `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
@@ -194,10 +193,11 @@ Scalability.set = function() {
 
   // #13
   dialog = new Dialog(`
-    <p>During the notarization process, the side chains send to KMD mainchain a summary of all transactions (MoM) that occured since</p>
-    <p>the last notarization. Simultaneously, the KMD main chain shares a summary to all the sidechains</p>
-    <p>which contains a summary of all previous transactions gathered from the last notarization (MoMoM).</p>
-    <p>Sounds genius & exciting? Let's see that in action!</p>
+    <p>First, a scaling chain sends a <b>summary of all transactions</b> that occurred since the last</p>
+    <p>notarization to main chain to which they are attached. In this example, it’s the main KMD chain.</p>
+    <p>Simultaneously, the KMD main chain shares data to the scaling chain</p>
+    <p>which contains data about of all previous summaries gathered since the last notarization.</p>
+    <p>Sounds exciting, right? Let's see it in action!</p>
     `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
@@ -242,7 +242,7 @@ Scalability.set = function() {
   this.addDialog(dialog);
 
   // #14
-  dialog = new Dialog('<p>MoMoM/Mom are being exchanged now !</p>',
+  dialog = new Dialog('<p>The data are being exchanged now!</p>',
     [], {
       x:940, y: 225,
       arrow: {x:0, y:60}, arrowWidth:50, arrowFrom: 'bottom',
@@ -252,9 +252,9 @@ Scalability.set = function() {
 
   // #15bis
   dialog = new Dialog(`
-    <p>Now, each chain has a records of what appended on other chains!</p>
-    <p>That way, it can validate transactions from any other chain, and with the</p>
-    <p>Burn protocol, this "cluster of blockchains" can maintain a constant level of coin across the whole ecosystem!</p>
+    <p>Now, each chain has a record of what happened on the other chain!</p>
+    <p>That way, it can <b>validate</b> transactions on any other chain, and with a unique burn protocol,</p>
+    <p>the blockchain cluster can maintain <b>constant coin supply</b> across the main chain and all scaling chains.</p>
     `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
@@ -264,11 +264,9 @@ Scalability.set = function() {
 
   // #15
   dialog = new Dialog(`
-    <p>There is no theorical limit to how many chains KMD or you can spin up.</p>
-    <p>Actually, during May 2018 Komodo has successfully conducted a stress test</p>
-    <p>where KMD successfully processed <strong>~20000 transactions per second!</strong></p>
-    <p>And this year, Komodo is preparing for a 1 million TX/s stresstest.</p>
-    <p> </p>
+    <p>There is no theoretical limit to how many scaling chains you can spin up.</p>
+    <p>Actually, in May 2018 <strong>KOMODO</strong> successfully conducted a stress test</p>
+    <p>where a massive blockchain cluster successfully processed <b>~20,000 transactions</b> per second!</p>
     `, [
     new Button("CONTINUE", proxy(this.continue,this), {float: 'center'})
     ], {
@@ -283,8 +281,8 @@ Scalability.set = function() {
 
   // #16
   dialog = new Dialog(`
-    <p>Now after covering the scalability tech of KMD,</p>
-    <p>Let's go to the next chapter: <strong>INTEROPERABILITY</strong></p>
+    <p>Now that we've covered <strong>KOMODO</strong>'s scalability tech,</p>
+    <p>let's move on to the next chapter: <strong>INTEROPERABILITY</strong></p>
     <p> </p>
     `, [
     new Button("ADD TRANSACTIONS", proxy(this.continue,this), { float: 'left'}),

@@ -12,8 +12,8 @@ Security.init = function() {
 
   window.Timelines.reset();
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
-  var platform = new Platform({y: 250, id: 'kmd', name: ' ',color: '#53f1be' ,chains: [komodo],emitterTPS: 35,});
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#41ead4', premined: 6, notarizeTo: 'not_yet', notaryLabelSize: "big" });
+  var platform = new Platform({y: 250, id: 'kmd', name: ' ',color: '#41ead4' ,chains: [komodo],emitterTPS: 35,});
   window.Platforms.push(platform);
 
   platform.hide();
@@ -30,7 +30,7 @@ Security.set = function() {
   let dialog = new Dialog(`
     <div class="chapter">
       <h1>SECURITY</h1>
-      <h2>RECYCLING BITCOIN</h2>
+      <h2>Delayed Proof of Work (dPoW)</h2>
     </div>
     `, [
     new Button('START CHAPTER', proxy(this.continue, this), {float: 'center', borderWidth:3}),
@@ -39,7 +39,7 @@ Security.set = function() {
   this.addDialog(dialog);
 
   // #2
-  dialog = new Dialog('So this is the [in]famous Komodo blockchain.',
+  dialog = new Dialog('This is the <strong>KOMODO</strong> blockchain.',
     [],
     {
       y: 350, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
@@ -56,8 +56,8 @@ Security.set = function() {
 
   // #3
   dialog = new Dialog(`
-    <p>It is a <i>Proof-of-Work</i> blockchain, with an average blocktime of one minute.</p>
-    <p>So every minute or so, a new block is mined by a pool of miners all around the world.</p>
+    <p><strong>KOMODO</strong> is a Proof-of-Work blockchain, with an average blocktime of one minute.</p>
+    <p>Every minute or so, a new block is mined by one of the nodes on the global, decentralized network.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -68,10 +68,10 @@ Security.set = function() {
 
   // #4
   dialog = new Dialog(`
-    <p>In order to increase the security of the network, <strong>KOMODO</strong> backs up its chain periodically to the <strong class="btc">Bitcoin</strong> blockchain.</p>
-    <p>By doing so an attacker would have to first compromise BTC in order to attack the KMD chain!</p>
+    <p>In order to increase the security of the network, <strong>KOMODO</strong> periodically saves block data to the <strong class="btc">Bitcoin</strong> blockchain.</p>
+    <p>This means that an attacker would need to first compromise the <strong class="btc">Bitcoin</strong> network in order to attack the KMD chain!</p>
     <p></p>
-    <p>Let's wait for the next notarization to see this in action...</p>
+    <p>Let's wait for the next notarization to see this in action.</p>
     `, [
     ], {
       y: 400,
@@ -134,9 +134,9 @@ Security.set = function() {
 
   // #6
   dialog = new Dialog(`
-    <p>Did you see this magic?</p>
+    <p>Did you see it?</p>
     <p></p>
-    <p>That was the so called notarization process!</p>
+    <p>That was the notarization process!</p>
     `, [
     ], {
       x: 850, y: 330, arrow: {x:0, y:-50}, arrowFrom: 'top', animate: true,
@@ -146,11 +146,10 @@ Security.set = function() {
 
   // #7
   dialog = new Dialog(`
-    <p><strong>By notarizing</strong> the KMD chain into <strong class="btc">Bitcoin</strong>, <strong>KOMODO</strong> takes avantage of the <strong class="btc">Bitcoin</strong> hashrate and security.</p>
-    <p>As soon as the notarization is confirmed it equals an immutable record of KOMODO transactions</p>
-    <p>written onto the <strong class="btc">Bitcoin</strong> blockchain,</p>
+    <p>By notarizing block data from the KMD chain onto <strong class="btc">Bitcoin</strong>, <strong>KOMODO</strong> takes advantage of the <strong class="btc">Bitcoin</strong> hashrate and security.</p>
+    <p>As soon as the notarization is confirmed, it creates an immutable record of <strong>KOMODO</strong> transactions written onto the <strong class="btc">Bitcoin</strong> blockchain.</p>
     <p> </p>
-    <p>Therefore, it becomes impossible to reorg (51% attack) the Komodo blockchain beyond this <i>"checkpoint"</i> !</p>
+    <p>Therefore, it becomes impossible to re-organize the <strong>KOMODO</strong> blockchain beyond the checkpoint! This prevents 51% attacks.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -160,10 +159,10 @@ Security.set = function() {
 
   // #8
   dialog = new Dialog(`
-    <p>This security mechanism is called <strong>Delayed Proof-of-Work (dPOW)</strong>.</p>
-    <p>In simple worlds: This technology is a solution for 51% attacks. If you want to attack</p>
-    <p><strong>KOMODO</strong> you have to first attack <strong class="btc">Bitcoin</strong></p>
-    <p>And good luck with that.</p>
+    <p>This security mechanism is called <strong>Delayed Proof of Work (dPoW)</strong>.</p>
+    <p>In simple words: This technology is a solution for 51% attacks. If you want to attack</p>
+    <p><strong>KOMODO</strong> you would have to first attack <strong class="btc">Bitcoin</strong>.</p>
+    <p>And that isn't really possible.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -173,7 +172,7 @@ Security.set = function() {
 
   // #9
   dialog = new Dialog(`
-    <strong>Wait, that's not all !</strong>
+    <p>Wait, that's not all !</p>
     `, [], {
       paddings: [25,50,25,50],
       lifetime: 3000, call: proxy(this.continue, this),
@@ -182,9 +181,9 @@ Security.set = function() {
 
   // #10
   dialog = new Dialog(`
-    <p>Did you know that <strong>KOMODO</strong> can provide <strong class="btc">Bitcoin</strong> level security</strong> to other independant blockchains ?</p>
+    <p>Did you know that <strong>KOMODO</strong> can provide <strong class="btc">Bitcoin</strong> level security to other independent blockchains ?</p>
     <p></p>
-    <p>Let's look on some examples.</p>
+    <p>Let's look at some examples.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -194,9 +193,9 @@ Security.set = function() {
 
   // #11
   dialog = new Dialog(`
-    <p>These external blockchains for example have chosen <strong>KOMODO</strong> to secure their network:</p>
+    <p>These external blockchains have chosen <strong>KOMODO</strong> to add extra security their network:</p>
     <p></p>
-    <p><strong>GameCredits</strong> and <strong>Einsteinum</strong> just to name 2 of many others.</p>
+    <p><b>GameCredits</b> and <b>Einsteinum</b> are two great examples.</p>
     `, [
     new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
     ], {
@@ -239,10 +238,10 @@ Security.set = function() {
   // #12
   dialog = new Dialog(`
     <p>These blockchains are notarizing onto <strong>KOMODO</strong>.</p>
-    <p>They now benefit from the <strong>KOMODO</strong> and <strong class="btc">Bitcoin</strong> level security.</p>
-    <p>An attacker would need to attack 3 blockchains instead of just 1, that should be pretty hard, don't you think?</p>
+    <p>They now benefit from the security of both the <strong>KOMODO</strong> and <strong class="btc">Bitcoin</strong> newtworks.</p>
+    <p>An attacker would need to attack 3 blockchains instead of just 1. That makes it too costly and difficult for an attack to be worthwhile.</p>
     <p></p>
-    <p>As a matter of fact, <strong>Einsteinium</strong> alreay resisted one (known) 51% attack since they implemented dPoW </p>
+    <p>As a matter of fact, <b>Einsteinium</b> alreay successfully defended against one known 51% attack since they implemented dPoW</p>
     `, [
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {
@@ -252,11 +251,8 @@ Security.set = function() {
 
   // #13
   dialog = new Dialog(`
-    <p>If you are interested in the <strong>dPOW mechanism</strong> for securing your blockchain,</p>
-    <p>Please read this detailed article and contact the Komodo Team :</p>
-    <p><a href="https://blog.komodoplatform.com/delayed-proof-of-work-explained" target="_blank">https://blog.komodoplatform.com/delayed-proof-of-work-explained-9a74250dbb86</a></p>
-    <p></p>
-    <p>You can contact the <strong>KOMODO</strong> Team on their official Discord !</p>
+    <p>If you are interested in adopting the dPoW mechanism to secure your blockchain,</p>
+    <p>please contact the <strong>KOMODO</strong> Team on their official Discord:</p>
     <p><a href="https://komodoplatform.com/discord" target="_blank">https://komodoplatform.com/discord</a></p>
     <p></p>
     <p>Next chapter: <strong>SCALABILITY</strong>

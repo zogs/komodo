@@ -13,7 +13,7 @@ export class Block extends createjs.Container {
 			rows: 2,
 			image: null,
 			genesis: false,
-			backgroundColor: '#565a66',
+			backgroundColor: '#283547',
 		};
 
 		this.params = extend(defaults,params);

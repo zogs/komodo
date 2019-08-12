@@ -10,8 +10,8 @@ export const Intro = new Chapter({name: 'Intro'});
 
 Intro.init = function() {
 
-  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#53f1be', premined: 6});
-  var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#53f1be', chains: [komodo], emitterTPS: 10 });
+  let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#41ead4', premined: 6});
+  var platform = new Platform({y: 250, id: 'kmd', name: ' ', color: '#41ead4', chains: [komodo], emitterTPS: 10 });
   window.Platforms.push(platform);
 
   platform.hide();
@@ -28,10 +28,10 @@ Intro.set = function() {
   dialog = new Dialog(`
     <div class="chapter">
       <h1>KOMODO</h1>
-      <h2>The discovery tour</h2>
+      <h2>The Discovery Tour</h2>
     </div>
   `, [
-  new Button('CLICK HERE TO START', function() {
+  new Button('CLICK TO START', function() {
         window.Timelines.start();
         window.Timelines.fadeIn(1000);
         that.continue();
@@ -56,7 +56,7 @@ Intro.set = function() {
 
 
 
-  dialog = new Dialog('It has a 1 minute block time and the max. blocksize is 4 MB.',
+  dialog = new Dialog('It has a 1 minute block time and the max block size is 4 MB.',
     [],
     {
       arrowTo: {x:500, y:200}, arrowFrom: 'bottom', animate: true,
@@ -65,7 +65,7 @@ Intro.set = function() {
     });
   this.addDialog(dialog);
 
-  dialog = new Dialog('<strong>KOMODO</strong> is public since October 2016!',
+  dialog = new Dialog('<strong>KOMODO</strong> has been public since October 2016.',
     [],
     {
       lifetime: 3000, call: proxy(this.continue, this),
@@ -75,10 +75,10 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog(`
-    <p>It began as a <strong class="zcash">Zcash</strong> which is a fork of <strong class="btc">Bitcoin</strong>.</p>
-    <p>So <strong>KOMODO</strong> inherits all the <strong class="btc">Bitcoin</strong> and <strong class="zcash">Zcash</strong> features plus a dozen of own features</p>
-    <p>A custom consensus framework capable of a unique <i>"smartcontract like"</i> experience,</p>
-    <p>and a security protocol which recycles <strong class="btc">Bitcoin</strong> hash power for a KMD backup on BTC!</p>
+    <p>It began as a fork of <strong class="zcash">Zcash</strong>, which is a fork of <strong class="btc">Bitcoin</strong>.</p>
+    <p>So <strong>KOMODO</strong> inherits all the <strong class="btc">Bitcoin</strong> and <strong class="zcash">Zcash</strong> features. <strong>KOMODO</strong> also added many features of its own.</p>
+    <p>For instance, <strong>KOMODO</strong> <strong>Antara framework</strong> supports blockchain-based games, contracts,</p>
+    <p>apps, and the dPoW security mechanism provides Bitcoin-level security.</p>
     `, [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
       new Button('ADD Z-TRANSACTION', function() {
@@ -96,8 +96,8 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog(`
-    <p>But <strong>KOMODO is much more</strong> than the aforementioned things. There is much more to see !</p>
-    <p>Let's get back to the more important aspect: <strong>SECURITY</strong></p>
+    <p>But <strong>KOMODO</strong> is much more than the aforementioned things. There is much more to see!</p>
+    <p>Let's start with the most important aspect: <strong>SECURITY</strong></p>
     <p></p>
     `, [
       new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left'}),

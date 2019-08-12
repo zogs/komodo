@@ -14,7 +14,7 @@ export class Mempool extends createjs.Container {
 			rows: 2,
 			padding: 10,
 			radius: 0,
-			backgroundColor: '#565a66',
+			backgroundColor: '#283547',
 		};
 
 		this.params = extend(defaults,params);
