@@ -15,7 +15,7 @@ Interoperability.init = function() {
 
   let komodo = new Blockchain({id: 'kmd', name: 'Komodo', color:'#41ead4', premined: 6, notarizeTo: 'btc', notaryLabelSize: "big" });
   let AC1 = new Blockchain({id: 'AC1', name: 'Asset Chain 1', color:'#ff1290', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
-  let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#b51ea', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
+  let AC2 = new Blockchain({id: 'AC2', name: 'Asset Chain 2', color:'#b541ea', type: 'AC', ccc: [], premined: 6, notarizeTo: 'kmd'});
   var komodoPlatform = new Platform({y: 260, id: 'kmd', name: ' ', color: '#41ead4', borderColor: '#41ead4', chains: [komodo, AC1, AC2], emitterTPS: 50,});
   window.Platforms.push(komodoPlatform);
 
