@@ -75,17 +75,17 @@ Intro.set = function() {
   this.addDialog(dialog);
 
   dialog = new Dialog(`
-    <p>It began as a fork of <strong class="zcash">Zcash</strong>, which is a fork of <strong class="btc">Bitcoin</strong>.</p>
-    <p>So <strong>KOMODO</strong> inherits all the <strong class="btc">Bitcoin</strong> and <strong class="zcash">Zcash</strong> features. <strong>KOMODO</strong> also added many features of its own.</p>
+    <p>It began as a fork of <strong class="btc">Bitcoin</strong>.</p>
+    <p>So <strong>KOMODO</strong> inherits all the <strong class="btc">Bitcoin</strong> features. But <strong>KOMODO</strong> added many features of its own.</p>
     <p>For instance, <strong>KOMODO</strong> <strong>Antara framework</strong> supports blockchain-based games, contracts,</p>
     <p>apps, and the dPoW security mechanism provides Bitcoin-level security.</p>
     `, [
       new Button('CONTINUE', proxy(this.continue, this), {float: 'right'}),
-      new Button('ADD Z-TRANSACTION', function() {
+      new Button('ADD TRANSACTION', function() {
 
         let komodo = window.Blockchains.find(b => b.params.id == 'kmd');
         let platform = window.Platforms.find(p => p.params.id == 'kmd');
-        let trans = new Transaction({blockchain: komodo, mempool: komodo.mempool, type: null, shape: 'z'});
+        let trans = new Transaction({blockchain: komodo, mempool: komodo.mempool, type: null});
         platform.emitter.emitWithMotion(trans, komodo);
 
 
