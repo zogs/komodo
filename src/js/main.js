@@ -94,6 +94,7 @@ window.loaded = function(env) {
     {id:'icon_unicorn',src:'dist/images/icon/unicorn.png'},
     {id:'icon_wolf',src:'dist/images/icon/wolf.png'},
 		{id:'sprite_warriors',src:'dist/images/warriors.png'},
+		{id:'icon-move',src:'dist/images/move-icon.png'},
 	]);
 
 

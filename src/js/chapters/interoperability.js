@@ -7,7 +7,7 @@ import {Transaction} from '../blockchains/transaction';
 import {RogueCC} from '../blockchains/contract';
 import createjs from 'createjs';
 
-export const Interoperability = new Chapter({name: 'Interoperability & Independence'});
+export const Interoperability = new Chapter({name: 'Interoperability'});
 
 Interoperability.init = function() {
 

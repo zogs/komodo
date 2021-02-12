@@ -1,6 +1,8 @@
 import {extend, proxy} from './utils';
 import createjs from 'createjs';
 
+let that;
+
 export class Dialog extends createjs.Container {
 
   constructor(content= [], buttons=[], params) {
@@ -29,7 +31,7 @@ export class Dialog extends createjs.Container {
       arrowWidth: 50,
       arrowCenter: 0,
       animate: false,
-      animateSpeed: 750,
+      animateSpeed: 500,
       id: 0,
     };
 
@@ -42,16 +44,51 @@ export class Dialog extends createjs.Container {
     this.alpha = this.params.alpha;
     this.htmlElement = null;
     this.htmlContent = null;
+    this.iconMove = null;
+    that = this;
 
     window.Stage.addEventListener('canvas_resized', proxy(this.onResize, this));
 
     this.init();
   }
 
+  press() {
+    window.addEventListener('mouseup', that.release);
+    window.addEventListener('mousemove', that.move)
+  }
+
+  release() {
+    window.removeEventListener('mouseup', that.release)
+    window.removeEventListener('mousemove', that.move)
+    that.px = undefined
+    that.py = undefined
+  }
+
+  move(ev) {
+    if(!that.px) {
+      that.px = ev.x;
+      that.py = ev.y;
+    } else {
+      let mx = that.px - ev.x;
+      let my = that.py - ev.y;
+      that.x -= mx / (window.STAGEWIDTH / window.DefaultWidth);
+      that.y -= my / (window.STAGEWIDTH / window.DefaultWidth);
+      that.px = ev.x;
+      that.py = ev.y
+    }
+  }
+
+  hover() {
+    this.iconMove.alpha = 0.25;
+  }
+
+  out() {
+    this.iconMove.alpha = 0;
+  }
+
   open() {
 
     this.mouseEnabled = true;
-    if(this.htmlElement) this.htmlElement.style.pointerEvents = 'initial';
 
     if(this.params.onload) {
       this.params.onload(this);
@@ -67,7 +104,11 @@ export class Dialog extends createjs.Container {
     }
 
     this.alpha = 0;
+    that = this;
     createjs.Tween.get(this).to({alpha: 1}, this.params.animateSpeed);
+    this.addEventListener('mousedown', proxy(this.press, this));
+    this.addEventListener('mouseover', proxy(this.hover, this));
+    this.addEventListener('mouseout', proxy(this.out, this));
   }
 
   close() {
@@ -75,6 +116,7 @@ export class Dialog extends createjs.Container {
     this.alpha = 0;
     this.mouseEnabled = false;
     if(this.htmlElement) this.htmlElement.style.pointerEvents = 'none';
+    this.removeAllEventListeners();
 
   }
 
@@ -120,6 +162,7 @@ export class Dialog extends createjs.Container {
       window.CanvasContainer.appendChild(element);
       content = new createjs.DOMElement(id);
       this.htmlElement = element;
+      if(this.params.width) this.htmlElement.style.width = this.params.width+'px';
       this.htmlContent = content;
       W = element.offsetWidth;
       H = element.offsetHeight;
@@ -214,6 +257,12 @@ export class Dialog extends createjs.Container {
     mid.graphics.beginFill('red').drawCircle(0,0,3);
     //this.addChild(mid);
 
+    let iconmove = new createjs.Bitmap(window.Queue.getResult('icon-move'));
+    iconmove.x = W;
+    iconmove.y = -10;
+    iconmove.alpha = 0;
+    this.addChild(iconmove);
+    this.iconMove = iconmove;
 
     // center dialog
     this.resetXY();
@@ -449,14 +498,15 @@ export class Dialog extends createjs.Container {
 
     }
 
-    clicked() {
+    clicked(ev) {
       if(this.callback === null) this.nullCallback();
       this.callback();
       this.scaleX = this.scaleY = 1;
     }
 
-    down() {
+    down(ev) {
       this.scaleX = this.scaleY -= 0.05;
+      ev.stopImmediatePropagation();
     }
 
     over() {

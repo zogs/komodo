@@ -241,7 +241,7 @@ Security.set = function() {
     <p>They now benefit from the security of both the <strong>KOMODO</strong> and <strong class="btc">Bitcoin</strong> newtworks.</p>
     <p>An attacker would need to attack 3 blockchains instead of just 1. That makes it too costly and difficult for an attack to be worthwhile.</p>
     <p></p>
-    <p>As a matter of fact, <b>Einsteinium</b> alreay successfully defended against one known 51% attack since they implemented dPoW</p>
+    <p>As a matter of fact, <b>Einsteinium</b> already successfully defended against one known 51% attack since they implemented dPoW</p>
     `, [
     new Button("CONTINUE", proxy(this.continue, this), {float: 'right'})
     ], {

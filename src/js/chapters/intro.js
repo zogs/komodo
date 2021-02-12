@@ -35,9 +35,12 @@ Intro.set = function() {
         window.Timelines.start();
         window.Timelines.fadeIn(1000);
         that.continue();
-  }, {float: 'center', borderWidth:3}),
-  ], {
-  });
+  }, {float: 'left', borderWidth:3}),
+  new Button('or choose chapter', function() {
+        console.log('choose chapter');
+        Intro.goToID('chapters');
+  }, {float: 'right', borderWidth:0, font: '12px Montserrat', borderColor: 'rgba(0,0,0,0.01)', backgroundColor: 'rgba(0,0,0,0.01)'}
+  )], { width: 350 });
   this.addDialog(dialog);
 
   dialog = new Dialog('This is the <strong>KOMODO</strong> blockchain.', [
@@ -103,6 +106,18 @@ Intro.set = function() {
       new Button("REPLAY CHAPTER", proxy(this.replay,this), {float: 'left'}),
       new Button('NEXT CHAPTER', proxy(window.Tour.goToChapter,window.Tour,['Security']), {float: 'right'}),
     ], {
+    });
+  this.addDialog(dialog);
+
+  dialog = new Dialog(`
+      <p>Choose your chapter.</p>
+    `,[
+    new Button("INTRO", proxy(window.Tour.goToChapter,window.Tour,['Intro']), { float: 'left'}),
+    new Button("SECURITY", proxy(window.Tour.goToChapter,window.Tour,['Security']), { float: 'left', x: 130,}),
+    new Button("SCALABILITY", proxy(window.Tour.goToChapter,window.Tour,['Scalability']), { float: 'center', x: 30}),
+    new Button("INTEROPERABILITY", proxy(window.Tour.goToChapter,window.Tour,['Interoperability']), { float: 'right'}),
+    ], {
+      id: 'chapters'
     });
   this.addDialog(dialog);
 }
