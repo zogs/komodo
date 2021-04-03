@@ -25,6 +25,7 @@ export class Chapter extends createjs.Container {
     this.init();
     this.set();
     this.goTo(0);
+    window.location.hash = '#'+this.params.name;
   }
 
   goTo(n) {

@@ -35,9 +35,9 @@ export class Tour extends createjs.Container {
   goToChapter(name) {
 
     let chapter = this.chapters.find(c => c.params.name == name);
-    if(chapter == null) console.error('Chapter "'+name+'" does not exist');
+    if(chapter == null) chapter = this.chapters[0];
 
-    this.current.stop();
+    if(this.current) this.current.stop();
     this.clear();
     chapter.start();
 

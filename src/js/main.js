@@ -233,11 +233,18 @@ window.initTour = function() {
     window.Tour.addChapter(Security);
     // Second chapter : SCALABILITY
     window.Tour.addChapter(Scalability);
-    // Third chapter
+    // Third chapter : INTEROPERABILITY
     window.Tour.addChapter(Interoperability);
 
     // start the Tour
-    window.Tour.start();
+    // (go to specific chapter by #anchor )
+    let hash = window.location.hash.substr(1);
+    if(hash) {
+      window.Tour.goToChapter(hash);
+    }
+    else {
+      window.Tour.start();
+    }
 
 }
 
